@@ -1,4 +1,6 @@
 import fs from 'fs';
+import { createLexer } from './lexer.js';
+import { createParser } from './parser.js';
 
 (() => {
 
@@ -18,5 +20,8 @@ import fs from 'fs';
 
     const fileContent = fs.readFileSync(filePath);
 
-    console.log(fileContent.toString());
+    const lexer = createLexer(fileContent);
+    const parser = createParser(lexer);
+
+    parser.parse();
 })();
