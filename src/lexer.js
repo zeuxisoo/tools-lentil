@@ -5,6 +5,7 @@ class Lexer {
     constructor(content) {
         this.content         = content.toString();
         this.currentPosition = 0;
+        this.nextPosition    = 0;
         this.currentChar     = '';
 
         this.readChar();
@@ -14,6 +15,15 @@ class Lexer {
         let tokens  = [];
 
         while(this.currentPosition < this.content.length) {
+            // Comment
+            if (this.currentChar === '/') {
+                if (this.nextChar() === '/') {
+                    this.skipComment();
+                }
+
+                continue;
+            }
+
             // Whitespace
             if (isWhiteSpace(this.currentChar)) {
                 // skip
@@ -29,6 +39,9 @@ class Lexer {
                 });
 
                 this.readChar();
+
+                this.skipNewline(); // remove extra newline
+
                 continue;
             }
 
@@ -91,25 +104,38 @@ class Lexer {
                 break;
             }
 
-            console.log('Unknown token type: global');
+            // End of file
+            if (this.currentChar == 0) {
+                tokens.push({
+                    type : "eof",
+                    value: this.currentChar,
+                });
+
+                break;
+            }
+
+            console.log(`Unknown token type: "${this.currentChar}", ${this.currentPosition}`);
             break;
         }
 
         console.log(tokens);
     }
 
+    // Reader
     readChar() {
         let currentChar = '';
 
-        if (this.currentPosition < this.content.length) {
-            currentChar = this.content[this.currentPosition];
+        if (this.nextPosition < this.content.length) {
+            currentChar = this.content[this.nextPosition];
 
-            this.currentPosition++;
+            this.currentPosition = this.nextPosition;
         }else{
             this.currentPosition = 0;
         }
 
         this.currentChar = currentChar;
+
+        this.nextPosition++;
     }
 
     readIdentifier() {
@@ -148,9 +174,33 @@ class Lexer {
         return description.join('');
     }
 
-    //
+    // Helper
+    nextChar() {
+        if (this.nextPosition > this.content.length) {
+            return 0;
+        }
+
+        return this.content[this.nextPosition];
+    }
+
+    // Skipper
+    skipComment() {
+        while(!isNewline(this.currentChar)) {
+            this.readChar();
+        }
+
+        this.skipNewline(); // remove extra newline
+    }
+
     skipWhitespace() {
         while(isWhiteSpace(this.currentChar)) {
+            this.readChar();
+        }
+    }
+
+    skipNewline() {
+        // E.g. (e.g. \n + "empty newline" + code)
+        while(isNewline(this.currentChar)) {
             this.readChar();
         }
     }

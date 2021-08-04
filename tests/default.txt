@@ -1,5 +1,9 @@
-tbank = Assets:Bank:HSBC
-ocard = Assets:Card:Ornament
+// 資產 Assets
+
+tbank = Assets:Bank:TBank
+ocard = Assets:Card:OCard
+
+// 花費 Expenses
 
 supermarket = Expenses:Shopping:SuperMarket ; 超市
 marksix     = Expenses:Gambling:MarkSix     ; 投注
