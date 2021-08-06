@@ -10,12 +10,12 @@ function isColon(value) {
     return /:/.test(value);
 }
 
-function isComma(value) {
-    return /,/.test(value);
-}
-
 function isAlpha(value) {
     return /^[a-zA-Z]$/.test(value);
+}
+
+function isDigi(value) {
+    return /^[0-9]$/.test(value);
 }
 
 function isIdentifier(value) {
@@ -34,8 +34,8 @@ export {
     isWhiteSpace,
     isNewline,
     isColon,
-    isComma,
     isAlpha,
+    isDigi,
     isIdentifier,
     isAccount,
     isCJK,

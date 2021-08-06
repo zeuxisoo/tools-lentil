@@ -8,3 +8,5 @@ ocard = Assets:Card:OCard
 supermarket = Expenses:Shopping:SuperMarket ; 超市
 marksix     = Expenses:Gambling:MarkSix     ; 投注
 hosting     = Expenses:Server:Vps
+
+supermarket+25hkd = tbank

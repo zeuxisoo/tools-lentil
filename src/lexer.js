@@ -1,4 +1,4 @@
-import { isWhiteSpace, isNewline, isColon, isComma, isAlpha, isIdentifier, isAccount, isCJK } from './utils.js';
+import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isIdentifier, isAccount, isCJK } from './utils.js';
 
 class Lexer {
 
@@ -56,6 +56,17 @@ class Lexer {
                 continue;
             }
 
+            // Plus
+            if (this.currentChar === '+') {
+                tokens.push({
+                    type : "plus",
+                    value: this.currentChar,
+                });
+
+                this.readChar();
+                continue;
+            }
+
             // Semicolon
             if (this.currentChar === ';') {
                 tokens.push({
@@ -82,8 +93,10 @@ class Lexer {
             if (isAlpha(this.currentChar)) {
                 // Identifier
                 if (isIdentifier(this.currentChar)) {
+                    const type = isDigi(this.previousChar()) ? "currency" : "identifier";
+
                     tokens.push({
-                        type : "identifier",
+                        type : type,
                         value: this.readIdentifier(),
                     });
 
@@ -104,6 +117,16 @@ class Lexer {
                 break;
             }
 
+            // Number
+            if (isDigi(this.currentChar)) {
+                tokens.push({
+                    type : "number",
+                    value: this.readNumber(),
+                });
+
+                continue;
+            }
+
             // End of file
             if (this.currentChar == 0) {
                 tokens.push({
@@ -114,7 +137,7 @@ class Lexer {
                 break;
             }
 
-            console.log(`Unknown token type: "${this.currentChar}", ${this.currentPosition}`);
+            console.log(`Unknown token type, char value "${this.currentChar}" at ${this.currentPosition} position`);
             break;
         }
 
@@ -174,7 +197,29 @@ class Lexer {
         return description.join('');
     }
 
+    readNumber() {
+        let number = [];
+
+        while(isDigi(this.currentChar)) {
+            number.push(this.currentChar);
+
+            this.readChar();
+        }
+
+        return number.join('');
+    }
+
     // Helper
+    previousChar() {
+        const previousPosition = this.currentPosition - 1;
+
+        if (previousPosition <= 0) {
+            return '';
+        }
+
+        return this.content[previousPosition];
+    }
+
     nextChar() {
         if (this.nextPosition > this.content.length) {
             return 0;
