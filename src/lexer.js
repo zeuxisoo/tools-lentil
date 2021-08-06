@@ -7,6 +7,7 @@ class Lexer {
         this.currentPosition = 0;
         this.nextPosition    = 0;
         this.currentChar     = '';
+        this.currentLine     = 1;
 
         this.readChar();
     }
@@ -147,7 +148,7 @@ class Lexer {
                 break;
             }
 
-            console.log(`Unknown token type, char value "${this.currentChar}" at ${this.currentPosition} position`);
+            console.log(`Unknown token type, char value "${this.currentChar}" at ${this.currentPosition} position in line ${this.currentLine}`);
             break;
         }
 
@@ -164,6 +165,10 @@ class Lexer {
             this.currentPosition = this.nextPosition;
         }else{
             this.currentPosition = 0;
+        }
+
+        if (isNewline(currentChar)) {
+            this.currentLine++;
         }
 
         this.currentChar = currentChar;
