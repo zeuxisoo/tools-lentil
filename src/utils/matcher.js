@@ -6,10 +6,6 @@ function isNewline(value) {
     return /[\n|\r|\r\n]/.test(value);
 }
 
-function isColon(value) {
-    return /:/.test(value);
-}
-
 function isAlpha(value) {
     return /^[a-zA-Z]$/.test(value);
 }
@@ -18,12 +14,20 @@ function isDigi(value) {
     return /^[0-9]$/.test(value);
 }
 
+function isLiteral(value) {
+    return /^[a-zA-Z_:]$/.test(value);
+}
+
 function isIdentifier(value) {
-    return /^[a-z]$/.test(value);
+    return /^[a-zA-Z_]+$/.test(value);
 }
 
 function isAccount(value) {
-    return /^[A-Z]$/.test(value);
+    return /^[Assets|Expenses|Liabilities|Equity|Income][:[a-zA-Z]+]*/.test(value);
+}
+
+function isCurrency(value) {
+    return /^[hkd|usd|cny|jpy|eur|gbp|inr]+$/i.test(value);
 }
 
 function isCJK(value) {
@@ -33,10 +37,11 @@ function isCJK(value) {
 export {
     isWhiteSpace,
     isNewline,
-    isColon,
     isAlpha,
     isDigi,
+    isLiteral,
     isIdentifier,
     isAccount,
+    isCurrency,
     isCJK,
 }

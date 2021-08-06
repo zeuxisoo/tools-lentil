@@ -10,3 +10,4 @@ marksix     = Expenses:Gambling:MarkSix     ; 投注
 hosting     = Expenses:Server:Vps
 
 supermarket+25hkd = tbank
+supermarket+25usd = tbank+25usd

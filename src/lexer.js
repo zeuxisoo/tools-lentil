@@ -1,4 +1,4 @@
-import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isIdentifier, isAccount, isCJK } from './utils.js';
+import { isWhiteSpace, isNewline, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isCJK } from './utils/matcher.js';
 
 class Lexer {
 
@@ -91,23 +91,33 @@ class Lexer {
 
             // Alpha
             if (isAlpha(this.currentChar)) {
-                // Identifier
-                if (isIdentifier(this.currentChar)) {
-                    const type = isDigi(this.previousChar()) ? "currency" : "identifier";
+                const literal = this.readLiteral();
 
+                // Currency
+                if (isCurrency(literal)) {
                     tokens.push({
-                        type : type,
-                        value: this.readIdentifier(),
+                        type : "currency",
+                        value: literal,
                     });
 
                     continue;
                 }
 
                 // Account
-                if (isAccount(this.currentChar))  {
+                if (isAccount(literal)) {
                     tokens.push({
                         type : "account",
-                        value: this.readAccount(),
+                        value: literal,
+                    });
+
+                    continue;
+                }
+
+                // Identifier (If previous not matched, mean maybe identifier)
+                if (isIdentifier(literal)) {
+                    tokens.push({
+                        type : "identifier",
+                        value: literal,
                     });
 
                     continue;
@@ -161,28 +171,16 @@ class Lexer {
         this.nextPosition++;
     }
 
-    readIdentifier() {
-        let identifier = [];
+    readLiteral() {
+        let literal = [];
 
-        while(isIdentifier(this.currentChar)) {
-            identifier.push(this.currentChar);
-
-            this.readChar();
-        }
-
-        return identifier.join('');
-    }
-
-    readAccount() {
-        let account = [];
-
-        while(isAccount(this.currentChar) || isAlpha(this.currentChar) || isColon(this.currentChar)) {
-            account.push(this.currentChar);
+        while(isLiteral(this.currentChar)) {
+            literal.push(this.currentChar);
 
             this.readChar();
         }
 
-        return account.join('');
+        return literal.join('');
     }
 
     readDescription() {
