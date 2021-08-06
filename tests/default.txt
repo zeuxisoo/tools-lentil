@@ -11,3 +11,4 @@ hosting     = Expenses:Server:Vps
 
 supermarket+25hkd = tbank
 supermarket+25usd = tbank+25usd
+supermarket+25eur & marksix+20eur = tbank

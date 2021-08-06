@@ -68,6 +68,17 @@ class Lexer {
                 continue;
             }
 
+            // And
+            if (this.currentChar === '&') {
+                tokens.push({
+                    type : "and",
+                    value: this.currentChar,
+                });
+
+                this.readChar();
+                continue;
+            }
+
             // Semicolon
             if (this.currentChar === ';') {
                 tokens.push({
