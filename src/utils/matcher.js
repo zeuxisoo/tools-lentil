@@ -34,8 +34,8 @@ function isCurrency(value) {
     return /^[hkd|usd|cny|jpy|eur|gbp|inr]+$/i.test(value);
 }
 
-function isCJK(value) {
-    return /[\u4E00-\u9FCC]/.test(value);
+function isString(value) {
+    return typeof value === 'string';
 }
 
 export {
@@ -48,5 +48,5 @@ export {
     isIdentifier,
     isAccount,
     isCurrency,
-    isCJK,
+    isString,
 }

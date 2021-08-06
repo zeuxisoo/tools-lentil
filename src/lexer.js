@@ -1,4 +1,4 @@
-import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isCJK } from './utils/matcher.js';
+import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isString } from './utils/matcher.js';
 
 class Lexer {
 
@@ -113,10 +113,10 @@ class Lexer {
                 this.skipWhitespace(); // skip it if exists before find title
 
                 // Title
-                if (isCJK(this.currentChar)) {
+                if (isString(this.currentChar)) {
                     tokens.push({
-                        type : "description",
-                        value: this.readDescription(),
+                        type : "title",
+                        value: this.readTitle(),
                     });
                 }
 
@@ -221,16 +221,16 @@ class Lexer {
         return literal.join('');
     }
 
-    readDescription() {
-        let description = [];
+    readTitle() {
+        let title = [];
 
-        while(isCJK(this.currentChar) || isAlpha(this.currentChar)) {
-            description.push(this.currentChar);
+        while(isString(this.currentChar) && !isNewline(this.currentChar) && !isColon(this.currentChar)) {
+            title.push(this.currentChar);
 
             this.readChar();
         }
 
-        return description.join('');
+        return title.join('');
     }
 
     readNumber() {
