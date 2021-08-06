@@ -6,6 +6,10 @@ function isNewline(value) {
     return /[\n|\r|\r\n]/.test(value);
 }
 
+function isColon(value) {
+    return value === ':';
+}
+
 function isAlpha(value) {
     return /^[a-zA-Z]$/.test(value);
 }
@@ -37,6 +41,7 @@ function isCJK(value) {
 export {
     isWhiteSpace,
     isNewline,
+    isColon,
     isAlpha,
     isDigi,
     isLiteral,

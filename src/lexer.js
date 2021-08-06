@@ -1,4 +1,4 @@
-import { isWhiteSpace, isNewline, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isCJK } from './utils/matcher.js';
+import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isCJK } from './utils/matcher.js';
 
 class Lexer {
 
@@ -83,6 +83,17 @@ class Lexer {
             if (this.currentChar === '&') {
                 tokens.push({
                     type : "bitwiseAnd",
+                    value: this.currentChar,
+                });
+
+                this.readChar();
+                continue;
+            }
+
+            // Colon
+            if (isColon(this.currentChar)) {
+                tokens.push({
+                    type : "colon",
                     value: this.currentChar,
                 });
 

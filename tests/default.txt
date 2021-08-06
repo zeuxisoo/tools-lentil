@@ -12,3 +12,4 @@ hosting     = Expenses:Server:Vps
 supermarket+25hkd = tbank
 supermarket+25usd = tbank+25usd
 supermarket+25eur & marksix+20eur = tbank-50eur
+supermarket+25jpy & marksix+20jpy = ocard-50jpy ; 主題:
