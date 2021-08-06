@@ -68,6 +68,17 @@ class Lexer {
                 continue;
             }
 
+            // Minus
+            if (this.currentChar === '-') {
+                tokens.push({
+                    type : "minus",
+                    value: this.currentChar,
+                });
+
+                this.readChar();
+                continue;
+            }
+
             // And
             if (this.currentChar === '&') {
                 tokens.push({
