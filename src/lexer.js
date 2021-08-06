@@ -90,17 +90,6 @@ class Lexer {
                 continue;
             }
 
-            // Colon
-            if (isColon(this.currentChar)) {
-                tokens.push({
-                    type : "colon",
-                    value: this.currentChar,
-                });
-
-                this.readChar();
-                continue;
-            }
-
             // Semicolon
             if (this.currentChar === ';') {
                 tokens.push({
