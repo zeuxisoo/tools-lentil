@@ -116,7 +116,17 @@ class Lexer {
                 if (isString(this.currentChar)) {
                     tokens.push({
                         type : "title",
-                        value: this.readTitle(),
+                        value: this.readTitleOrDescription(),
+                    });
+                }
+
+                // Description
+                if (isColon(this.currentChar)) {
+                    this.readChar(); // skip colon ";"
+
+                    tokens.push({
+                        type : "description",
+                        value: this.readTitleOrDescription(),
                     });
                 }
 
@@ -221,16 +231,16 @@ class Lexer {
         return literal.join('');
     }
 
-    readTitle() {
-        let title = [];
+    readTitleOrDescription() {
+        let text = [];
 
         while(isString(this.currentChar) && !isNewline(this.currentChar) && !isColon(this.currentChar)) {
-            title.push(this.currentChar);
+            text.push(this.currentChar);
 
             this.readChar();
         }
 
-        return title.join('');
+        return text.join('');
     }
 
     readNumber() {
