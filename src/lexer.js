@@ -79,10 +79,10 @@ class Lexer {
                 continue;
             }
 
-            // And
+            // Bitwise And
             if (this.currentChar === '&') {
                 tokens.push({
-                    type : "and",
+                    type : "bitwiseAnd",
                     value: this.currentChar,
                 });
 
