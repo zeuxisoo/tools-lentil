@@ -27,7 +27,7 @@ function isIdentifier(value) {
 }
 
 function isAccount(value) {
-    return /^[Assets|Expenses|Liabilities|Equity|Income][:[a-zA-Z]+]*/.test(value);
+    return /^(Assets|Expenses|Liabilities|Equity|Income){1}(:[a-zA-Z]+)*/.test(value);
 }
 
 function isCurrency(value) {
