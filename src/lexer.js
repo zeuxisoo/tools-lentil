@@ -116,7 +116,7 @@ class Lexer {
                     continue;
                 }
 
-                this.unknownToken(`Unknown token type, alpha value "${this.literal}" in (line: ${this.currentLine}, column: ${this.currentColumn})`);
+                this.throwUnknownError('alpha', this.currentChar);
                 break;
             }
 
@@ -132,7 +132,7 @@ class Lexer {
                 break;
             }
 
-            this.unknownToken(`Unknown token type, char value "${this.currentChar}" in (line: ${this.currentLine}, column: ${this.currentColumn})`);
+            this.throwUnknownError('char', this.currentChar);
             break;
         }
 
@@ -146,8 +146,8 @@ class Lexer {
         });
     }
 
-    unknownToken(message) {
-        throw new UnknownTokenException(message);
+    throwUnknownError(name, value) {
+        throw new UnknownTokenException(name, value, this.currentLine, this.currentColumn);
     }
 
     // Reader
