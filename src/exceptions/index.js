@@ -1,1 +1,1 @@
-export { default as UnknownTokenException } from './UnknownTokenException.js';
+export { default as UnknownTokenException } from './unknown-token-exception.js';
