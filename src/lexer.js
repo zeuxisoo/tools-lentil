@@ -1,4 +1,5 @@
 import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isString } from './utils/matcher.js';
+import { TokenKind } from './token.js';
 
 class Lexer {
 
@@ -7,14 +8,15 @@ class Lexer {
         this.currentPosition = 0;
         this.nextPosition    = 0;
         this.currentChar     = '';
+        this.currentColumn   = 0;
         this.currentLine     = 1;
+
+        this.tokens = [];
 
         this.readChar();
     }
 
     lex() {
-        let tokens  = [];
-
         while(this.currentPosition < this.content.length) {
             // Comment
             if (this.currentChar === '/') {
@@ -34,89 +36,58 @@ class Lexer {
 
             // Newline
             if (isNewline(this.currentChar)) {
-                tokens.push({
-                    type : "newline",
-                    value: this.currentChar,
-                });
-
+                this.addToken(TokenKind.NewLine, this.currentChar);
                 this.readChar();
 
                 this.skipNewline(); // remove extra newline
-
                 continue;
             }
 
             // Assign/Equals
             if (this.currentChar === '=') {
-                tokens.push({
-                    type : "equals",
-                    value: this.currentChar,
-                });
-
+                this.addToken(TokenKind.Equals, this.currentChar);
                 this.readChar();
                 continue;
             }
 
             // Plus
             if (this.currentChar === '+') {
-                tokens.push({
-                    type : "plus",
-                    value: this.currentChar,
-                });
-
+                this.addToken(TokenKind.Plus, this.currentChar);
                 this.readChar();
                 continue;
             }
 
             // Minus
             if (this.currentChar === '-') {
-                tokens.push({
-                    type : "minus",
-                    value: this.currentChar,
-                });
-
+                this.addToken(TokenKind.Minus, this.currentChar);
                 this.readChar();
                 continue;
             }
 
             // Bitwise And
             if (this.currentChar === '&') {
-                tokens.push({
-                    type : "bitwiseAnd",
-                    value: this.currentChar,
-                });
-
+                this.addToken(TokenKind.BitwiseAnd, this.currentChar);
                 this.readChar();
                 continue;
             }
 
             // Semicolon
             if (this.currentChar === ';') {
-                tokens.push({
-                    type : "semicolon",
-                    value: this.currentChar,
-                });
-
+                this.addToken(TokenKind.Semicolon, this.currentChar);
                 this.readChar();
 
                 this.skipWhitespace(); // skip it if exists before find title
 
                 // Title
                 if (isString(this.currentChar)) {
-                    tokens.push({
-                        type : "title",
-                        value: this.readTitleOrDescription(),
-                    });
+                    this.addToken(TokenKind.Title, this.readTitleOrDescription());
                 }
 
                 // Description
                 if (isColon(this.currentChar)) {
                     this.readChar(); // skip colon ";"
 
-                    tokens.push({
-                        type : "description",
-                        value: this.readTitleOrDescription(),
-                    });
+                    this.addToken(TokenKind.Description, this.readTitleOrDescription());
                 }
 
                 continue;
@@ -128,63 +99,54 @@ class Lexer {
 
                 // Currency
                 if (isCurrency(literal)) {
-                    tokens.push({
-                        type : "currency",
-                        value: literal,
-                    });
-
+                    this.addToken(TokenKind.Currency, literal);
                     continue;
                 }
 
                 // Account
                 if (isAccount(literal)) {
-                    tokens.push({
-                        type : "account",
-                        value: literal,
-                    });
-
+                    this.addToken(TokenKind.Account, literal);
                     continue;
                 }
 
                 // Identifier (If previous not matched, mean maybe identifier)
                 if (isIdentifier(literal)) {
-                    tokens.push({
-                        type : "identifier",
-                        value: literal,
-                    });
-
+                    this.addToken(TokenKind.Identifier, literal);
                     continue;
                 }
 
-                console.log('Unknown token type: alpha');
+                this.unknownToken(`Unknown token type, alpha value "${this.literal}" in (line: ${this.currentLine}, column: ${this.currentColumn})`);
                 break;
             }
 
             // Number
             if (isDigi(this.currentChar)) {
-                tokens.push({
-                    type : "number",
-                    value: this.readNumber(),
-                });
-
+                this.addToken(TokenKind.Number, this.readNumber());
                 continue;
             }
 
             // End of file
             if (this.currentChar == 0) {
-                tokens.push({
-                    type : "eof",
-                    value: this.currentChar,
-                });
-
+                this.addToken(TokenKind.Eof, this.currentChar);
                 break;
             }
 
-            console.log(`Unknown token type, char value "${this.currentChar}" at ${this.currentPosition} position in line ${this.currentLine}`);
+            this.unknownToken(`Unknown token type, char value "${this.currentChar}" in (line: ${this.currentLine}, column: ${this.currentColumn})`);
             break;
         }
 
-        console.log(tokens);
+        console.log(this.tokens);
+    }
+
+    addToken(kind, value) {
+        this.tokens.push({
+            kind,
+            value
+        });
+    }
+
+    unknownToken(message) {
+        throw new Error(message);
     }
 
     // Reader
@@ -195,12 +157,14 @@ class Lexer {
             currentChar = this.content[this.nextPosition];
 
             this.currentPosition = this.nextPosition;
+            this.currentColumn++;
         }else{
             this.currentPosition = 0;
         }
 
         if (isNewline(currentChar)) {
             this.currentLine++;
+            this.currentColumn = 0;
         }
 
         this.currentChar = currentChar;
