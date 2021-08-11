@@ -1,5 +1,6 @@
 import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isString } from './utils/matcher.js';
 import { TokenKind } from './token.js';
+import { UnknownTokenException } from './exceptions/index.js';
 
 class Lexer {
 
@@ -146,7 +147,7 @@ class Lexer {
     }
 
     unknownToken(message) {
-        throw new Error(message);
+        throw new UnknownTokenException(message);
     }
 
     // Reader
