@@ -1,4 +1,6 @@
-export default class UnknownTokenException extends Error {
+import CustomError from './custom-error.js';
+
+export default class UnknownTokenException extends CustomError {
 
     constructor(name, value, line, column) {
         super(
