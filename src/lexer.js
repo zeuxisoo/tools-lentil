@@ -136,7 +136,7 @@ class Lexer {
             break;
         }
 
-        console.log(this.tokens);
+        return this.tokens;
     }
 
     addToken(kind, value) {

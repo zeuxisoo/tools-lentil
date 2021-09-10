@@ -1,3 +1,5 @@
+import Program from './ast/program.js';
+
 class Parser {
 
     constructor(lexer) {
@@ -5,7 +7,17 @@ class Parser {
     }
 
     parse() {
+        const ast = new Program();
         const tokens = this.lexer.lex();
+
+        for(let i=0; i<tokens.length; i++) {
+            const token = tokens[i];
+
+            console.log(token);
+        }
+
+        console.log(ast)
+        console.log(ast.display());
     }
 
 }
