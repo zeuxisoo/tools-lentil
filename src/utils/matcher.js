@@ -14,7 +14,7 @@ function isAlpha(value) {
     return /^[a-zA-Z]$/.test(value);
 }
 
-function isDigi(value) {
+function isDigit(value) {
     return /^[0-9]$/.test(value);
 }
 
@@ -30,10 +30,6 @@ function isAccount(value) {
     return /^(Assets|Expenses|Liabilities|Equity|Income){1}(:[a-zA-Z]+)*/.test(value);
 }
 
-function isCurrency(value) {
-    return /^[hkd|usd|cny|jpy|eur|gbp|inr]+$/i.test(value);
-}
-
 function isString(value) {
     return typeof value === 'string';
 }
@@ -43,10 +39,9 @@ export {
     isNewline,
     isColon,
     isAlpha,
-    isDigi,
+    isDigit,
     isLiteral,
     isIdentifier,
     isAccount,
-    isCurrency,
     isString,
 }

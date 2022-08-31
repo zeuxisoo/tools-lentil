@@ -1,3 +1,9 @@
+// 設定 config
+
+config {
+    currency = ["hkd", "usd", "jpy", "eur", "inr"]
+}
+
 // 資產 Assets
 
 tbank = Assets:Bank:TBank

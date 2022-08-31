@@ -1,4 +1,4 @@
-import { isWhiteSpace, isNewline, isColon, isAlpha, isDigi, isLiteral, isIdentifier, isAccount, isCurrency, isString } from './utils/matcher.js';
+import { isWhiteSpace, isNewline, isColon, isAlpha, isDigit, isLiteral, isIdentifier, isAccount, isString } from './utils/matcher.js';
 import { TokenKind } from './token.js';
 import { UnknownTokenException } from './exceptions/index.js';
 
@@ -51,6 +51,48 @@ class Lexer {
                 continue;
             }
 
+            // Left bracket
+            if (this.currentChar === '[') {
+                this.addToken(TokenKind.LeftBracket, this.currentChar);
+                this.readChar();
+                continue;
+            }
+
+            // Right bracket
+            if (this.currentChar === ']') {
+                this.addToken(TokenKind.RightBracket, this.currentChar);
+                this.readChar();
+                continue;
+            }
+
+            // Left brace
+            if (this.currentChar === '{') {
+                this.addToken(TokenKind.LeftBrace, this.currentChar);
+                this.readChar();
+                continue;
+            }
+
+            // Right brace
+            if (this.currentChar === '}') {
+                this.addToken(TokenKind.RightBrace, this.currentChar);
+                this.readChar();
+                continue;
+            }
+
+            // Double quote
+            if (this.currentChar === '"') {
+                this.addToken(TokenKind.DoubleQuote, this.currentChar);
+                this.readChar();
+                continue;
+            }
+
+            // Comma
+            if (this.currentChar === ',') {
+                this.addToken(TokenKind.Comma, this.currentChar);
+                this.readChar();
+                continue;
+            }
+
             // Plus
             if (this.currentChar === '+') {
                 this.addToken(TokenKind.Plus, this.currentChar);
@@ -98,12 +140,6 @@ class Lexer {
             if (isAlpha(this.currentChar)) {
                 const literal = this.readLiteral();
 
-                // Currency
-                if (isCurrency(literal)) {
-                    this.addToken(TokenKind.Currency, literal);
-                    continue;
-                }
-
                 // Account
                 if (isAccount(literal)) {
                     this.addToken(TokenKind.Account, literal);
@@ -121,7 +157,7 @@ class Lexer {
             }
 
             // Number
-            if (isDigi(this.currentChar)) {
+            if (isDigit(this.currentChar)) {
                 this.addToken(TokenKind.Number, this.readNumber());
                 continue;
             }
@@ -200,7 +236,7 @@ class Lexer {
     readNumber() {
         let number = [];
 
-        while(isDigi(this.currentChar)) {
+        while(isDigit(this.currentChar)) {
             number.push(this.currentChar);
 
             this.readChar();
