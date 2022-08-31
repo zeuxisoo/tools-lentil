@@ -30,6 +30,12 @@ function isAccount(value) {
     return /^(Assets|Expenses|Liabilities|Equity|Income){1}(:[a-zA-Z]+)*/.test(value);
 }
 
+function isDate(value) {
+    return /^\d{4}\-\d{2}\-\d{2}$/.test(value) &&
+        new Date(value) !== "Invalid Date" &&
+        !isNaN(new Date(value));
+}
+
 function isString(value) {
     return typeof value === 'string';
 }
@@ -43,5 +49,6 @@ export {
     isLiteral,
     isIdentifier,
     isAccount,
+    isDate,
     isString,
 }

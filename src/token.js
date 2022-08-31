@@ -11,6 +11,7 @@ const TokenKind = {
     Minus       : "-",
     BitwiseAnd  : "&",
     Semicolon   : ";",
+    Date        : "date",
     Title       : "title",
     Description : "description",
     Account     : "account",

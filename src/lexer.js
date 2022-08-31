@@ -1,4 +1,4 @@
-import { isWhiteSpace, isNewline, isColon, isAlpha, isDigit, isLiteral, isIdentifier, isAccount, isString } from './utils/matcher.js';
+import { isWhiteSpace, isNewline, isColon, isAlpha, isDigit, isLiteral, isIdentifier, isAccount, isDate, isString } from './utils/matcher.js';
 import { TokenKind } from './token.js';
 import { UnknownTokenException } from './exceptions/index.js';
 
@@ -158,6 +158,13 @@ class Lexer {
 
             // Number
             if (isDigit(this.currentChar)) {
+                const value = this.readDate();
+
+                if (isDate(value)) {
+                    this.addToken(TokenKind.Date, value);
+                    continue;
+                }
+
                 this.addToken(TokenKind.Number, this.readNumber());
                 continue;
             }
@@ -219,6 +226,18 @@ class Lexer {
         }
 
         return literal.join('');
+    }
+
+    readDate() {
+        let value = [];
+
+        while(isDigit(this.currentChar) || this.currentChar === "-") {
+            value.push(this.currentChar);
+
+            this.readChar();
+        }
+
+        return value.join('');
     }
 
     readTitleOrDescription() {
