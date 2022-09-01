@@ -10,8 +10,8 @@ class Parser {
         const ast = new Program();
         const tokens = this.lexer.lex();
 
-        for(let i=0; i<tokens.length; i++) {
-            const token = tokens[i];
+        while(tokens.length > 0) {
+            const token = tokens.shift();
 
             console.log(token);
         }
