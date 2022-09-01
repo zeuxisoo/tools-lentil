@@ -1,5 +1,5 @@
 import { isWhiteSpace, isNewline, isColon, isAlpha, isDigit, isLiteral, isIdentifier, isAccount, isDate, isString } from './utils/matcher.js';
-import { TokenKind } from './token.js';
+import { TokenKind, ReservedKeywords } from './token.js';
 import { UnknownTokenException } from './exceptions/index.js';
 
 class Lexer {
@@ -146,9 +146,13 @@ class Lexer {
                     continue;
                 }
 
-                // Identifier (If previous not matched, mean maybe identifier)
+                // Identifier/Keyword (If previous not matched, mean maybe identifier or keyword)
                 if (isIdentifier(literal)) {
-                    this.addToken(TokenKind.Identifier, literal);
+                    const tokenType = ReservedKeywords[literal] !== undefined
+                        ? ReservedKeywords[literal]
+                        : TokenKind.Identifier;
+
+                    this.addToken(tokenType, literal);
                     continue;
                 }
 

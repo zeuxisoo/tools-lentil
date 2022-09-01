@@ -20,6 +20,11 @@ const TokenKind = {
     Eof         : "eof",
 }
 
+const ReservedKeywords = {
+    'config': 'config',
+};
+
 export {
-    TokenKind
+    TokenKind,
+    ReservedKeywords
 }
