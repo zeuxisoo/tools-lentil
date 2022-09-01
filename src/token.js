@@ -1,4 +1,5 @@
 const TokenKind = {
+    // Basic
     NewLine     : "\n",
     Equals      : "=",
     LeftBracket : "[",
@@ -18,10 +19,13 @@ const TokenKind = {
     Identifier  : "identifier",
     Number      : "number",
     Eof         : "eof",
+
+    // Keyword
+    Config: "config",
 }
 
 const ReservedKeywords = {
-    'config': 'config',
+    'config': TokenKind.Config,
 };
 
 export {
