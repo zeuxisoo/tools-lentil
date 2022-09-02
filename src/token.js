@@ -1,7 +1,7 @@
 const TokenKind = {
     // Basic
     NewLine     : "\n",
-    Equals      : "=",
+    Assign      : "=",
     LeftBracket : "[",
     RightBracket: "]",
     LeftBrace   : "{",

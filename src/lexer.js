@@ -37,7 +37,8 @@ class Lexer {
 
             // Newline
             if (isNewline(this.currentChar)) {
-                this.addToken(TokenKind.NewLine, this.currentChar);
+                // Skip create the newline token
+                // this.addToken(TokenKind.NewLine, this.currentChar);
                 this.readChar();
 
                 this.skipNewline(); // remove extra newline
@@ -46,7 +47,7 @@ class Lexer {
 
             // Assign/Equals
             if (this.currentChar === '=') {
-                this.addToken(TokenKind.Equals, this.currentChar);
+                this.addToken(TokenKind.Assign, this.currentChar);
                 this.readChar();
                 continue;
             }
@@ -189,7 +190,9 @@ class Lexer {
     addToken(kind, value) {
         this.tokens.push({
             kind,
-            value
+            value,
+            line  : this.currentLine,
+            column: this.currentColumn,
         });
     }
 
