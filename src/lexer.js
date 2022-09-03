@@ -1,6 +1,6 @@
 import { isWhiteSpace, isNewline, isColon, isAlpha, isDigit, isLiteral, isIdentifier, isAccount, isDate, isString } from './utils/matcher.js';
 import { TokenKind, ReservedKeywords } from './token.js';
-import { UnknownTokenException } from './exceptions/index.js';
+import { TokenUnknownException, TokenUnexpectedException } from './exceptions/index.js';
 
 class Lexer {
 
@@ -80,10 +80,14 @@ class Lexer {
                 continue;
             }
 
-            // Double quote
+            // Double quote for string // TODO
             if (this.currentChar === '"') {
-                this.addToken(TokenKind.DoubleQuote, this.currentChar);
-                this.readChar();
+                // this.addToken(TokenKind.DoubleQuote, this.currentChar);
+                // this.readChar();
+
+                const value = this.readString();
+
+                this.addToken(TokenKind.String, value);
                 continue;
             }
 
@@ -197,7 +201,11 @@ class Lexer {
     }
 
     throwUnknownError(name, value) {
-        throw new UnknownTokenException(name, value, this.currentLine, this.currentColumn);
+        throw new TokenUnknownException(name, value, this.currentLine, this.currentColumn);
+    }
+
+    throwUnexpectedError(want, value) {
+        throw new TokenUnexpectedException(want, value, this.currentLine, this.currentColumn);
     }
 
     // Reader
@@ -233,6 +241,32 @@ class Lexer {
         }
 
         return literal.join('');
+    }
+
+    readString() {
+        let strings = [];
+
+        this.readChar(); // skip start "
+
+        while(this.currentChar !== '"') {
+            // skip the escaped char
+            if (this.currentChar === "\\") {
+                this.readChar();
+            }
+
+            // when meet empty/eof meet double quote not exists
+            if (this.currentChar == 0) {
+                this.throwUnexpectedError('"', this.currentChar);
+            }
+
+            strings.push(this.currentChar);
+
+            this.readChar();
+        }
+
+        this.readChar(); // skip end "
+
+        return strings.join('');
     }
 
     readDate() {

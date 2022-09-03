@@ -6,7 +6,6 @@ const TokenKind = {
     RightBracket: "]",
     LeftBrace   : "{",
     RightBrace  : "}",
-    DoubleQuote : "\"",
     Comma       : ",",
     Plus        : "+",
     Minus       : "-",
@@ -17,6 +16,7 @@ const TokenKind = {
     Description : "description",
     Account     : "account",
     Identifier  : "identifier",
+    String      : "string",
     Number      : "number",
     Eof         : "eof",
 
