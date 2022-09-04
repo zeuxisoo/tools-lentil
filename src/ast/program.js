@@ -12,7 +12,7 @@ class Program extends Node {
         let output = ['program {'];
 
         for(let i=0; i<this.statements.length; i++) {
-            output.push(statements[i].display());
+            output.push(this.statements[i].display());
         }
 
         output.push('}');
