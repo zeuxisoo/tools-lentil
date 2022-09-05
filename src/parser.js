@@ -1,10 +1,10 @@
 import {
     Program,
-    ConfigStatement, ConfigBlockStatement,
     IdentifierExpression, AssignExpression, ArrayExpression, StringExpression
 } from './ast/index.js';
 import { TokenKind } from './token.js';
 import { ParseUnexpectedTokenException } from './exceptions/index.js';
+import { statementParsers  } from './parsers/index.js';
 
 class Parser {
 
@@ -36,44 +36,10 @@ class Parser {
     }
 
     parseStatement() {
-        let statement = null;
-
-        switch(this.currentToken.kind) {
-            case TokenKind.Config:
-                statement = this.parseConfigStatement();
-                break;
-            default:
-                statement = this.parseExpressionStatement();
-                break;
-        }
-
-        return statement;
-    }
-
-    parseConfigStatement() {
-        const nextToken = this.lookNextToken();
-
-        if (nextToken.kind !== TokenKind.LeftBrace) {
-            this.throwUnexpectedToken("{", nextToken);
-        }
-
-        this.readToken(); // move currentToken to {
-        this.readToken(); // move currentToken to next token
-
-        const statement = new ConfigStatement();
-        statement.block = this.parseConfigBlockStatement();
-
-        return statement;
-    }
-
-    parseConfigBlockStatement() {
-        const statement = new ConfigBlockStatement();
-
-        while(this.currentToken.kind !== TokenKind.RightBrace && this.currentToken.kind !== TokenKind.Eof) {
-            statement.values.push(this.parseStatement());
-
-            this.readToken();
-        }
+        const parser    = statementParsers[this.currentToken.kind];
+        const statement =  parser !== undefined
+            ? parser(this)
+            : this.parseExpressionStatement();
 
         return statement;
     }
