@@ -4,7 +4,7 @@ import {
 } from './ast/index.js';
 import { TokenKind } from './token.js';
 import { ParseUnexpectedTokenException } from './exceptions/index.js';
-import { statementParsers, expressionParsers  } from './parsers/index.js';
+import { statementParsers, expressionStatementParsers, expressionParsers  } from './parsers/index.js';
 
 class Parser {
 
@@ -19,7 +19,7 @@ class Parser {
     parse() {
         // Get the tokens and initial the first current token value
         this.tokens = this.lexer.lex();
-        // console.log(this.tokens);
+
         this.readToken();
 
         while(this.tokens.length > 0) {
@@ -35,8 +35,10 @@ class Parser {
         console.log(this.ast.display());
     }
 
+    // e.g. N expressions
     parseStatement() {
-        const parser    = statementParsers[this.currentToken.kind];
+        const parser = statementParsers[this.currentToken.kind];
+
         const statement =  parser !== undefined
             ? parser(this)
             : this.parseExpressionStatement();
@@ -44,49 +46,29 @@ class Parser {
         return statement;
     }
 
+    // e.g. a = b
     parseExpressionStatement() {
-        const parser     = expressionParsers[this.currentToken.kind];
-        const expression = parser !== undefined
+        const parser = expressionStatementParsers[this.currentToken.kind];
+
+        const expressionStatement = parser !== undefined
             ? parser(this)
             : console.log('expressionStatement: ', this.currentToken);
 
-        return expression;
+        return expressionStatement;
     }
 
+    // e.g. [a, b, c] / "abc"
     parseExpression() {
-        let expression = null;
+        const parser = expressionParsers[this.currentToken.kind];
 
-        switch(this.currentToken.kind) {
-            case TokenKind.LeftBracket:
-                expression = this.parseArrayExpression();
-                break;
-            case TokenKind.String:
-                expression = this.parseStringExpression();
-                break;
-            default:
-                console.log('expression: ', this.currentToken);
-                break;
-        }
+        const expression = parser !== undefined
+            ? parser(this)
+            : console.log('expression: ', this.currentToken);
 
-        return expression;
+        return expression
     }
 
-    parseStringExpression() {
-        const expression = new StringExpression();
-        expression.token = this.currentToken;
-        expression.value = this.currentToken.value;
-
-        return expression;
-    }
-
-    parseArrayExpression() {
-        const expression  = new ArrayExpression();
-        expression.token  = this.currentToken;
-        expression.values = this.parseExpressionList();
-
-        return expression;
-    }
-
+    // helpers
     parseExpressionList() {
         // move currentToken to next value, skip [ token
         this.readToken();
@@ -109,7 +91,7 @@ class Parser {
         const lookNextToken = this.lookNextToken()
 
         if (lookNextToken.kind !== TokenKind.RightBracket) {
-            this.throwUnexpectedToken("]", this.lookNextToken());
+            this.throwUnexpectedToken("]", lookNextToken);
         }
 
         this.readToken();
