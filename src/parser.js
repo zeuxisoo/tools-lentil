@@ -1,10 +1,10 @@
 import {
     Program,
-    IdentifierExpression, AssignExpression, ArrayExpression, StringExpression
+    ArrayExpression, StringExpression
 } from './ast/index.js';
 import { TokenKind } from './token.js';
 import { ParseUnexpectedTokenException } from './exceptions/index.js';
-import { statementParsers  } from './parsers/index.js';
+import { statementParsers, expressionParsers  } from './parsers/index.js';
 
 class Parser {
 
@@ -45,40 +45,12 @@ class Parser {
     }
 
     parseExpressionStatement() {
-        let statement = null;
+        const parser     = expressionParsers[this.currentToken.kind];
+        const expression = parser !== undefined
+            ? parser(this)
+            : console.log('expressionStatement: ', this.currentToken);
 
-        switch(this.currentToken.kind) {
-            case TokenKind.Identifier:
-                statement = this.parseIdentifierExpression();
-                break;
-            default:
-                console.log('expressionStatement: ', this.currentToken);
-                break;
-        }
-
-        return statement;
-    }
-
-    parseIdentifierExpression() {
-        const nextToken = this.lookNextToken();
-
-        if (nextToken.kind !== TokenKind.Assign) {
-            this.throwUnexpectedToken("=", nextToken);
-        }
-
-        const identifierExpression = new IdentifierExpression();
-        identifierExpression.token = this.currentToken;
-        identifierExpression.value = this.currentToken.value;
-
-        this.readToken(); // move currentToken to =
-        this.readToken(); // move currentToken to right hand side
-
-        const assignExpression = new AssignExpression();
-        assignExpression.token = nextToken;
-        assignExpression.left  = identifierExpression;
-        assignExpression.right = this.parseExpression();
-
-        return assignExpression;
+        return expression;
     }
 
     parseExpression() {
