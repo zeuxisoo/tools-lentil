@@ -1,6 +1,5 @@
 import {
     Program,
-    ArrayExpression, StringExpression
 } from './ast/index.js';
 import { TokenKind } from './token.js';
 import { ParseUnexpectedTokenException } from './exceptions/index.js';
