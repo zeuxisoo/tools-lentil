@@ -7,3 +7,4 @@ export { default as IdentifierExpression } from './expressions/identifier-expres
 export { default as AssignExpression } from './expressions/assign-expression.js';
 export { default as ArrayExpression } from './expressions/array-expression.js';
 export { default as StringExpression } from './expressions/string-expression.js';
+export { default as AccountExpression } from './expressions/account-expression.js';

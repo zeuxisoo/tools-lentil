@@ -32,6 +32,7 @@ class Parser {
             this.readToken();
         }
 
+        console.dir(this.ast, { depth: null });
         console.log(this.ast.display());
     }
 

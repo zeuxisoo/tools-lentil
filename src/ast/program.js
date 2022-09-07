@@ -17,7 +17,7 @@ class Program extends Node {
 
         output.push('}');
 
-        return output.join('');
+        return output.join('\n');
     }
 
 }
