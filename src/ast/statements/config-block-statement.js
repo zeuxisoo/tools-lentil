@@ -2,6 +2,7 @@ import Statement from '../statement.js';
 
 class ConfigBlockStatement extends Statement {
 
+    token  = {};
     values = [];
 
     display() {

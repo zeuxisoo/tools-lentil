@@ -9,10 +9,11 @@ export default function parseConfigStatement(parser) {
         parser.throwUnexpectedToken("{", nextToken);
     }
 
-    parser.readToken(); // move currentToken to {
-    parser.readToken(); // move currentToken to next token
-
     const statement = new ConfigStatement();
+    statement.token = parser.currentToken;
+
+    parser.readToken(); // move currentToken to {
+
     statement.block = parseConfigBlockStatement(parser);
 
     return statement;
