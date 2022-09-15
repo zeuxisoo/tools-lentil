@@ -167,14 +167,26 @@ class Lexer {
 
             // Number
             if (isDigit(this.currentChar)) {
+                const previousState = [
+                    this.currentPosition, this.nextPosition,
+                    this.currentChar, this.currentColumn,
+                    this.currentLine
+                ];
+
                 const value = this.readDate();
 
                 if (isDate(value)) {
                     this.addToken(TokenKind.Date, value);
-                    continue;
+                }else{
+                    [
+                        this.currentPosition, this.nextPosition,
+                        this.currentChar, this.currentColumn,
+                        this.currentLine
+                    ] = previousState;
+
+                    this.addToken(TokenKind.Number, this.readNumber());
                 }
 
-                this.addToken(TokenKind.Number, this.readNumber());
                 continue;
             }
 
