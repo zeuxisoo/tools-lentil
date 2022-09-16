@@ -2,18 +2,13 @@ import Statement from '../statement.js';
 
 class DateBlockStatement extends Statement {
 
-    token  = {};
-    values = [];
+    token = {};
+    value = {};
 
     display() {
         let output = ['date_block {'];
 
-        for(const v of this.values) {
-            if (v !== null) {
-                // output.push(v.display());
-            }
-        }
-
+        output.push(this.value.display());
         output.push('}');
 
         return output.join('');

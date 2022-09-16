@@ -10,3 +10,8 @@ export { default as AssignExpression } from './expressions/assign-expression.js'
 export { default as ArrayExpression } from './expressions/array-expression.js';
 export { default as StringExpression } from './expressions/string-expression.js';
 export { default as AccountExpression } from './expressions/account-expression.js';
+export { default as NumberKindExpression } from './expressions/number-kind-expression.js';
+export { default as NumberExpression } from './expressions/number-expression.js';
+export { default as DateRecordsExpression } from './expressions/date-records-expression.js';
+export { default as DateRecordExpression } from './expressions/date-record-expression.js';
+export { default as DateRecordReceiptExpression } from './expressions/date-record-receipt-expression.js';
