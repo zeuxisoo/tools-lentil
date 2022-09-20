@@ -308,7 +308,7 @@ class Lexer {
     readAtom() {
         let value = [];
 
-        while(isString(this.currentChar) && !isNewline(this.currentChar)) {
+        while(isString(this.currentChar) && !isNewline(this.currentChar) && !isWhiteSpace(this.currentChar)) {
             value.push(this.currentChar);
 
             this.readChar();
