@@ -11,8 +11,8 @@ ocard = Assets:Card:OCard
 
 // 花費 Expenses
 
-supermarket = Expenses:Shopping:SuperMarket ; 超市
-marksix     = Expenses:Gambling:MarkSix     ; 投注
+supermarket = Expenses:Shopping:SuperMarket // 超市
+marksix     = Expenses:Gambling:MarkSix     // 投注
 hosting     = Expenses:Server:Vps
 
 // 記錄 Records
@@ -21,6 +21,6 @@ hosting     = Expenses:Server:Vps
     supermarket+25hkd & tbank
     supermarket+25usd & tbank+25usd
     supermarket+25eur & marksix+20eur & tbank-50eur
-    supermarket+25jpy & marksix+20jpy & ocard-50jpy ; 主題:
-    supermarket+25inr & marksix+20inr & tbank-50inr ; 主題:簡單描述
+    supermarket+25jpy & marksix+20jpy & ocard-50jpy :主題
+//    supermarket+25inr & marksix+20inr & tbank-50inr ; 主題:簡單描述
 }

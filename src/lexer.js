@@ -119,6 +119,18 @@ class Lexer {
                 continue;
             }
 
+            // Colon
+            if (this.currentChar === ':') {
+                this.addToken(TokenKind.Colon, this.currentChar);
+                this.readChar();
+
+                if (isString(this.nextChar())) {
+                    this.addToken(TokenKind.Atom, this.readAtom());
+                }
+
+                continue;
+            }
+
             // Semicolon
             if (this.currentChar === ';') {
                 this.addToken(TokenKind.Semicolon, this.currentChar);
@@ -285,6 +297,18 @@ class Lexer {
         let value = [];
 
         while(isDigit(this.currentChar) || this.currentChar === "-") {
+            value.push(this.currentChar);
+
+            this.readChar();
+        }
+
+        return value.join('');
+    }
+
+    readAtom() {
+        let value = [];
+
+        while(isString(this.currentChar) && !isNewline(this.currentChar)) {
             value.push(this.currentChar);
 
             this.readChar();
