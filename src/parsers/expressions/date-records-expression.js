@@ -3,6 +3,7 @@ import { DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpressio
 import parseIdentifierExpression from './identifier-expression.js';
 import parseNumberKindExpression from './number-kind-expression.js';
 import parseNumberExpression from './number-expression.js';
+import parseAtomExpression from './atom-expression.js';
 
 export default function parseDateRecordsExpression(parser) {
     const expression  = new  DateRecordsExpression();
@@ -59,6 +60,9 @@ function parseDateRecordReceiptExpression(parser) {
         expression.currency = parseIdentifierExpression(parser);
         parser.readToken();
     }
+
+    expression.title       = parseAtomExpression(parser);
+    expression.description = parseAtomExpression(parser);
 
     return expression;
 }
