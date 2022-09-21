@@ -332,7 +332,7 @@ class Lexer {
     readNumber() {
         let number = [];
 
-        while(isDigit(this.currentChar)) {
+        while(isDigit(this.currentChar) || this.currentChar === '.') {
             number.push(this.currentChar);
 
             this.readChar();
