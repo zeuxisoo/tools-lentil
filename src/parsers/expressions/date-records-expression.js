@@ -4,6 +4,8 @@ import parseIdentifierExpression from './identifier-expression.js';
 import parseNumberKindExpression from './number-kind-expression.js';
 import parseNumberExpression from './number-expression.js';
 import parseAtomExpression from './atom-expression.js';
+import parseTitleExpression from './title-expression.js';
+import parseDescriptionExpression from './description-expression.js';
 
 export default function parseDateRecordsExpression(parser) {
     const expression  = new  DateRecordsExpression();
@@ -11,11 +13,9 @@ export default function parseDateRecordsExpression(parser) {
     expression.values = [];
 
     while(![TokenKind.RightBrace, TokenKind.Eof].includes(parser.currentToken.kind)) {
-
         const record = parseDateRecordExpression(parser);
 
         expression.values.push(record);
-
     }
 
     return expression;
@@ -40,6 +40,21 @@ function parseDateRecordExpression(parser) {
 
     expression.values[expression.values.length - 1].isLast = true;
 
+    switch(parser.currentToken.kind) {
+        case TokenKind.Semicolon:
+            expression.title       = parseTitleExpression(parser);
+            expression.description = parseDescriptionExpression(parser);
+            break;
+        case TokenKind.Colon:
+            expression.title       = parseAtomExpression(parser);
+            expression.description = parseAtomExpression(parser);
+            break;
+        default:
+            expression.title       = null;
+            expression.description = null;
+            break;
+    }
+
     return expression;
 }
 
@@ -60,9 +75,6 @@ function parseDateRecordReceiptExpression(parser) {
         expression.currency = parseIdentifierExpression(parser);
         parser.readToken();
     }
-
-    expression.title       = parseAtomExpression(parser);
-    expression.description = parseAtomExpression(parser);
 
     return expression;
 }

@@ -145,7 +145,8 @@ class Lexer {
 
                 // Description
                 if (isColon(this.currentChar)) {
-                    this.readChar(); // skip colon ";"
+                    this.addToken(TokenKind.Colon, this.currentChar);
+                    this.readChar();
 
                     this.addToken(TokenKind.Description, this.readTitleOrDescription());
                 }

@@ -7,8 +7,6 @@ class DateRecordReceiptExpression extends Expression {
     kind        = {};
     amount      = {};
     currency    = {};
-    title       = {};
-    description = {};
     isLast      = false;
 
     display() {
@@ -19,14 +17,6 @@ class DateRecordReceiptExpression extends Expression {
         output.push(this.amount.value);
         output.push(this.currency.value);
         output.push(this.isLast ? '$' : "");
-
-        if (this.title) {
-            output.push(' ' + this.title.display());
-        }
-
-        if (this.description) {
-            output.push(' ' + this.description.display());
-        }
 
         return output.join('');
     }
