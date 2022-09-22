@@ -18,3 +18,4 @@ export { default as DateRecordExpression } from './expressions/date-record-expre
 export { default as DateRecordReceiptExpression } from './expressions/date-record-receipt-expression.js';
 export { default as TitleExpression } from './expressions/title-expression.js';
 export { default as DescriptionExpression } from './expressions/description-expression.js';
+export { default as AmountExpression } from './expressions/amount-expression.js';
