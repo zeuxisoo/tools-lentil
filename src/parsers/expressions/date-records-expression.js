@@ -1,7 +1,6 @@
 import { TokenKind } from '../../token.js';
 import { DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression } from "../../ast/index.js";
 import parseIdentifierExpression from './identifier-expression.js';
-import parseNumberKindExpression from './number-kind-expression.js';
 import parseNumberExpression from './number-expression.js';
 import parseAtomExpression from './atom-expression.js';
 import parseTitleExpression from './title-expression.js';
@@ -66,9 +65,6 @@ function parseDateRecordReceiptExpression(parser) {
     parser.readToken();
 
     if ([TokenKind.Plus, TokenKind.Minus].includes(parser.currentToken.kind)) {
-        expression.kind = parseNumberKindExpression(parser);
-        parser.readToken();
-
         expression.amount = parseNumberExpression(parser);
         parser.readToken();
 
