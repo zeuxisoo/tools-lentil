@@ -7,7 +7,7 @@ class AmountExpression extends Expression {
     currency = {}; // Identifier
 
     display() {
-        let output = [''];
+        let output = [];
 
         output.push(this.value.display());
         output.push(this.currency.display());

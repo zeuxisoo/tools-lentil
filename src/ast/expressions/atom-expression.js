@@ -6,7 +6,7 @@ class AtomExpression extends Expression {
     value = '';
 
     display() {
-        let output = [''];
+        let output = [];
 
         if (this.value.length > 0) {
             output.push(`:${this.value}`);
