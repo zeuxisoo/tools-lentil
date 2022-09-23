@@ -25,4 +25,6 @@ hosting     = Expenses:Server:Vps
     supermarket+25jpy & marksix+20jpy & ocard-45jpy :主題 :簡單描述
     supermarket+30.29jpy & marksix+20.21jpy & ocard-50.50jpy :主題2 :簡單描述2
     supermarket+25inr & marksix+20inr & tbank-50inr ; 主題3:簡單描述3
+
+    supermarket+25inr,+25hkd,+46jpy & hosting+10inr & tbank-35hkd
 }

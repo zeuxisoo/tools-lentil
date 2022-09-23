@@ -4,14 +4,18 @@ class DateRecordReceiptExpression extends Expression {
 
     token   = {};
     account = {};
-    amount  = {};
+    amounts = {}; // AmountsExpression
     isLast  = false;
 
     display() {
-        let output = [''];
+        let output = [];
 
         output.push(this.account.display());
-        output.push(this.amount.display());
+
+        if (this.amounts !== null) {
+            output.push(this.amounts.display());
+        }
+
         output.push(this.isLast ? '$' : "");
 
         return output.join('');
