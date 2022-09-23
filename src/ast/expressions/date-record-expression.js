@@ -1,4 +1,4 @@
-import TitleExpression from './title-expression.js';
+import AtomExpression from './atom-expression.js';
 import Expression from '../expression.js';
 
 class DateRecordExpression extends Expression {
@@ -26,7 +26,7 @@ class DateRecordExpression extends Expression {
         }
 
         if (this.description) {
-            if (!this.title instanceof TitleExpression) {
+            if (this.description instanceof AtomExpression) {
                 output.push(' ');
             }
 
