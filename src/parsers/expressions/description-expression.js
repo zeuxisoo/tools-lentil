@@ -7,12 +7,11 @@ export default function parseDescriptionExpression(parser) {
     }
 
     const expression = new DescriptionExpression();
-    expression.token = parser.currentToken;
 
+    expression.token = parser.currentToken;
     parser.readToken();
 
     expression.value = parser.currentToken.value;
-
     parser.readToken();
 
     return expression;
