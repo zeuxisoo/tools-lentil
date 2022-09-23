@@ -7,12 +7,11 @@ export default function parseAtomExpression(parser) {
     }
 
     const expression = new AtomExpression();
-    expression.token = parser.currentToken;
 
+    expression.token = parser.currentToken;
     parser.readToken();
 
     expression.value = parser.currentToken.value;
-
     parser.readToken();
 
     return expression;
