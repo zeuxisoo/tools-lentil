@@ -9,11 +9,12 @@ export default function parseDateStatement(parser) {
 
     const statement   = new DateStatement();
     statement.token = parser.currentToken;
-    statement.value = parser.currentToken.value;
 
+    statement.value = parser.currentToken.value;
     parser.readToken(); // move currentToken to {
 
     statement.block = parserDateBlockStatement(parser);
+    // skip call readToken() because it is called
 
     return statement;
 }

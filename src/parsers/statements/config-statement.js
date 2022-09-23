@@ -10,11 +10,12 @@ export default function parseConfigStatement(parser) {
     }
 
     const statement = new ConfigStatement();
-    statement.token = parser.currentToken;
 
+    statement.token = parser.currentToken;
     parser.readToken(); // move currentToken to {
 
     statement.block = parseConfigBlockStatement(parser);
+    // skip call readToken() because it is called
 
     return statement;
 }
