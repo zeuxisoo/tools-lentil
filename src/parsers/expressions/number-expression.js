@@ -14,6 +14,7 @@ export default function parseNumberExpression(parser) {
     parser.readToken();
 
     expression.value = parser.currentToken.value;
+    parser.readToken();
 
     return expression;
 }
