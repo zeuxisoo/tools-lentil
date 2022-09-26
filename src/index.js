@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { createLexer } from './lexer.js';
 import { createParser } from './parser.js';
+import { createGenerator } from './generator.js';
 
 (() => {
 
@@ -22,6 +23,7 @@ import { createParser } from './parser.js';
 
     const lexer = createLexer(fileContent);
     const parser = createParser(lexer);
+    const generator = createGenerator(parser);
 
-    parser.parse();
+    generator.generate();
 })();

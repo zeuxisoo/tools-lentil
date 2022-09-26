@@ -31,8 +31,7 @@ class Parser {
             this.readToken();
         }
 
-        console.dir(this.ast, { depth: null });
-        console.log(this.ast.display());
+        return this.ast;
     }
 
     // e.g. N expressions
