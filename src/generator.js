@@ -17,6 +17,8 @@ class Generator {
         const env = new Environment();
 
         this.produce(ast, env);
+
+        console.log(env.configs);
     }
 
     produce(node, env) {
@@ -25,15 +27,16 @@ class Generator {
                 let codes = [];
 
                 for(const statement of node.statements) {
-                    codes.push(
-                        this.produce(statement, env)
-                    );
+                    const result = this.produce(statement, env);
+
+                    if (result !== null) {
+                        codes.push(result);
+                    }
                 }
 
                 return codes;
             case ConfigStatement:
-                this.produce(node.block, env);
-                break;
+                return this.produce(node.block, env);
             case ConfigBlockStatement:
                 for(const v of node.values) {
                     if (v instanceof AssignExpression) {
@@ -43,7 +46,7 @@ class Generator {
                         env.addConfig(name, data);
                     }
                 }
-                break;
+                return null;
             case IdentifierExpression:
                 return node.value;
             case ArrayExpression:
