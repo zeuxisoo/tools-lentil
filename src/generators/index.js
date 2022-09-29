@@ -5,3 +5,4 @@ export { default as generateConfigBlockStatement } from './config-block-statemen
 
 export { default as generateIdentifierExpression } from './identifier-expression.js';
 export { default as generateArrayExpression } from './array-expression.js';
+export { default as generateStringExpression } from './string-expression.js';

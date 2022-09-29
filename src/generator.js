@@ -6,7 +6,8 @@ import {
 import {
     generateProgram,
     generateConfigStatement, generateConfigBlockStatement,
-    generateIdentifierExpression, generateArrayExpression
+    generateIdentifierExpression, generateArrayExpression,
+    generateStringExpression
 } from './generators/index.js';
 import Environment from './utils/environment.js';
 import { GeneratorUnknownException  } from './exceptions/index.js';
@@ -39,7 +40,7 @@ class Generator {
             case ArrayExpression:
                 return generateArrayExpression(this, node, env);
             case StringExpression:
-                return node.value;
+                return generateStringExpression(this, node, env);
             default:
                 throw new GeneratorUnknownException(
                     node.constructor.name,
