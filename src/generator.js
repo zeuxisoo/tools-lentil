@@ -3,6 +3,9 @@ import {
     ConfigStatement, ConfigBlockStatement,
     AssignExpression, IdentifierExpression, ArrayExpression, StringExpression,
 } from './ast/index.js';
+import {
+    generateProgram
+} from './generators/index.js';
 import Environment from './utils/environment.js';
 import { GeneratorUnknownException  } from './exceptions/index.js';
 
@@ -24,17 +27,7 @@ class Generator {
     produce(node, env) {
         switch(node.constructor) {
             case Program:
-                let codes = [];
-
-                for(const statement of node.statements) {
-                    const result = this.produce(statement, env);
-
-                    if (result !== null) {
-                        codes.push(result);
-                    }
-                }
-
-                return codes;
+                return generateProgram(this, node, env);
             case ConfigStatement:
                 return this.produce(node.block, env);
             case ConfigBlockStatement:
