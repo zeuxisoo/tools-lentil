@@ -6,6 +6,7 @@ import {
 import {
     generateProgram,
     generateConfigStatement, generateConfigBlockStatement,
+    generateIdentifierExpression
 } from './generators/index.js';
 import Environment from './utils/environment.js';
 import { GeneratorUnknownException  } from './exceptions/index.js';
@@ -34,7 +35,7 @@ class Generator {
             case ConfigBlockStatement:
                 return generateConfigBlockStatement(this, node, env);
             case IdentifierExpression:
-                return node.value;
+                return generateIdentifierExpression(this, node, env);
             case ArrayExpression:
                 let items = [];
 
