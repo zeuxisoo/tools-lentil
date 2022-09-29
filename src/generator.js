@@ -1,11 +1,11 @@
 import {
     Program,
     ConfigStatement, ConfigBlockStatement,
-    AssignExpression, IdentifierExpression, ArrayExpression, StringExpression,
+    IdentifierExpression, ArrayExpression, StringExpression,
 } from './ast/index.js';
 import {
     generateProgram,
-    generateConfigStatement,
+    generateConfigStatement, generateConfigBlockStatement,
 } from './generators/index.js';
 import Environment from './utils/environment.js';
 import { GeneratorUnknownException  } from './exceptions/index.js';
@@ -32,15 +32,7 @@ class Generator {
             case ConfigStatement:
                 return generateConfigStatement(this, node, env);
             case ConfigBlockStatement:
-                for(const v of node.values) {
-                    if (v instanceof AssignExpression) {
-                        const name = this.produce(v.left, env);
-                        const data = this.produce(v.right, env);
-
-                        env.addConfig(name, data);
-                    }
-                }
-                return null;
+                return generateConfigBlockStatement(this, node, env);
             case IdentifierExpression:
                 return node.value;
             case ArrayExpression:
