@@ -4,7 +4,8 @@ import {
     AssignExpression, IdentifierExpression, ArrayExpression, StringExpression,
 } from './ast/index.js';
 import {
-    generateProgram
+    generateProgram,
+    generateConfigStatement,
 } from './generators/index.js';
 import Environment from './utils/environment.js';
 import { GeneratorUnknownException  } from './exceptions/index.js';
@@ -29,7 +30,7 @@ class Generator {
             case Program:
                 return generateProgram(this, node, env);
             case ConfigStatement:
-                return this.produce(node.block, env);
+                return generateConfigStatement(this, node, env);
             case ConfigBlockStatement:
                 for(const v of node.values) {
                     if (v instanceof AssignExpression) {
