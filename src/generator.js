@@ -6,7 +6,7 @@ import {
 import {
     generateProgram,
     generateConfigStatement, generateConfigBlockStatement,
-    generateIdentifierExpression
+    generateIdentifierExpression, generateArrayExpression
 } from './generators/index.js';
 import Environment from './utils/environment.js';
 import { GeneratorUnknownException  } from './exceptions/index.js';
@@ -37,13 +37,7 @@ class Generator {
             case IdentifierExpression:
                 return generateIdentifierExpression(this, node, env);
             case ArrayExpression:
-                let items = [];
-
-                for(const v of node.values) {
-                    items.push(this.produce(v, env));
-                }
-
-                return items;
+                return generateArrayExpression(this, node, env);
             case StringExpression:
                 return node.value;
             default:
