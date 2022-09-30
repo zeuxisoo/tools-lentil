@@ -1,8 +1,27 @@
-export { default as generateProgram } from './program.js';
+import {
+    Program,
+    ConfigStatement, ConfigBlockStatement,
+    IdentifierExpression, ArrayExpression, StringExpression,
+} from '../ast/index.js';
 
-export { default as generateConfigStatement } from './config-statements.js';
-export { default as generateConfigBlockStatement } from './config-block-statement.js';
+import generateProgram from './program.js';
 
-export { default as generateIdentifierExpression } from './identifier-expression.js';
-export { default as generateArrayExpression } from './array-expression.js';
-export { default as generateStringExpression } from './string-expression.js';
+import generateConfigStatement from './config-statements.js';
+import generateConfigBlockStatement from './config-block-statement.js';
+
+import generateIdentifierExpression from './identifier-expression.js';
+import generateArrayExpression from './array-expression.js';
+import generateStringExpression from './string-expression.js';
+
+const generators = {
+    [Program]             : generateProgram,
+    [ConfigStatement]     : generateConfigStatement,
+    [ConfigBlockStatement]: generateConfigBlockStatement,
+    [IdentifierExpression]: generateIdentifierExpression,
+    [ArrayExpression]     : generateArrayExpression,
+    [StringExpression]    : generateStringExpression,
+};
+
+export {
+    generators
+}

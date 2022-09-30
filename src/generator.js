@@ -1,16 +1,6 @@
-import {
-    Program,
-    ConfigStatement, ConfigBlockStatement,
-    IdentifierExpression, ArrayExpression, StringExpression,
-} from './ast/index.js';
-import {
-    generateProgram,
-    generateConfigStatement, generateConfigBlockStatement,
-    generateIdentifierExpression, generateArrayExpression,
-    generateStringExpression
-} from './generators/index.js';
-import Environment from './utils/environment.js';
+import { generators } from './generators/index.js';
 import { GeneratorUnknownException  } from './exceptions/index.js';
+import Environment from './utils/environment.js';
 
 class Generator {
 
@@ -28,27 +18,22 @@ class Generator {
     }
 
     produce(node, env) {
-        switch(node.constructor) {
-            case Program:
-                return generateProgram(this, node, env);
-            case ConfigStatement:
-                return generateConfigStatement(this, node, env);
-            case ConfigBlockStatement:
-                return generateConfigBlockStatement(this, node, env);
-            case IdentifierExpression:
-                return generateIdentifierExpression(this, node, env);
-            case ArrayExpression:
-                return generateArrayExpression(this, node, env);
-            case StringExpression:
-                return generateStringExpression(this, node, env);
-            default:
-                throw new GeneratorUnknownException(
-                    node.constructor.name,
-                    node.token.value,
-                    node.token.line,
-                    node.token.column,
-                )
-        }
+        const generator = generators[node.constructor];
+
+        const result = generator !== undefined
+            ? generator(this, node, env)
+            : this.throwUnknownException(node);
+
+        return result;
+    }
+
+    throwUnknownException(node) {
+        throw new GeneratorUnknownException(
+            node.constructor.name,
+            node.token.value,
+            node.token.line,
+            node.token.column,
+        );
     }
 
 }
