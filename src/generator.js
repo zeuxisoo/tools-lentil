@@ -14,7 +14,7 @@ class Generator {
 
         this.produce(ast, env);
 
-        console.log(env.configs);
+        console.log(env);
     }
 
     produce(node, env) {
