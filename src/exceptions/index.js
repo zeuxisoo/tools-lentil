@@ -5,4 +5,4 @@ export { default as TokenUnexpectedException } from './token-unexpected-exceptio
 
 export { default as ParseUnexpectedTokenException } from './parse-unexpected-token-exception.js';
 
-export { default as GeneratorUnknownException } from './generator-unknow-exception.js';
+export { default as GeneratorUnknownException } from './generator-unknown-exception.js';
