@@ -1,5 +1,10 @@
 import { generators } from './generators/index.js';
-import { GeneratorUnknownException  } from './exceptions/index.js';
+import {
+    GeneratorUnknownException,
+    GeneratorUnexpectedException,
+    GeneratorAccountNotFoundException,
+    GeneratorCurrencyNotFoundException,
+} from './exceptions/index.js';
 import Environment from './utils/environment.js';
 
 class Generator {
@@ -12,9 +17,11 @@ class Generator {
         const ast = this.parser.parse();
         const env = new Environment();
 
-        this.produce(ast, env);
+        const result = this.produce(ast, env);
 
         console.log(env);
+        console.log('----', 'result', '----');
+        console.log(result.join('\n'));
     }
 
     produce(node, env) {
@@ -34,6 +41,18 @@ class Generator {
             node.token.line,
             node.token.column,
         );
+    }
+
+    throwUnexpectedException(message) {
+        throw new GeneratorUnexpectedException(message);
+    }
+
+    throwAccountNotFoundException(name) {
+        throw new GeneratorAccountNotFoundException(name);
+    }
+
+    throwCurrencyNotFoundException(name) {
+        throw new GeneratorCurrencyNotFoundException(name);
     }
 
 }

@@ -1,0 +1,22 @@
+// 設定 config
+
+config {
+    currency = ["hkd", "usd", "jpy", "eur", "inr"]
+}
+
+// 資產 Assets
+
+tbank = Assets:Bank:TBank
+ocard = Assets:Card:OCard
+
+// 花費 Expenses
+
+supermarket = Expenses:Shopping:SuperMarket // 超市
+marksix     = Expenses:Gambling:MarkSix     // 投注
+hosting     = Expenses:Server:Vps
+
+// 記錄 Records
+
+2022-08-31 {
+    supermarket+25hkd & tbank
+}

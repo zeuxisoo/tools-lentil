@@ -6,3 +6,6 @@ export { default as TokenUnexpectedException } from './token-unexpected-exceptio
 export { default as ParseUnexpectedTokenException } from './parse-unexpected-token-exception.js';
 
 export { default as GeneratorUnknownException } from './generator-unknown-exception.js';
+export { default as GeneratorAccountNotFoundException } from './generator-account-not-found-exception.js';
+export { default as GeneratorCurrencyNotFoundException } from './generator-currency-not-found-exception.js';
+export { default as GeneratorUnexpectedException } from './generator-unexpected-exception.js';
