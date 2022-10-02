@@ -1,5 +1,5 @@
 import { TokenKind } from '../../token.js';
-import { DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression } from "../../ast/index.js";
+import { DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression, AmountsExpression } from "../../ast/index.js";
 import parseIdentifierExpression from './identifier-expression.js';
 import parseAmountsExpression from './amounts-expression.js';
 import parseAtomExpression from './atom-expression.js';
@@ -68,7 +68,11 @@ function parseDateRecordReceiptExpression(parser) {
         expression.amounts = parseAmountsExpression(parser);
         parser.readToken();
     }else{
-        expression.amounts = null;
+        const amountExpression  = new AmountsExpression();
+        amountExpression.token  = parser.currentToken;
+        amountExpression.values = [];
+
+        expression.amounts = amountExpression;
     }
 
     return expression;

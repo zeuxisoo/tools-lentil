@@ -12,11 +12,7 @@ export default function generateDateRecordReceiptExpression(generator, node, env
     const addWhitespace = ' '.repeat(whitespaceLength);
 
     // Input amount by manually
-    let amount = null;
-
-    if (node.amounts !== null) {
-        amount = generator.produce(node.amounts, env);
-    }
+    const amount = node.amounts.values.length > 0 ? generator.produce(node.amounts, env) : null;
 
     if (amount === null) {
         return accountValue;
