@@ -58,8 +58,9 @@ function generateAmount(amount, remainAmount) {
 function generateRemainAmount(amount, remainAmount) {
     // When amount is empty in last record, use the auto calculated remain amount
     if (amount.length <= 0) {
+        // when remain amount is positive, it should be add `-` prefix
         if (remainAmount.price > 0) {
-            remainAmount.price = `+${remainAmount.price}`;
+            remainAmount.price = `-${remainAmount.price}`;
         }
 
         return concatAmount(remainAmount);
