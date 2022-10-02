@@ -12,7 +12,7 @@ export default function generateDateStatement(generator, node, env) {
         // Date records
         const rowContent = [];
 
-        // Store auto calculated remain amount value
+        // Store auto calculated remain amount value, use in last record amount is empty
         let remainAmount = { price: 0, currency: '' };
 
         for(const record of row) {
@@ -24,32 +24,9 @@ export default function generateDateStatement(generator, node, env) {
             const amount = record.amount;
 
             if (!record.isLast) {
-                switch(amount.length) {
-                    case 1:
-                        remainAmount = updateRemainAmount(remainAmount, amount[0]);
-
-                        rowContent.push(concatAmount(amount[0]));
-                        break;
-                    case 2:
-                        remainAmount = updateRemainAmount(remainAmount, amount[1]);
-
-                        const first = concatAmount(amount[0]);
-                        const second = concatAmount(amount[1]);
-
-                        rowContent.push(`${first} @@ ${second}`);
-                        break;
-                }
+                rowContent.push(generateAmount(amount, remainAmount));
             }else{
-                // When amount is empty in last record, use the auto calculated remain amount
-                if (amount.length <= 0) {
-                    if (remainAmount.price > 0) {
-                        remainAmount.price = `+${remainAmount.price}`;
-                    }
-
-                    rowContent.push(concatAmount(remainAmount));
-                }else{
-                    rowContent.push(concatAmount(amount[0]));
-                }
+                rowContent.push(generateRemainAmount(amount, remainAmount));
             }
 
             // Add new when end of record
@@ -60,6 +37,35 @@ export default function generateDateStatement(generator, node, env) {
     }
 
     return content.join('\n');
+}
+
+function generateAmount(amount, remainAmount) {
+    switch(amount.length) {
+        case 1:
+            remainAmount = updateRemainAmount(remainAmount, amount[0]);
+
+            return concatAmount(amount[0]);
+        case 2:
+            remainAmount = updateRemainAmount(remainAmount, amount[1]);
+
+            const first = concatAmount(amount[0]);
+            const second = concatAmount(amount[1]);
+
+            return `${first} @@ ${second}`;
+    }
+}
+
+function generateRemainAmount(amount, remainAmount) {
+    // When amount is empty in last record, use the auto calculated remain amount
+    if (amount.length <= 0) {
+        if (remainAmount.price > 0) {
+            remainAmount.price = `+${remainAmount.price}`;
+        }
+
+        return concatAmount(remainAmount);
+    }else{
+        return concatAmount(amount[0]);
+    }
 }
 
 function concatAmount(amount) {
