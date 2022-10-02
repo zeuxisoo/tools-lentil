@@ -7,12 +7,5 @@ export default function generateAmountsExpression(generator, node, env) {
         amounts.push(amount);
     }
 
-    switch(amounts.length) {
-        case 1:
-            return amounts.join('');
-        case 2:
-            return amounts.join(' @@ ');
-        default:
-            generator.throwUnexpectedException(`amount length miss match, got ${amounts.length}, want 1 or 2`);
-    }
+    return amounts;
 }

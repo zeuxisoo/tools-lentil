@@ -6,17 +6,18 @@ export default function generateDateRecordReceiptExpression(generator, node, env
         generator.throwAccountNotFoundException(accountName);
     }
 
-    //
-    const accountLength = Object.values(env.variables).reduce((a, b) => a > b ? a : b).length;
-    const whitespaceLength = accountLength - accountValue.length + 4; // fix 4 space
-    const addWhitespace = ' '.repeat(whitespaceLength);
+    // Calculate whitespace between account and currency
+    const accountLength    = Object.values(env.variables).reduce((a, b) => a > b ? a : b).length;
+    const whitespaceLength = accountLength - accountValue.length + 4;                                // fix 4 space
 
     // Input amount by manually
-    const amount = node.amounts.values.length > 0 ? generator.produce(node.amounts, env) : null;
+    const amount = node.amounts.values.length > 0 ? generator.produce(node.amounts, env) : [];
 
-    if (amount === null) {
-        return accountValue;
-    }else{
-        return `${accountValue}${addWhitespace}${amount}`;
-    }
+    //
+    return {
+        account   : accountValue,
+        amount    : amount,
+        isLast    : node.isLast,
+        whitespace: whitespaceLength,
+    };
 }

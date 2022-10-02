@@ -6,5 +6,8 @@ export default function generateAmountExpression(generator, node, env) {
         generator.throwCurrencyNotFoundException(currency);
     }
 
-    return `${price} ${currency}`;
+    return {
+        price,
+        currency
+    };
 }
