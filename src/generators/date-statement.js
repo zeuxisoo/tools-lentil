@@ -3,40 +3,61 @@ export default function generateDateStatement(generator, node, env) {
     const rows = generator.produce(node.block, env);
 
     const content = [];
-    const recordPrefixWhitespace = ' '.repeat(4);
 
     for(const row of rows) {
         // Date
         content.push(date);
 
         // Date records
-        const rowContent = [];
-
-        // Store auto calculated remain amount value, use in last record amount is empty
-        let remainAmount = { price: 0, currency: '' };
-
-        for(const record of row) {
-            rowContent.push(recordPrefixWhitespace);
-            rowContent.push(record.account);
-            rowContent.push(' '.repeat(record.whitespace));
-
-            // Amount
-            const amount = record.amount;
-
-            if (!record.isLast) {
-                rowContent.push(generateAmount(amount, remainAmount));
-            }else{
-                rowContent.push(generateRemainAmount(amount, remainAmount));
-            }
-
-            // Add new when end of record
-            rowContent.push('\n');
-        }
-
-        content.push(rowContent.join(''));
+        content.push(generateDate(row));
     }
 
     return content.join('\n');
+}
+
+function generateDate(recordRow) {
+    let remainAmount = { price: 0, currency: '' };
+
+    // Create render structure
+    const records = [];
+
+    for(const record of recordRow) {
+        const amount = record.isLast
+            ? generateRemainAmount(record.amount, remainAmount)
+            : generateAmount(record.amount, remainAmount)
+
+        records.push({
+            recordPrefix : ' '.repeat(4),
+            account      : record.account,
+            accountSuffix: ' '.repeat(record.whitespace),
+            amount       : amount,
+        });
+    }
+
+    // Output the formatted structure
+    // '+10.00 jpy'.length
+    const lastAmountLength = records[records.length - 1].amount.length;
+
+    const output = [];
+
+    for(const record of records) {
+        output.push(record.recordPrefix);
+        output.push(record.account);
+        output.push(record.accountSuffix);
+
+        // Format amount in same width
+        // Get the first amount length: `+10.00 usd @@ +7.80 xyz` -> `+10.00 usd`.length
+        const amountLength = record.amount.match(/^[+|-][0-9]+\.[0-9]{2}\s[a-z]{3}/g)[0].length;
+        const amountPrefix = record.isLast ? 0 : lastAmountLength - amountLength;
+
+        output.push(' '.repeat(amountPrefix));
+        output.push(record.amount);
+
+        // Add newline when end of record
+        output.push('\n');
+    }
+
+    return output.join('');
 }
 
 function generateAmount(amount, remainAmount) {
