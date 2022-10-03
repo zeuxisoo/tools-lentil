@@ -70,6 +70,12 @@ function generateRemainAmount(amount, remainAmount) {
 }
 
 function concatAmount(amount) {
+    amount.price = new Number(amount.price).toFixed(2);
+
+    if (amount.price > 0) {
+        amount.price = `+${amount.price}`;
+    }
+
     return `${amount.price} ${amount.currency}`;
 }
 
