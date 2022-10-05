@@ -6,7 +6,8 @@ import {
     AmountsExpression, AmountExpression,
     NumberExpression, NumberKindExpression,
     DateStatement, DateBlockStatement,
-    DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression
+    DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression,
+    AtomExpression,
 } from '../ast/index.js';
 
 import generateProgram from './program.js';
@@ -32,6 +33,8 @@ import generateDateRecordsExpression from './date-records-expression.js';
 import generateDateRecordExpression from './date-record-expression.js';
 import generateDateRecordReceiptExpression from './date-record-receipt-expression.js';
 
+import generateAtomExpression from './atom-expression.js';
+
 const generators = {
     [Program]             : generateProgram,
     [ConfigStatement]     : generateConfigStatement,
@@ -53,6 +56,8 @@ const generators = {
     [DateRecordsExpression]      : generateDateRecordsExpression,
     [DateRecordExpression]       : generateDateRecordExpression,
     [DateRecordReceiptExpression]: generateDateRecordReceiptExpression,
+
+    [AtomExpression]: generateAtomExpression,
 };
 
 export {

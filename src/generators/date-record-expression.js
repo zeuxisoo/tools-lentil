@@ -1,4 +1,5 @@
 export default function generateDateRecordExpression(generator, node, env) {
+    // Receipts
     const receipts = [];
 
     for(const v of node.values) {
@@ -7,5 +8,11 @@ export default function generateDateRecordExpression(generator, node, env) {
         receipts.push(receipt);
     }
 
-    return receipts;
+    // Atom title
+    const title = node.title === null ? "" : generator.produce(node.title);
+
+    return {
+        receipts,
+        title,
+    };
 }

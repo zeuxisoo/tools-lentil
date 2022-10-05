@@ -5,8 +5,10 @@ export default function generateDateStatement(generator, node, env) {
     const content = [];
 
     for(const row of rows) {
-        // Date
-        content.push(date);
+        const title = row.title.length > 0 ? row.title.replace(/"/g, '\\"') : "";
+
+        // Header
+        content.push(`${date} * "${title}"`);
 
         // Date records
         content.push(generateDate(row));
@@ -21,7 +23,7 @@ function generateDate(recordRow) {
     // Create render structure
     const records = [];
 
-    for(const record of recordRow) {
+    for(const record of recordRow.receipts) {
         const amount = record.isLast
             ? generateRemainAmount(record.amount, remainAmount)
             : generateAmount(record.amount, remainAmount)
