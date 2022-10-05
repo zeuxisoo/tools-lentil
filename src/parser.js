@@ -74,7 +74,7 @@ class Parser {
 
         let expressions = [];
 
-        while(![TokenKind.RightBracket, TokenKind.Eof].includes(this.lookNextToken().kind)) {
+        while(![TokenKind.RightBracket, TokenKind.Eof].includes(this.currentToken.kind)) {
             const expression = this.parseExpression();
 
             expressions.push(expression);
@@ -87,13 +87,9 @@ class Parser {
             }
         }
 
-        const lookNextToken = this.lookNextToken()
-
-        if (lookNextToken.kind !== TokenKind.RightBracket) {
-            this.throwUnexpectedToken("]", lookNextToken);
+        if (this.currentToken.kind !== TokenKind.RightBracket) {
+            this.throwUnexpectedToken("]", this.currentToken);
         }
-
-        this.readToken();
 
         return expressions;
     }
