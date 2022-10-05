@@ -5,10 +5,11 @@ export default function generateDateStatement(generator, node, env) {
     const content = [];
 
     for(const row of rows) {
-        const title = row.title.length > 0 ? row.title.replace(/"/g, '\\"') : "";
+        const title       = row.title.length > 0 ? row.title.replace(/"/g, '\\"') : "";
+        const description = row.description.length > 0 ? row.description.replace(/"/g, '\\"') : "";
 
         // Header
-        content.push(`${date} * "${title}"`);
+        content.push(`${date} * "${title}" "${description}"`);
 
         // Date records
         content.push(generateDate(row));

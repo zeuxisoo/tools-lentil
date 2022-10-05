@@ -8,11 +8,13 @@ export default function generateDateRecordExpression(generator, node, env) {
         receipts.push(receipt);
     }
 
-    // Atom title
-    const title = node.title === null ? "" : generator.produce(node.title);
+    // Atom title & description
+    const title       = node.title === null ? "" : generator.produce(node.title);
+    const description = node.description === null ? "" : generator.produce(node.description);
 
     return {
         receipts,
         title,
+        description,
     };
 }
