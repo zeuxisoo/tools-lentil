@@ -22,6 +22,10 @@ export default function parseAmountsExpression(parser) {
         }
     }
 
+    if (amounts.length >= 3) {
+        parser.throwUnexpected('want 0, 1 or 2 amount values, but got 3 values', parser.currentToken);
+    }
+
     expression.values = amounts;
 
     return expression;

@@ -2,7 +2,7 @@ import {
     Program,
 } from './ast/index.js';
 import { TokenKind } from './token.js';
-import { ParseUnexpectedTokenException } from './exceptions/index.js';
+import { ParseUnexpectedTokenException, ParseUnexpectedException } from './exceptions/index.js';
 import { statementParsers, expressionStatementParsers, expressionParsers  } from './parsers/index.js';
 
 class Parser {
@@ -108,6 +108,10 @@ class Parser {
 
     throwUnexpectedToken(want, token) {
         throw new ParseUnexpectedTokenException(want, token);
+    }
+
+    throwUnexpected(message, token) {
+        throw new ParseUnexpectedException(message, token);
     }
 
 }
