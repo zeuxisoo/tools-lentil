@@ -1,8 +1,13 @@
 class Environment {
 
     constructor() {
+        this.program   = {};
         this.configs   = {};
         this.variables = {};
+    }
+
+    addProgram(key, value) {
+        this.program[key] = value;
     }
 
     addConfig(key, value) {

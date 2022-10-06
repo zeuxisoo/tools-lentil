@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { createLexer } from './lexer.js';
 import { createParser } from './parser.js';
 import { createGenerator } from './generator.js';
@@ -14,15 +15,18 @@ import { createGenerator } from './generator.js';
 
     const filePath = options[0];
 
-    if (fs.statSync(filePath).isFile() === false) {
+    if (fs.existsSync(filePath) === false) {
         console.log("The file path is not file");
         return;
     }
 
     const fileContent = fs.readFileSync(filePath);
+    const fileRoot    = path.resolve(path.dirname(filePath));
 
     const lexer = createLexer(fileContent);
-    const parser = createParser(lexer);
+    const parser = createParser(lexer, {
+        root: fileRoot,
+    });
     const generator = createGenerator(parser);
 
     generator.generate();

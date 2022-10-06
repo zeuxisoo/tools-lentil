@@ -7,8 +7,11 @@ import { statementParsers, expressionStatementParsers, expressionParsers  } from
 
 class Parser {
 
-    constructor(lexer) {
-        this.ast    = new Program();
+    constructor(lexer, options) {
+        const program = new Program();
+        program.root = options.root;
+
+        this.ast    = program;
         this.lexer  = lexer;
         this.tokens = [];
 
@@ -116,8 +119,8 @@ class Parser {
 
 }
 
-function createParser(lexer) {
-    return new Parser(lexer)
+function createParser(lexer, options) {
+    return new Parser(lexer, options)
 }
 
 export {

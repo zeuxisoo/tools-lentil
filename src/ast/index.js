@@ -1,5 +1,6 @@
 export { default as Program } from './program.js';
 
+export { default as IncludeStatement } from './statements/include-statement.js';
 export { default as ConfigStatement } from './statements/config-statement.js';
 export { default as ConfigBlockStatement } from './statements/config-block-statement.js';
 export { default as DateStatement } from './statements/date-statement.js';

@@ -1,6 +1,6 @@
 import {
     Program,
-    ConfigStatement, ConfigBlockStatement,
+    IncludeStatement, ConfigStatement, ConfigBlockStatement,
     IdentifierExpression, ArrayExpression, StringExpression,
     AssignExpression, AccountExpression,
     AmountsExpression, AmountExpression,
@@ -11,6 +11,8 @@ import {
 } from '../ast/index.js';
 
 import generateProgram from './program.js';
+
+import generateIncludeStatement from './include-statement.js';
 
 import generateConfigStatement from './config-statements.js';
 import generateConfigBlockStatement from './config-block-statement.js';
@@ -39,6 +41,7 @@ import generateDescriptionExpression from './description-expression.js';
 
 const generators = {
     [Program]             : generateProgram,
+    [IncludeStatement]    : generateIncludeStatement,
     [ConfigStatement]     : generateConfigStatement,
     [ConfigBlockStatement]: generateConfigBlockStatement,
     [IdentifierExpression]: generateIdentifierExpression,

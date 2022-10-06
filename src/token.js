@@ -23,11 +23,13 @@ const TokenKind = {
     Eof         : "eof",
 
     // Keyword
-    Config: "config",
+    Config : "config",
+    Include: "include",
 }
 
 const ReservedKeywords = {
-    'config': TokenKind.Config,
+    'config' : TokenKind.Config,
+    'include': TokenKind.Include,
 };
 
 export {
