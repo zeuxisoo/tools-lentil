@@ -8,7 +8,7 @@ class ConfigStatement extends Statement {
     display() {
         let output = ['config {'];
 
-        output.push('block = ' + this.block.display());
+        output.push(this.block.display());
         output.push('}');
 
         return output.join('');
