@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { createLexer } from './lexer.js';
 import { createParser } from './parser.js';
 import { createGenerator } from './generator.js';
@@ -12,7 +13,7 @@ import { createGenerator } from './generator.js';
         return;
     }
 
-    const filePath = options[0];
+    const filePath = path.resolve(options[0]);
 
     if (fs.existsSync(filePath) === false) {
         console.log("The file path is not file");
