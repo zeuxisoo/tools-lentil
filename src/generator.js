@@ -14,12 +14,14 @@ class Generator {
     }
 
     generate() {
-        const ast = this.parser.parse();
-        const env = new Environment();
+        const astFile     = this.parser.parse();
+        const environment = new Environment();
 
-        const result = this.produce(ast, env);
+        environment.addProgram('root', astFile.root);
 
-        console.log(env);
+        const result = this.produce(astFile.ast, environment);
+
+        console.log(environment);
         console.log('----', 'result', '----');
         console.log(result.join('\n'));
     }

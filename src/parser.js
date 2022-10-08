@@ -1,6 +1,5 @@
-import {
-    Program,
-} from './ast/index.js';
+import path from 'path';
+import { Program, File as AstFile } from './ast/index.js';
 import { TokenKind } from './token.js';
 import { ParseUnexpectedTokenException, ParseUnexpectedException } from './exceptions/index.js';
 import { statementParsers, expressionStatementParsers, expressionParsers  } from './parsers/index.js';
@@ -9,12 +8,12 @@ class Parser {
 
     constructor(lexer, options) {
         const program = new Program();
-        program.root = options.root;
+        program.root = path.resolve(path.dirname(options.path));
 
-        this.ast    = program;
-        this.lexer  = lexer;
-        this.tokens = [];
-
+        this.ast          = program;
+        this.lexer        = lexer;
+        this.tokens       = [];
+        this.options      = options;
         this.currentToken = {};
     }
 
@@ -34,7 +33,12 @@ class Parser {
             this.readToken();
         }
 
-        return this.ast;
+        return new AstFile({
+            name    : path.basename(this.options.path),
+            root    : this.ast.root,
+            path    : path.resolve(this.options.path),
+            ast     : this.ast,
+        });
     }
 
     // e.g. N expressions

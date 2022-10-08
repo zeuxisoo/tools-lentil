@@ -12,11 +12,11 @@ export default function generateIncludeStatement(generator, node, env) {
     }
 
     const fileContent = fs.readFileSync(fullPath);
-
     const lexer = createLexer(fileContent);
     const parser = createParser(lexer, {
-        root: env.program.root
+        path: fullPath
     });
+    const astFile = parser.parse();
 
-    generator.produce(parser.parse(), env);
+    generator.produce(astFile.ast, env);
 }

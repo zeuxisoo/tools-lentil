@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 import { createLexer } from './lexer.js';
 import { createParser } from './parser.js';
 import { createGenerator } from './generator.js';
@@ -21,11 +20,10 @@ import { createGenerator } from './generator.js';
     }
 
     const fileContent = fs.readFileSync(filePath);
-    const fileRoot    = path.resolve(path.dirname(filePath));
 
     const lexer = createLexer(fileContent);
     const parser = createParser(lexer, {
-        root: fileRoot,
+        path: filePath,
     });
     const generator = createGenerator(parser);
 

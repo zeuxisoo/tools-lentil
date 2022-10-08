@@ -1,3 +1,5 @@
+export { default as File } from './file.js';
+
 export { default as Program } from './program.js';
 
 export { default as IncludeStatement } from './statements/include-statement.js';
