@@ -3,7 +3,7 @@ import path from 'path';
 import { createLexer } from '../lexer.js';
 import { createParser } from '../parser.js';
 
-export default function generateConfigStatement(generator, node, env) {
+export default function generateIncludeStatement(generator, node, env) {
     const filePath = generator.produce(node.path);
     const fullPath = path.join(env.program.root, filePath);
 
