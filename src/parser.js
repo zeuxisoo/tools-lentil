@@ -12,8 +12,9 @@ class Parser {
 
         this.ast          = program;
         this.lexer        = lexer;
-        this.tokens       = [];
         this.options      = options;
+        this.tokens       = [];
+        this.includes     = [];
         this.currentToken = {};
     }
 
@@ -38,6 +39,7 @@ class Parser {
             root    : this.ast.root,
             path    : path.resolve(this.options.path),
             ast     : this.ast,
+            includes: this.includes,
         });
     }
 

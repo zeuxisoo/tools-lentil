@@ -18,5 +18,6 @@ export default function generateIncludeStatement(generator, node, env) {
     });
     const astFile = parser.parse();
 
+    generator.checkIncludeCycle(astFile);
     generator.produce(astFile.ast, env);
 }

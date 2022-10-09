@@ -1,3 +1,4 @@
+import path from 'path';
 import { generators } from './generators/index.js';
 import {
     GeneratorUnknownException,
@@ -6,17 +7,21 @@ import {
     GeneratorCurrencyNotFoundException,
 } from './exceptions/index.js';
 import Environment from './utils/environment.js';
+import Graph from './utils/graph.js';
 
 class Generator {
 
     constructor(parser) {
         this.parser = parser;
+        this.graph  = new Graph();
     }
 
     generate() {
-        const astFile     = this.parser.parse();
-        const environment = new Environment();
+        const astFile = this.parser.parse();
 
+        this.checkIncludeCycle(astFile);
+
+        const environment = new Environment();
         environment.addProgram('root', astFile.root);
 
         const result = this.produce(astFile.ast, environment);
@@ -34,6 +39,19 @@ class Generator {
             : this.throwUnknownException(node);
 
         return result;
+    }
+
+    checkIncludeCycle(astFile) {
+        for(const include of astFile.includes) {
+            this.graph.addEdge(
+                astFile.path,
+                path.resolve(path.join(astFile.root, include.value))
+            );
+        }
+
+        if (this.graph.isCycle()) {
+            this.throwUnexpectedException("Include cycle not allowed");
+        }
     }
 
     throwUnknownException(node) {

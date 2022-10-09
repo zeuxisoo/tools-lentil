@@ -17,5 +17,8 @@ export default function parseIncludeStatement(parser) {
     statement.path = parseStringExpression(parser);
     // skip call readToken() because it is called
 
+    // collect include path
+    parser.includes.push(statement.path);
+
     return statement;
 }
