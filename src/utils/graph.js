@@ -1,10 +1,10 @@
 class Graph {
 
-    color = {
+    color = Object.freeze({
         white: 'unreached',
         gray : 'reached',
         black: 'finished',
-    }
+    });
 
     constructor() {
         this.nodes = {};
