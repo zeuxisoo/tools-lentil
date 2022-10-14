@@ -5,7 +5,7 @@ export default function generateProgram(generator, node, env) {
     for(const statement of node.statements) {
         const result = generator.produce(statement, env);
 
-        if (result !== null) {
+        if (result) {
             codes.push(result);
         }
     }
