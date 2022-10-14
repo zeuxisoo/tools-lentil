@@ -26,8 +26,6 @@ class Generator {
 
         const result = this.produce(astFile.ast, environment);
 
-        console.log(environment);
-        console.log('----', 'result', '----');
         console.log(result.join('\n'));
     }
 
