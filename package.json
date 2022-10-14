@@ -1,6 +1,6 @@
 {
-    "name": "unknown",
-    "version": "0.0.1",
+    "name": "tools-lentil",
+    "version": "1.0.0",
     "type": "module",
     "scripts": {},
     "dependencies": {},
