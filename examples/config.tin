@@ -1,4 +1,4 @@
-// 設定 config
+// config
 
 config {
     currency = ["hkd", "usd", "jpy", "eur", "inr"]
