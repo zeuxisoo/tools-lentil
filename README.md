@@ -1,6 +1,6 @@
 # Tools Lentil
 
-Convert the custom syntax to specificed syntax
+Convert the custom syntax to specified syntax
 
 ## Usage
 
