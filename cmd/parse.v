@@ -2,6 +2,7 @@ module cmd
 
 import cli
 import os
+import lexer { new_lexer }
 
 pub fn parse() cli.Command {
 	return cli.Command{
@@ -28,5 +29,6 @@ fn parse_action(cmd cli.Command) ? {
 		return
 	}
 
-	println(file)
+	lexer := new_lexer(file) or { panic(err) }
+	lexer.lex()
 }
