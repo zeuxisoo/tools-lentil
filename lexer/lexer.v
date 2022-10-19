@@ -30,6 +30,8 @@ pub fn (mut l Lexer) lex() {
 	content_length := l.content.len
 
 	for l.current_position < content_length {
+		l.skip_whitespace()
+
 		look_char := l.look_char()
 
 		token := match look_char {
@@ -74,6 +76,18 @@ fn (mut l Lexer) read_char() u8 {
 	l.current_position = l.current_position + 1
 
 	return current_char
+}
+
+fn (mut l Lexer) skip_whitespace() {
+	for {
+		look_char := l.look_char()
+
+		if look_char == ` ` || look_char == `\t` {
+			l.read_char()
+		}else{
+			break
+		}
+	}
 }
 
 fn (mut l Lexer) read_identifer() string {
