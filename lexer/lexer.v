@@ -3,6 +3,11 @@ module lexer
 import os
 import token
 
+const (
+	char_lf = 10 // line feed, new line
+	char_cr = 13 // carriage return
+)
+
 pub struct Lexer {
 	file_path      string
 	current_column int
@@ -48,7 +53,7 @@ pub fn (mut l Lexer) lex() []token.Token {
 			`}` {
 				l.new_token(.right_brace, l.read_char())
 			}
-			10 { // newline
+			char_lf { // newline
 				l.read_char()
 				l.new_token(.end_of_line, '')
 			}
@@ -87,6 +92,7 @@ fn (mut l Lexer) read_char() u8 {
 	return current_char
 }
 
+[inline]
 fn (mut l Lexer) skip_whitespace() {
 	for {
 		look_char := l.look_char()
