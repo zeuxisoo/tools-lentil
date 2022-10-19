@@ -4,8 +4,7 @@ import os
 import token
 
 const (
-	char_lf = 10 // line feed, new line
-	char_cr = 13 // carriage return
+	char_eof = u8(C.EOF)
 )
 
 pub struct Lexer {
@@ -42,6 +41,7 @@ pub fn (mut l Lexer) lex() []token.Token {
 	content_length := l.content.len
 
 	for l.current_position < content_length {
+		l.skip_newline()
 		l.skip_whitespace()
 
 		look_char := l.look_char()
@@ -53,15 +53,14 @@ pub fn (mut l Lexer) lex() []token.Token {
 			`}` {
 				l.new_token(.right_brace, l.read_char())
 			}
-			char_lf { // newline
-				l.read_char()
-				l.new_token(.end_of_line, '')
+			char_eof {
+				l.new_token(.end_of_line, 'eof')
 			}
 			else {
 				if look_char.is_letter() {
 					l.new_token(.identifier, l.read_identifer())
 				} else {
-					l.new_token(.unknown, '')
+					l.new_token(.unknown, look_char)
 				}
 			}
 		}
@@ -81,7 +80,7 @@ fn (mut l Lexer) look_char() u8 {
 		return l.content[current_position]
 	}
 
-	return u8(C.EOF)
+	return char_eof
 }
 
 fn (mut l Lexer) read_char() u8 {
@@ -98,6 +97,19 @@ fn (mut l Lexer) skip_whitespace() {
 		look_char := l.look_char()
 
 		if look_char == ` ` || look_char == `\t` {
+			l.read_char()
+		} else {
+			break
+		}
+	}
+}
+
+[inline]
+fn (mut l Lexer) skip_newline() {
+	for {
+		look_char := l.look_char()
+
+		if look_char == `\n` || look_char == `\r` {
 			l.read_char()
 		} else {
 			break
