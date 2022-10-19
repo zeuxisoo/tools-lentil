@@ -26,7 +26,14 @@ pub fn new_lexer(file_path string) ?&Lexer {
 	}
 }
 
-pub fn (mut l Lexer) lex() {
+pub fn new_lexer_content(content string) ?&Lexer {
+	return &Lexer{
+		file_path: ''
+		content: content
+	}
+}
+
+pub fn (mut l Lexer) lex() []token.Token {
 	content_length := l.content.len
 
 	for l.current_position < content_length {
@@ -58,6 +65,8 @@ pub fn (mut l Lexer) lex() {
 	}
 
 	println(l.tokens)
+
+	return l.tokens
 }
 
 fn (mut l Lexer) look_char() u8 {
@@ -84,7 +93,7 @@ fn (mut l Lexer) skip_whitespace() {
 
 		if look_char == ` ` || look_char == `\t` {
 			l.read_char()
-		}else{
+		} else {
 			break
 		}
 	}
@@ -107,15 +116,14 @@ fn (mut l Lexer) read_identifer() string {
 }
 
 fn (mut l Lexer) new_token(kind token.Kind, value token.TokenValue) token.Token {
-	return token.Token{
-		kind: kind
-		value: match value {
-			string {
-				value
-			}
-			u8 {
-				unsafe { value.vstring() }
-			}
+	value_string := match value {
+		string {
+			value
+		}
+		u8 {
+			unsafe { value.vstring() }
 		}
 	}
+
+	return token.new_token(kind, value_string)
 }
