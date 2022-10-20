@@ -6,11 +6,12 @@ pub enum Kind {
 	unknown
 	end_of_line
 	identifier
-	left_brace
-	right_brace
-
-	// keywords
-	config
+	left_brace // {
+	right_brace // }
+	assign // =
+	left_bracket // [
+	right_bracket // ]
+	config // keywords
 }
 
 const keywords = {

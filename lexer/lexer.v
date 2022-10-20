@@ -57,6 +57,15 @@ pub fn (mut l Lexer) lex() []token.Token {
 			`}` {
 				l.new_token(.right_brace, l.read_char())
 			}
+			`=` {
+				l.new_token(.assign, l.read_char())
+			}
+			`[` {
+				l.new_token(.left_bracket, l.read_char())
+			}
+			`]` {
+				l.new_token(.right_bracket, l.read_char())
+			}
 			lexer.char_eof {
 				l.new_token(.end_of_line, 'eof')
 			}
@@ -78,7 +87,7 @@ pub fn (mut l Lexer) lex() []token.Token {
 		l.tokens << token
 	}
 
-	println(l.tokens)
+	// println(l.tokens)
 
 	return l.tokens
 }
