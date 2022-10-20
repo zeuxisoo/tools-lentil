@@ -15,16 +15,17 @@ fn test_config() {
 
 fn test_assign_assign() {
 	tokens := create_tokens('config{
-		currency = []
+		currency = ["hkd"]
 	}')!
 
-	assert tokens.len == 7
+	assert tokens.len == 8
 	assert tokens == [
 		token.new_token(.config, 'config'),
 		token.new_token(.left_brace, '{'),
 		token.new_token(.identifier, 'currency'),
 		token.new_token(.assign, '='),
 		token.new_token(.left_bracket, '['),
+		token.new_token(.literal, 'hkd'),
 		token.new_token(.right_bracket, ']'),
 		token.new_token(.right_brace, '}'),
 	]

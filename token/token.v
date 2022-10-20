@@ -6,6 +6,7 @@ pub enum Kind {
 	unknown
 	end_of_line
 	identifier
+	literal
 	left_brace // {
 	right_brace // }
 	assign // =
