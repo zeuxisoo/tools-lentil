@@ -30,5 +30,6 @@ fn parse_action(cmd cli.Command) ? {
 	}
 
 	mut lexer := new_lexer(file) or { panic(err) }
-	lexer.lex()
+
+	println(lexer.lex())
 }

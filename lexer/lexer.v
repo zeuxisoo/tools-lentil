@@ -13,6 +13,7 @@ pub struct Lexer {
 	current_line   int
 mut:
 	content          string
+	content_length   int
 	current_position int
 	tokens           []token.Token
 }
@@ -27,6 +28,7 @@ pub fn new_lexer(file_path string) ?&Lexer {
 	return &Lexer{
 		file_path: file_path
 		content: content
+		content_length: content.len
 	}
 }
 
@@ -34,13 +36,12 @@ pub fn new_lexer_content(content string) ?&Lexer {
 	return &Lexer{
 		file_path: ''
 		content: content
+		content_length: content.len
 	}
 }
 
 pub fn (mut l Lexer) lex() []token.Token {
-	content_length := l.content.len
-
-	for l.current_position < content_length {
+	for l.current_position < l.content_length {
 		look_char := l.look_char()
 
 		// skip newline, whitespace
@@ -67,9 +68,7 @@ pub fn (mut l Lexer) lex() []token.Token {
 				l.new_token(.right_bracket, l.read_char())
 			}
 			`"` {
-				value := l.read_string()
-
-				l.new_token(.literal, value)
+				l.new_token(.literal, l.read_string())
 			}
 			lexer.char_eof {
 				l.new_token(.end_of_line, 'eof')
@@ -91,8 +90,6 @@ pub fn (mut l Lexer) lex() []token.Token {
 
 		l.tokens << token
 	}
-
-	// println(l.tokens)
 
 	return l.tokens
 }
@@ -139,12 +136,18 @@ fn (mut l Lexer) read_string() string {
 	for {
 		look_char := l.look_char()
 
+		if look_char == `\\` {
+			l.read_char()
+		}
+
 		if look_char != `"` {
 			value << l.read_char()
 		} else {
 			l.read_char() // skip last `"`
 			break
 		}
+
+		l.check_end_of_file('read_string')
 	}
 
 	return value.bytestr()
@@ -161,4 +164,10 @@ fn (mut l Lexer) new_token(kind token.Kind, value token.TokenValue) token.Token 
 	}
 
 	return token.new_token(kind, value_string)
+}
+
+fn (mut l Lexer) check_end_of_file(method_name string) {
+	if l.current_position >= l.content_length {
+		panic('cannot read next char, got end of file in `$method_name` method')
+	}
 }

@@ -13,7 +13,7 @@ fn test_config() {
 	]
 }
 
-fn test_assign_assign() {
+fn test_config_assign() {
 	tokens := create_tokens('config{
 		currency = ["hkd"]
 	}')!
