@@ -57,12 +57,18 @@ pub fn (mut l Lexer) lex() []token.Token {
 			`}` {
 				l.new_token(.right_brace, l.read_char())
 			}
-			char_eof {
+			lexer.char_eof {
 				l.new_token(.end_of_line, 'eof')
 			}
 			else {
 				if look_char.is_letter() {
-					l.new_token(.identifier, l.read_identifer())
+					identifier := l.read_identifer()
+
+					if token.is_keyword(identifier) {
+						l.new_token(token.find_keyword_kind(identifier), identifier)
+					} else {
+						l.new_token(.identifier, identifier)
+					}
 				} else {
 					l.new_token(.unknown, look_char)
 				}
@@ -84,7 +90,7 @@ fn (mut l Lexer) look_char() u8 {
 		return l.content[current_position]
 	}
 
-	return char_eof
+	return lexer.char_eof
 }
 
 fn (mut l Lexer) read_char() u8 {

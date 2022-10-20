@@ -7,7 +7,7 @@ fn test_config() {
 
 	assert tokens.len == 3
 	assert tokens == [
-		token.new_token(.identifier, 'config'),
+		token.new_token(.config, 'config'),
 		token.new_token(.left_brace, '{'),
 		token.new_token(.right_brace, '}'),
 	]
@@ -18,7 +18,7 @@ fn test_skip_whitespace() {
 
 	assert tokens.len == 3
 	assert tokens == [
-		token.new_token(.identifier, 'config'),
+		token.new_token(.config, 'config'),
 		token.new_token(.left_brace, '{'),
 		token.new_token(.right_brace, '}'),
 	]
@@ -32,7 +32,7 @@ fn test_skip_newline() {
 
 	assert tokens.len == 7
 	assert tokens == [
-		token.new_token(.identifier, 'config'),
+		token.new_token(.config, 'config'),
 		token.new_token(.left_brace, '{'),
 		token.new_token(.identifier, 'foo'),
 		token.new_token(.identifier, 'bar'),

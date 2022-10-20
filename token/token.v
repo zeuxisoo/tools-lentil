@@ -8,6 +8,13 @@ pub enum Kind {
 	identifier
 	left_brace
 	right_brace
+
+	// keywords
+	config
+}
+
+const keywords = {
+	'config': Kind.config
 }
 
 pub struct Token {
@@ -20,4 +27,12 @@ pub fn new_token(kind Kind, value string) Token {
 		kind: kind
 		value: value
 	}
+}
+
+pub fn is_keyword(name string) bool {
+	return name in token.keywords
+}
+
+pub fn find_keyword_kind(name string) Kind {
+	return token.keywords[name]
 }
