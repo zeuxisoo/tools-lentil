@@ -41,11 +41,15 @@ pub fn (mut l Lexer) lex() []token.Token {
 	content_length := l.content.len
 
 	for l.current_position < content_length {
-		l.skip_newline()
-		l.skip_whitespace()
-
 		look_char := l.look_char()
 
+		// Skip newline, whitespace
+		if (look_char == `\n` || look_char == `\r`) || (look_char == ` ` || look_char == `\t`) {
+			l.read_char()
+			continue
+		}
+
+		// Other tokens
 		token := match look_char {
 			`{` {
 				l.new_token(.left_brace, l.read_char())
@@ -89,32 +93,6 @@ fn (mut l Lexer) read_char() u8 {
 	l.current_position = l.current_position + 1
 
 	return current_char
-}
-
-[inline]
-fn (mut l Lexer) skip_whitespace() {
-	for {
-		look_char := l.look_char()
-
-		if look_char == ` ` || look_char == `\t` {
-			l.read_char()
-		} else {
-			break
-		}
-	}
-}
-
-[inline]
-fn (mut l Lexer) skip_newline() {
-	for {
-		look_char := l.look_char()
-
-		if look_char == `\n` || look_char == `\r` {
-			l.read_char()
-		} else {
-			break
-		}
-	}
 }
 
 fn (mut l Lexer) read_identifer() string {

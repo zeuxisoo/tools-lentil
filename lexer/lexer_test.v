@@ -26,7 +26,8 @@ fn test_skip_whitespace() {
 
 fn test_skip_newline() {
 	tokens := create_tokens('config {
-		foo   bar	baz   quz
+		foo   bar	baz
+		quz
 	}')!
 
 	assert tokens.len == 7
