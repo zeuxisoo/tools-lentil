@@ -1,3 +1,3 @@
 config {
-	currency = ["hkd"]
+	currency = ["hkd", "usd"]
 }

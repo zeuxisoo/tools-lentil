@@ -70,6 +70,9 @@ pub fn (mut l Lexer) lex() []token.Token {
 			`"` {
 				l.new_token(.literal, l.read_string())
 			}
+			`,` {
+				l.new_token(.comma, l.read_char())
+			}
 			lexer.char_eof {
 				l.new_token(.end_of_line, 'eof')
 			}

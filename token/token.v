@@ -12,6 +12,7 @@ pub enum Kind {
 	assign // =
 	left_bracket // [
 	right_bracket // ]
+	comma
 	config // keywords
 }
 
