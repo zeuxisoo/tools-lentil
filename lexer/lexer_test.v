@@ -62,6 +62,35 @@ fn test_skip_newline() {
 	]
 }
 
+fn test_skip_single_line_comment() {
+	tokens := create_tokens('
+		// comment 1
+		config {}
+		config {} // comment 2
+		config {
+			// comment 3
+		}
+
+		key = value // comment 4
+	')!
+
+	assert tokens.len == 12
+	assert tokens == [
+		token.new_token(.config, 'config'),
+		token.new_token(.left_brace, '{'),
+		token.new_token(.right_brace, '}'),
+		token.new_token(.config, 'config'),
+		token.new_token(.left_brace, '{'),
+		token.new_token(.right_brace, '}'),
+		token.new_token(.config, 'config'),
+		token.new_token(.left_brace, '{'),
+		token.new_token(.right_brace, '}'),
+		token.new_token(.identifier, 'key'),
+		token.new_token(.assign, '='),
+		token.new_token(.identifier, 'value'),
+	]
+}
+
 fn test_assign_account() {
 	tokens := create_tokens('
 		aBank = Assets:Bank:ABank

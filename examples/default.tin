@@ -1,6 +1,10 @@
+// Config
+
 config {
 	currency = ["hkd", "usd"]
 }
+
+// Accounts
 
 tbank = Assets:Bank:TBank
 ocard = Assets:Card:OCard
