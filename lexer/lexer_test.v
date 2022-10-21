@@ -62,6 +62,36 @@ fn test_skip_newline() {
 	]
 }
 
+fn test_assign_account() {
+	tokens := create_tokens('
+		aBank = Assets:Bank:ABank
+		eShop = Expenses:Online:Shop
+		lBank = Liabilities:Bank:LBank
+		eWater= Equity:Unknown:Water
+		iAbcd = Income:Salary:Abcd
+
+	')!
+
+	assert tokens.len == 15
+	assert tokens == [
+		token.new_token(.identifier, 'aBank'),
+		token.new_token(.assign, '='),
+		token.new_token(.account, 'Assets:Bank:ABank'),
+		token.new_token(.identifier, 'eShop'),
+		token.new_token(.assign, '='),
+		token.new_token(.account, 'Expenses:Online:Shop'),
+		token.new_token(.identifier, 'lBank'),
+		token.new_token(.assign, '='),
+		token.new_token(.account, 'Liabilities:Bank:LBank'),
+		token.new_token(.identifier, 'eWater'),
+		token.new_token(.assign, '='),
+		token.new_token(.account, 'Equity:Unknown:Water'),
+		token.new_token(.identifier, 'iAbcd'),
+		token.new_token(.assign, '='),
+		token.new_token(.account, 'Income:Salary:Abcd'),
+	]
+}
+
 fn create_tokens(content string) ![]token.Token {
 	mut lexer := new_lexer_content(content) or { panic(err) }
 

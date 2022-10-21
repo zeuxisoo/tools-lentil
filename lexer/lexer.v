@@ -82,6 +82,10 @@ pub fn (mut l Lexer) lex() []token.Token {
 
 					if token.is_keyword(identifier) {
 						l.new_token(token.find_keyword_kind(identifier), identifier)
+					} else if token.is_account(identifier) {
+						account := l.read_account(identifier)
+
+						l.new_token(.account, account)
 					} else {
 						l.new_token(.identifier, identifier)
 					}
@@ -154,6 +158,22 @@ fn (mut l Lexer) read_string() string {
 	}
 
 	return value.bytestr()
+}
+
+fn (mut l Lexer) read_account(prefix string) string {
+	mut value := []u8{}
+
+	for {
+		look_char := l.look_char()
+
+		if look_char.is_letter() || look_char == `:` {
+			value << l.read_char()
+		} else {
+			break
+		}
+	}
+
+	return prefix + value.bytestr()
 }
 
 fn (mut l Lexer) new_token(kind token.Kind, value token.TokenValue) token.Token {
