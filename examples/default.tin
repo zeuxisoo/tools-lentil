@@ -1,7 +1,7 @@
 // Config
 
 config {
-	currency = ["hkd", "usd"]
+    currency = ["hkd", "usd"]
 }
 
 // Accounts
