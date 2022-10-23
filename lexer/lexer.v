@@ -58,66 +58,75 @@ pub fn (mut l Lexer) lex() []token.Token {
 		}
 
 		// tokens
-		token := match look_char {
-			`{` {
-				l.new_token(.left_brace, l.read_char())
-			}
-			`}` {
-				l.new_token(.right_brace, l.read_char())
-			}
-			`=` {
-				l.new_token(.assign, l.read_char())
-			}
-			`[` {
-				l.new_token(.left_bracket, l.read_char())
-			}
-			`]` {
-				l.new_token(.right_bracket, l.read_char())
-			}
-			`"` {
-				l.new_token(.literal, l.read_string())
-			}
-			`,` {
-				l.new_token(.comma, l.read_char())
-			}
-			lexer.char_eof {
-				l.new_token(.end_of_line, 'eof')
-			}
-			else {
-				if look_char.is_letter() {
-					identifier := l.read_identifer()
-
-					if token.is_keyword(identifier) {
-						l.new_token(token.find_keyword_kind(identifier), identifier)
-					} else if token.is_account(identifier) {
-						account := l.read_account(identifier)
-
-						l.new_token(.account, account)
-					} else {
-						l.new_token(.identifier, identifier)
-					}
-				} else if look_char.is_digit() {
-					old_current_position := l.current_position
-
-					date := l.read_date()
-
-					if token.is_date(date) {
-						l.new_token(.date, date)
-					} else {
-						l.current_position = old_current_position
-
-						l.new_token(.number, l.read_number())
-					}
-				} else {
-					l.new_token(.unknown, look_char)
-				}
-			}
+		token := l.lex_text(look_char) or {
+			eprintln(err)
+			exit(1)
 		}
 
 		l.tokens << token
 	}
 
 	return l.tokens
+}
+
+fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
+	return match look_char {
+		`{` {
+			l.new_token(.left_brace, l.read_char())
+		}
+		`}` {
+			l.new_token(.right_brace, l.read_char())
+		}
+		`=` {
+			l.new_token(.assign, l.read_char())
+		}
+		`[` {
+			l.new_token(.left_bracket, l.read_char())
+		}
+		`]` {
+			l.new_token(.right_bracket, l.read_char())
+		}
+		`"` {
+			l.new_token(.literal, l.read_string())
+		}
+		`,` {
+			l.new_token(.comma, l.read_char())
+		}
+		lexer.char_eof {
+			l.new_token(.end_of_line, 'eof')
+		}
+		else {
+			if look_char.is_letter() {
+				identifier := l.read_identifer()
+
+				if token.is_keyword(identifier) {
+					l.new_token(token.find_keyword_kind(identifier), identifier)
+				} else if token.is_account(identifier) {
+					account := l.read_account(identifier)
+
+					l.new_token(.account, account)
+				} else {
+					l.new_token(.identifier, identifier)
+				}
+			} else if look_char.is_digit() {
+				old_current_position := l.current_position
+
+				date := l.read_date()
+
+				if token.is_date(date) {
+					l.new_token(.date, date)
+				} else {
+					l.current_position = old_current_position
+
+					l.new_token(.number, l.read_number())
+				}
+			} else {
+				unknown_char := unsafe { look_char.vstring() }
+
+				error('unknown char: `$unknown_char` in (line: $l.current_line)')
+			}
+		}
+	}
 }
 
 fn (mut l Lexer) look_char() u8 {
