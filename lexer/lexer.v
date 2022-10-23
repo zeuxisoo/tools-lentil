@@ -8,12 +8,12 @@ const (
 )
 
 pub struct Lexer {
-	file_path      string
-	current_line   int
+	file_path string
 mut:
 	content          string
 	content_length   int
 	current_position int
+	current_line     int
 	tokens           []token.Token
 }
 
@@ -28,6 +28,7 @@ pub fn new_lexer(file_path string) ?&Lexer {
 		file_path: file_path
 		content: content
 		content_length: content.len
+		current_line: 1
 	}
 }
 
@@ -36,6 +37,7 @@ pub fn new_lexer_content(content string) ?&Lexer {
 		file_path: ''
 		content: content
 		content_length: content.len
+		current_line: 1
 	}
 }
 
@@ -140,6 +142,10 @@ fn (mut l Lexer) look_next_char() u8 {
 
 fn (mut l Lexer) read_char() u8 {
 	current_char := l.content[l.current_position]
+
+	if current_char == `\n` || current_char == `\r` {
+		l.current_line = l.current_line + 1
+	}
 
 	l.current_position = l.current_position + 1
 
