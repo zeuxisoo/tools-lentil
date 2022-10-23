@@ -14,6 +14,7 @@ mut:
 	content_length   int
 	current_position int
 	current_line     int
+	current_column   int
 	tokens           []token.Token
 }
 
@@ -29,6 +30,7 @@ pub fn new_lexer(file_path string) ?&Lexer {
 		content: content
 		content_length: content.len
 		current_line: 1
+		current_column: 0
 	}
 }
 
@@ -38,6 +40,7 @@ pub fn new_lexer_content(content string) ?&Lexer {
 		content: content
 		content_length: content.len
 		current_line: 1
+		current_column: 0
 	}
 }
 
@@ -123,7 +126,7 @@ fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
 			} else {
 				unknown_char := unsafe { look_char.vstring() }
 
-				error('unknown char: `$unknown_char` in (line: $l.current_line)')
+				error('unknown char: `$unknown_char` in (line: $l.current_line, column: $l.current_column)')
 			}
 		}
 	}
@@ -153,10 +156,12 @@ fn (mut l Lexer) read_char() u8 {
 	current_char := l.content[l.current_position]
 
 	if current_char == `\n` || current_char == `\r` {
-		l.current_line = l.current_line + 1
+		l.current_line   = l.current_line + 1
+		l.current_column = 0
 	}
 
 	l.current_position = l.current_position + 1
+	l.current_column   = l.current_column + 1
 
 	return current_char
 }
