@@ -9,7 +9,6 @@ const (
 
 pub struct Lexer {
 	file_path      string
-	current_column int
 	current_line   int
 mut:
 	content          string
@@ -95,6 +94,18 @@ pub fn (mut l Lexer) lex() []token.Token {
 					} else {
 						l.new_token(.identifier, identifier)
 					}
+				} else if look_char.is_digit() {
+					old_current_position := l.current_position
+
+					date := l.read_date()
+
+					if token.is_date(date) {
+						l.new_token(.date, date)
+					} else {
+						l.current_position = old_current_position
+
+						l.new_token(.number, l.read_number())
+					}
 				} else {
 					l.new_token(.unknown, look_char)
 				}
@@ -176,6 +187,22 @@ fn (mut l Lexer) read_string() string {
 	return value.bytestr()
 }
 
+fn (mut l Lexer) read_number() string {
+	mut value := []u8{}
+
+	for {
+		look_char := l.look_char()
+
+		if look_char.is_digit() || look_char == `.` {
+			value << l.read_char()
+		} else {
+			break
+		}
+	}
+
+	return value.bytestr()
+}
+
 fn (mut l Lexer) read_account(prefix string) string {
 	mut value := []u8{}
 
@@ -190,6 +217,22 @@ fn (mut l Lexer) read_account(prefix string) string {
 	}
 
 	return prefix + value.bytestr()
+}
+
+fn (mut l Lexer) read_date() string {
+	mut value := []u8{}
+
+	for {
+		look_char := l.look_char()
+
+		if look_char.is_digit() || look_char == `-` {
+			value << l.read_char()
+		} else {
+			break
+		}
+	}
+
+	return value.bytestr()
 }
 
 [inline]

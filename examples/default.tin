@@ -8,3 +8,8 @@ config {
 
 tbank = Assets:Bank:TBank
 ocard = Assets:Card:OCard
+
+// Records
+
+2022-10-23 {
+}

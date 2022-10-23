@@ -121,6 +121,30 @@ fn test_assign_account() {
 	]
 }
 
+fn test_date_and_number() {
+	tokens := create_tokens('
+		2022-10-23 {}
+		2022-10-23 {
+		}
+
+		1 5.5 10.10 20
+	')!
+
+	assert tokens.len == 10
+	assert tokens == [
+		token.new_token(.date, '2022-10-23'),
+		token.new_token(.left_brace, '{'),
+		token.new_token(.right_brace, '}'),
+		token.new_token(.date, '2022-10-23'),
+		token.new_token(.left_brace, '{'),
+		token.new_token(.right_brace, '}'),
+		token.new_token(.number, '1'),
+		token.new_token(.number, '5.5'),
+		token.new_token(.number, '10.10'),
+		token.new_token(.number, '20'),
+	]
+}
+
 fn create_tokens(content string) ![]token.Token {
 	mut lexer := new_lexer_content(content) or { panic(err) }
 
