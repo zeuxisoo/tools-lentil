@@ -57,9 +57,7 @@ pub fn is_account(name string) bool {
 
 [inline]
 pub fn is_date(value string) bool {
-	mut re := regex.regex_opt(r'^\d{4}\-\d{2}\-\d{2}$') or {
-		panic(err)
-	}
+	mut re := regex.regex_opt(r'^\d{4}\-\d{2}\-\d{2}$') or { panic(err) }
 
 	return re.matches_string(value)
 }

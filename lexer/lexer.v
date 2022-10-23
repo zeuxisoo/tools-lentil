@@ -112,14 +112,20 @@ fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
 					l.new_token(.identifier, identifier)
 				}
 			} else if look_char.is_digit() {
-				old_current_position := l.current_position
+				old_status := {
+					'position': l.current_position
+					'line':     l.current_line
+					'column':   l.current_column
+				}
 
 				date := l.read_date()
 
 				if token.is_date(date) {
 					l.new_token(.date, date)
 				} else {
-					l.current_position = old_current_position
+					l.current_position = old_status['position']
+					l.current_line = old_status['inline']
+					l.current_column = old_status['column']
 
 					l.new_token(.number, l.read_number())
 				}
@@ -156,12 +162,12 @@ fn (mut l Lexer) read_char() u8 {
 	current_char := l.content[l.current_position]
 
 	if current_char == `\n` || current_char == `\r` {
-		l.current_line   = l.current_line + 1
+		l.current_line = l.current_line + 1
 		l.current_column = 0
 	}
 
 	l.current_position = l.current_position + 1
-	l.current_column   = l.current_column + 1
+	l.current_column = l.current_column + 1
 
 	return current_char
 }
