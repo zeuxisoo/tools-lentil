@@ -19,9 +19,10 @@ pub enum Kind {
 	plus
 	minus
 	bit_wise_and
-	config // keywords
 	account
 	date
+	atom
+	config // keywords
 }
 
 const keywords = {

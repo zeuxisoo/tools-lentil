@@ -104,6 +104,9 @@ fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
 		`&` {
 			l.new_token(.bit_wise_and, l.read_char())
 		}
+		`:` {
+			l.new_token(.atom, l.read_atom())
+		}
 		lexer.char_eof {
 			l.new_token(.end_of_line, 'eof')
 		}
@@ -261,6 +264,24 @@ fn (mut l Lexer) read_date() string {
 		look_char := l.look_char()
 
 		if look_char.is_digit() || look_char == `-` {
+			value << l.read_char()
+		} else {
+			break
+		}
+	}
+
+	return value.bytestr()
+}
+
+fn (mut l Lexer) read_atom() string {
+	l.read_char() // skip start `:`
+
+	mut value := []u8{}
+
+	for {
+		look_char := l.look_char()
+
+		if look_char != ` ` && look_char != `\n` && look_char != `\r` {
 			value << l.read_char()
 		} else {
 			break
