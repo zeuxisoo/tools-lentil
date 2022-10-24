@@ -95,6 +95,15 @@ fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
 		`,` {
 			l.new_token(.comma, l.read_char())
 		}
+		`+` {
+			l.new_token(.plus, l.read_char())
+		}
+		`-` {
+			l.new_token(.minus, l.read_char())
+		}
+		`&` {
+			l.new_token(.bit_wise_and, l.read_char())
+		}
 		lexer.char_eof {
 			l.new_token(.end_of_line, 'eof')
 		}
@@ -124,7 +133,7 @@ fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
 					l.new_token(.date, date)
 				} else {
 					l.current_position = old_status['position']
-					l.current_line = old_status['inline']
+					l.current_line = old_status['line']
 					l.current_column = old_status['column']
 
 					l.new_token(.number, l.read_number())

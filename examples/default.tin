@@ -12,4 +12,10 @@ ocard = Assets:Card:OCard
 // Records
 
 2022-10-23 {
+    supermarket+25hkd & tbank
+    supermarket+25usd & tbank+25usd
+    supermarket+25eur & marksix+20eur & tbank-45eur
+
+    supermarket+25jpy,+30.50hkd & tbank
+    supermarket+25hkd & hosting+10usd,+78.50hkd & tbank
 }

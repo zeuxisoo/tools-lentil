@@ -16,6 +16,9 @@ pub enum Kind {
 	left_bracket // [
 	right_bracket // ]
 	comma
+	plus
+	minus
+	bit_wise_and
 	config // keywords
 	account
 	date

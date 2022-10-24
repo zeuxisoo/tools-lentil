@@ -145,6 +145,36 @@ fn test_date_and_number() {
 	]
 }
 
+fn test_date_records() {
+	tokens := create_tokens('
+		supermarket+25hkd & hosting+10usd,+78.50hkd & ocard-8.98inr & tbank
+	')!
+
+	assert tokens.len == 20
+	assert tokens == [
+		token.new_token(.identifier, 'supermarket'),
+		token.new_token(.plus, '+'),
+		token.new_token(.number, '25'),
+		token.new_token(.identifier, 'hkd'),
+		token.new_token(.bit_wise_and, '&'),
+		token.new_token(.identifier, 'hosting'),
+		token.new_token(.plus, '+'),
+		token.new_token(.number, '10'),
+		token.new_token(.identifier, 'usd'),
+		token.new_token(.comma, ','),
+		token.new_token(.plus, '+'),
+		token.new_token(.number, '78.50'),
+		token.new_token(.identifier, 'hkd'),
+		token.new_token(.bit_wise_and, '&'),
+		token.new_token(.identifier, 'ocard'),
+		token.new_token(.minus, '-'),
+		token.new_token(.number, '8.98'),
+		token.new_token(.identifier, 'inr'),
+		token.new_token(.bit_wise_and, '&'),
+		token.new_token(.identifier, 'tbank'),
+	]
+}
+
 fn create_tokens(content string) ![]token.Token {
 	mut lexer := new_lexer_content(content) or { panic(err) }
 
