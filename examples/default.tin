@@ -1,3 +1,7 @@
+// Include
+
+include "dummy.tin"
+
 // Config
 
 config {

@@ -23,10 +23,12 @@ pub enum Kind {
 	date
 	atom
 	config // keywords
+	include
 }
 
 const keywords = {
-	'config': Kind.config
+	'config':  Kind.config
+	'include': Kind.include
 }
 
 pub struct Token {

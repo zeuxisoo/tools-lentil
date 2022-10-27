@@ -2,6 +2,16 @@ module lexer
 
 import token
 
+fn test_include() {
+	tokens := create_tokens('include "dummy.tin"')!
+
+	assert tokens.len == 2
+	assert tokens == [
+		token.new_token(.include, 'include'),
+		token.new_token(.literal, 'dummy.tin'),
+	]
+}
+
 fn test_config() {
 	tokens := create_tokens('config{}')!
 
