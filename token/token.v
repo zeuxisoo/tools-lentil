@@ -32,6 +32,7 @@ const keywords = {
 }
 
 pub struct Token {
+pub:
 	kind  Kind
 	value string
 }
