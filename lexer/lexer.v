@@ -302,7 +302,7 @@ fn (mut l Lexer) skip_single_line_comment() {
 	}
 }
 
-fn (mut l Lexer) new_token(kind token.Kind, value token.TokenValue) token.Token {
+fn (l Lexer) new_token(kind token.Kind, value token.TokenValue) token.Token {
 	value_string := match value {
 		string {
 			value
@@ -317,6 +317,6 @@ fn (mut l Lexer) new_token(kind token.Kind, value token.TokenValue) token.Token 
 
 fn (mut l Lexer) check_end_of_file(method_name string) {
 	if l.current_position >= l.content_length {
-		panic('cannot read next char, got end of file in `$method_name` method')
+		panic('lexer: cannot read next char, got end of file in `$method_name` method')
 	}
 }
