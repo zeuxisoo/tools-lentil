@@ -56,16 +56,6 @@ pub fn (mut p Parser) parse_statement() Statement {
 	}
 }
 
-pub fn (mut p Parser) parse_string_expression() Expression {
-	p.current_token = p.read_token()
-
-	expression := StringExpression{
-		value: p.current_token.value
-	}
-
-	return expression
-}
-
 pub fn (mut p Parser) read_token() token.Token {
 	token := p.tokens.first()
 
