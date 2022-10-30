@@ -2,9 +2,13 @@ module parser
 
 import lexer
 import token { Kind }
-import ast { Expression, Program, Statement }
+import ast { Program, Statement }
 import ast.statements { IncludeStatement }
 import ast.expressions { StringExpression }
+
+const statement_parsers = {
+	Kind.include: parse_include_statement
+}
 
 struct Parser {
 	lexer lexer.Lexer
@@ -37,10 +41,6 @@ pub fn (mut p Parser) parse() Program {
 }
 
 pub fn (mut p Parser) parse_statement() Statement {
-	statement_parsers := {
-		Kind.include: parse_include_statement
-	}
-
 	if p.current_token.kind == .include {
 		return statement_parsers[p.current_token.kind](mut p)
 	}
@@ -61,4 +61,12 @@ pub fn (mut p Parser) read_token() token.Token {
 	p.tokens.delete(0)
 
 	return token
+}
+
+// test helper
+fn create_parser(content string) !Program {
+	mut lexer := lexer.new_lexer_content(content) or { panic(err) }
+	mut parser := new_parser(mut lexer)
+
+	return parser.parse()
 }

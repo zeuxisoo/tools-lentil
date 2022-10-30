@@ -214,9 +214,3 @@ fn test_date_records_title_description() {
 		token.new_token(.atom, 'description'),
 	]
 }
-
-fn create_tokens(content string) ![]token.Token {
-	mut lexer := new_lexer_content(content) or { panic(err) }
-
-	return lexer.lex()
-}
