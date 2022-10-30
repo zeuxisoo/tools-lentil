@@ -6,7 +6,6 @@ import ast { Expression, Program, Statement }
 import ast.statements { IncludeStatement }
 import ast.expressions { StringExpression }
 
-[heap]
 struct Parser {
 	lexer lexer.Lexer
 mut:
