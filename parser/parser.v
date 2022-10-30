@@ -27,9 +27,13 @@ pub fn new_parser(mut lexer lexer.Lexer) &Parser {
 }
 
 pub fn (mut p Parser) parse() Program {
-	p.current_token = p.read_token()
-
 	mut program := Program{}
+
+	if p.tokens.len == 0 {
+		return program
+	}
+
+	p.current_token = p.read_token()
 
 	for p.tokens.len > 0 {
 		statement := p.parse_statement()
@@ -64,7 +68,7 @@ pub fn (mut p Parser) read_token() token.Token {
 }
 
 // test helper
-fn create_parser(content string) !Program {
+pub fn create_parser(content string) !Program {
 	mut lexer := lexer.new_lexer_content(content) or { panic(err) }
 	mut parser := new_parser(mut lexer)
 
