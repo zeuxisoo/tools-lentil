@@ -39,11 +39,11 @@ pub fn (mut p Parser) parse() Program {
 
 pub fn (mut p Parser) parse_statement() Statement {
 	statement_parsers := {
-		Kind.include: p.parse_include_statement
+		Kind.include: parse_include_statement
 	}
 
 	if p.current_token.kind == .include {
-		return statement_parsers[p.current_token.kind]()
+		return statement_parsers[p.current_token.kind](mut p)
 	}
 
 	// TODO: remove when other token parser completed
@@ -54,14 +54,6 @@ pub fn (mut p Parser) parse_statement() Statement {
 			value: 'TODO: other token parser'
 		}
 	}
-}
-
-pub fn (mut p Parser) parse_include_statement() Statement {
-	statement := IncludeStatement{
-		path: p.parse_string_expression()
-	}
-
-	return statement
 }
 
 pub fn (mut p Parser) parse_string_expression() Expression {
