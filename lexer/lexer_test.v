@@ -101,6 +101,13 @@ fn test_skip_single_line_comment() {
 	]
 }
 
+fn test_skip_single_line_comment_only_comment() {
+	tokens := create_tokens('// comment 1')!
+
+	assert tokens.len == 0
+	assert tokens == []
+}
+
 fn test_assign_account() {
 	tokens := create_tokens('
 		aBank = Assets:Bank:ABank

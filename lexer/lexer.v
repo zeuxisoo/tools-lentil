@@ -297,7 +297,7 @@ fn (mut l Lexer) skip_single_line_comment() {
 	l.read_char()
 	l.read_char()
 
-	for l.look_char() != `\n` && l.look_char() != `\r` {
+	for l.look_char() != `\n` && l.look_char() != `\r` && l.current_position < l.content_length {
 		l.read_char()
 	}
 }
