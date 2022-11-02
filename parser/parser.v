@@ -26,7 +26,7 @@ pub fn new_parser(mut lexer lexer.Lexer) &Parser {
 	}
 }
 
-pub fn (mut p Parser) parse() Program {
+pub fn (mut p Parser) parse() !Program {
 	mut program := Program{}
 
 	if p.tokens.len == 0 {
@@ -36,7 +36,7 @@ pub fn (mut p Parser) parse() Program {
 	p.current_token = p.read_token()
 
 	for p.tokens.len > 0 {
-		statement := p.parse_statement()
+		statement := p.parse_statement() or { return err }
 
 		program.statements << statement
 	}
@@ -44,7 +44,7 @@ pub fn (mut p Parser) parse() Program {
 	return program
 }
 
-pub fn (mut p Parser) parse_statement() Statement {
+pub fn (mut p Parser) parse_statement() !Statement {
 	if p.current_token.kind == .include {
 		return statement_parsers[p.current_token.kind](mut p)
 	}
@@ -63,6 +63,12 @@ pub fn (mut p Parser) read_token() token.Token {
 	token := p.tokens.first()
 
 	p.tokens.delete(0)
+
+	return token
+}
+
+pub fn (mut p Parser) look_next_token() token.Token {
+	token := p.tokens.first()
 
 	return token
 }
