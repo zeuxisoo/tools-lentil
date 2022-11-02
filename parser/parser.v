@@ -49,7 +49,7 @@ pub fn (mut p Parser) parse() !Program {
 
 		program.statements << statement
 
-		p.read_token()
+		p.read_token() // eat end of statement like `]`, `string`
 	}
 
 	return program
@@ -121,7 +121,7 @@ pub fn (mut p Parser) read_token() token.Token {
 		p.tokens.delete(0)
 
 		return p.current_token
-	}else{
+	} else {
 		return p.end_of_line_token()
 	}
 }

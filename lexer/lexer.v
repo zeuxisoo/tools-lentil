@@ -23,7 +23,9 @@ pub fn new_lexer(file_path string) ?&Lexer {
 		return error('lexer: file path is not file, got $file_path')
 	}
 
-	content := os.read_file(file_path) or { return error('lexer: failed to open file, got $file_path') }
+	content := os.read_file(file_path) or {
+		return error('lexer: failed to open file, got $file_path')
+	}
 
 	return &Lexer{
 		file_path: file_path
