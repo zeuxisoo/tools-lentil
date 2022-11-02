@@ -20,10 +20,10 @@ mut:
 
 pub fn new_lexer(file_path string) ?&Lexer {
 	if !os.is_file(file_path) {
-		return error('file path is not file: $file_path')
+		return error('lexer: file path is not file, got $file_path')
 	}
 
-	content := os.read_file(file_path) or { return error('failed to open file: $file_path') }
+	content := os.read_file(file_path) or { return error('lexer: failed to open file, got $file_path') }
 
 	return &Lexer{
 		file_path: file_path
@@ -144,7 +144,7 @@ fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
 			} else {
 				unknown_char := unsafe { look_char.vstring() }
 
-				error('unknown char: `$unknown_char` in (line: $l.current_line, column: $l.current_column)')
+				error('lexer: unknown char `$unknown_char` in (line: $l.current_line, column: $l.current_column)')
 			}
 		}
 	}
