@@ -33,7 +33,7 @@ pub fn (mut p Parser) parse() !Program {
 		return program
 	}
 
-	p.current_token = p.read_token()
+	p.read_token()
 
 	for p.tokens.len > 0 {
 		statement := p.parse_statement() or { return err }
@@ -60,11 +60,11 @@ pub fn (mut p Parser) parse_statement() !Statement {
 }
 
 pub fn (mut p Parser) read_token() token.Token {
-	token := p.tokens.first()
+	p.current_token = p.tokens.first()
 
 	p.tokens.delete(0)
 
-	return token
+	return p.current_token
 }
 
 pub fn (mut p Parser) look_next_token() token.Token {
