@@ -13,7 +13,7 @@ fn parse_include_statement(mut parser Parser) !Statement {
 	parser.read_token() // move to string token
 
 	statement := IncludeStatement{
-		path: parse_string_expression(mut parser)
+		path: parse_string_expression(mut parser)!
 	}
 
 	return statement
