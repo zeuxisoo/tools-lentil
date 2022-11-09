@@ -72,3 +72,13 @@ pub fn is_date(value string) bool {
 pub fn find_keyword_kind(name string) Kind {
 	return token.keywords[name]
 }
+
+pub fn find_account_kind(account string) string {
+	mut re := regex.regex_opt(r'^((Assets)|(Expenses)|(Liabilities)|(Equity)|(Income))') or {
+		panic(err)
+	}
+
+	start, end := re.match_string(account)
+
+	return account[start..end].to_lower()
+}

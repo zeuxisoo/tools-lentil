@@ -17,6 +17,7 @@ const expression_statement_parsers = {
 const expression_parsers = {
 	Kind.left_bracket: parse_array_expression
 	Kind.literal:      parse_string_expression
+	Kind.account:      parse_account_expression
 }
 
 struct Parser {
