@@ -8,6 +8,7 @@ import ast.statements { ExpressionStatement }
 const statement_parsers = {
 	Kind.include: parse_include_statement
 	Kind.config:  parse_config_statement
+	Kind.date:    parse_date_statement
 }
 
 const expression_statement_parsers = {
