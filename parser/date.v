@@ -11,7 +11,7 @@ fn parse_date_statement(mut parser Parser) !Statement {
 	}
 
 	statement := DateStatement{
-		// TODO: implment block
+		block: parse_date_block_statement(mut parser)!
 	}
 
 	return statement
