@@ -3,7 +3,7 @@ module statements
 import ast { Expression }
 
 pub struct DateBlockStatement {
-	value []Expression
+	value Expression
 }
 
 pub fn (db DateBlockStatement) display() {
