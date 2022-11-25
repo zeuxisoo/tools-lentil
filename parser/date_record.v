@@ -1,7 +1,7 @@
 module parser
 
 import ast { Expression }
-import ast.expressions { DateRecordExpression }
+import ast.expressions { DateRecordExpression, DateRecordReceiptExpression }
 
 fn parse_date_record_expression(mut parser Parser) !Expression {
 	mut expressions := [
@@ -16,6 +16,14 @@ fn parse_date_record_expression(mut parser Parser) !Expression {
 		expressions << parse_date_record_receipt_expression(mut parser)!
 	}
 
+	// set `is_last` field to true when expression is last element
+	mut last_receipt := expressions.last()
+
+	if mut last_receipt is DateRecordReceiptExpression {
+		last_receipt.is_last = true
+	}
+
+	// create the date record expression
 	expression := DateRecordExpression{
 		values: expressions
 	}

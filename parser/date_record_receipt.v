@@ -16,8 +16,9 @@ fn parse_date_record_receipt_expression(mut parser Parser) !Expression {
 	}
 
 	expression := DateRecordReceiptExpression{
-		account: account,
+		account: account
 		amounts: amounts
+		is_last: false
 	}
 
 	return expression
