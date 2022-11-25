@@ -51,7 +51,7 @@ pub fn (mut p Parser) parse() !Program {
 
 		program.statements << statement
 
-		p.read_token() // eat end of statement like `]`, `string`
+		p.read_token() // skip end of statement like `]`, `string`
 	}
 
 	return program
@@ -93,7 +93,7 @@ pub fn (mut p Parser) parse_expression() !Expression {
 }
 
 pub fn (mut p Parser) parse_expression_list() ![]Expression {
-	p.read_token() // eat `[`
+	p.read_token() // skip `[`
 
 	mut expressions := []Expression{}
 

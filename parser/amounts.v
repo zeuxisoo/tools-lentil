@@ -15,10 +15,10 @@ fn parse_amounts_expression(mut parser Parser) !Expression {
 	]
 
 	for parser.look_next_token().kind == .comma {
-		parser.read_token() // eat token `,`
+		parser.read_token() // sip `,`
 
 		if parser.look_next_token().kind in [.plus, .minus] {
-			parser.read_token() // eat token `+` or `-`
+			parser.read_token() // sip `+` or `-`
 
 			amounts << parse_amount_expression(mut parser)!
 		}

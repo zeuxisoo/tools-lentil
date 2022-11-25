@@ -10,7 +10,7 @@ pub fn parse_config_statement(mut parser Parser) !Statement {
 		return error('parser: expected next token to be left_brace but got $next_token_kind')
 	}
 
-	parser.read_token() // move to config block `{`
+	parser.read_token() // skip `{`
 
 	config := ConfigStatement{
 		block: parse_config_block_statement(mut parser)!

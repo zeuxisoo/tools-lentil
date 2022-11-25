@@ -8,8 +8,8 @@ pub fn parse_assign_expression(mut parser Parser) !Expression {
 		value: parser.current_token.value
 	}
 
-	parser.read_token() // eat identifier
-	parser.read_token() // eat `=`
+	parser.read_token() // skip identifier
+	parser.read_token() // skip `=`
 
 	return AssignExpression{
 		left: identifier

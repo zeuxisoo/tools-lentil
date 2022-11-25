@@ -10,7 +10,7 @@ fn parse_include_statement(mut parser Parser) !Statement {
 		return error('parser: expected next token to be literal but got $next_token_kind')
 	}
 
-	parser.read_token() // move to string token
+	parser.read_token() // skip `"`
 
 	statement := IncludeStatement{
 		path: parse_string_expression(mut parser)!

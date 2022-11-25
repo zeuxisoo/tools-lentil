@@ -4,7 +4,7 @@ import ast { Statement }
 import ast.statements { ConfigBlockStatement }
 
 pub fn parse_config_block_statement(mut parser Parser) !Statement {
-	parser.read_token() // eat `{`
+	parser.read_token() // skip `{`
 
 	mut values := []Statement{}
 
