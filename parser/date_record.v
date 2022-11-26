@@ -5,10 +5,10 @@ import ast.expressions { DateRecordExpression, DateRecordReceiptExpression }
 
 fn parse_date_record_expression(mut parser Parser) !Expression {
 	mut expressions := [
-		parse_date_record_receipt_expression(mut parser)!
+		parse_date_record_receipt_expression(mut parser)!,
 	]
 
-	for parser.current_token.kind in [.bit_wise_and] {
+	for parser.current_token.kind == .bit_wise_and {
 		if parser.current_token.kind == .bit_wise_and {
 			parser.read_token()
 		}

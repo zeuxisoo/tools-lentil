@@ -11,7 +11,7 @@ fn parse_amounts_expression(mut parser Parser) !Expression {
 	}
 
 	mut amounts := [
-		parse_amount_expression(mut parser)!
+		parse_amount_expression(mut parser)!,
 	]
 
 	for parser.look_next_token().kind == .comma {

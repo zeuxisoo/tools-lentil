@@ -5,7 +5,6 @@ import ast { Expression }
 pub struct DateRecordReceiptExpression {
 	account Expression
 	amounts Expression
-
 pub mut:
 	is_last bool
 }
