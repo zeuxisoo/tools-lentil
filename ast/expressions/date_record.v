@@ -4,6 +4,7 @@ import ast { Expression }
 
 pub struct DateRecordExpression {
 	values []Expression
+	title  Expression
 }
 
 pub fn (dr DateRecordExpression) display() {
