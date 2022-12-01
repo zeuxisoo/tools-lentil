@@ -3,8 +3,9 @@ module expressions
 import ast { Expression }
 
 pub struct DateRecordExpression {
-	values []Expression
-	title  Expression
+	values      []Expression
+	title       Expression
+	description Expression
 }
 
 pub fn (dr DateRecordExpression) display() {

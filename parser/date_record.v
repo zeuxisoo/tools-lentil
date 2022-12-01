@@ -27,6 +27,7 @@ fn parse_date_record_expression(mut parser Parser) !Expression {
 	expression := DateRecordExpression{
 		values: expressions
 		title: parse_atom_expression(mut parser)!
+		description: parse_atom_expression(mut parser)!
 	}
 
 	return expression
