@@ -4,6 +4,7 @@ import cli
 import os
 import lexer { new_lexer }
 import parser { new_parser }
+import generator { new_generator }
 
 pub fn parse() cli.Command {
 	return cli.Command{
@@ -33,10 +34,12 @@ fn parse_action(cmd cli.Command) ? {
 	mut lexer := new_lexer(file) or { panic(err) }
 	mut parser := new_parser(mut lexer)
 
-	ast := parser.parse() or {
-		eprintln(err)
-		return
-	}
+	// mut ast := parser.parse() or {
+	// 	eprintln(err)
+	// 	return
+	// }
 
-	println(ast)
+	mut generator := new_generator(mut parser)
+
+	generator.generate()
 }

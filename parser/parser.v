@@ -21,7 +21,7 @@ const expression_parsers = {
 	Kind.account:      parse_account_expression
 }
 
-struct Parser {
+pub struct Parser {
 	lexer lexer.Lexer
 mut:
 	current_token token.Token
