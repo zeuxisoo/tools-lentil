@@ -5,9 +5,9 @@ import ast.statements
 import ast.expressions
 
 fn test_include_statement() {
-	program := create_parser('include "dummy.tin"')!
+	parser := create_parser('include "dummy.tin"')!
 
-	assert program == ast.Program{
+	assert parser.ast == ast.Program{
 		statements: [
 			statements.IncludeStatement{
 				path: expressions.StringExpression{

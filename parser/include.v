@@ -12,9 +12,13 @@ fn parse_include_statement(mut parser Parser) !Statement {
 
 	parser.read_token() // skip `"`
 
+	include_path := parse_string_expression(mut parser)!
+
 	statement := IncludeStatement{
-		path: parse_string_expression(mut parser)!
+		path: include_path
 	}
+
+	parser.includes << include_path
 
 	return statement
 }

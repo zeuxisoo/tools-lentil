@@ -3,9 +3,9 @@ module parser
 import ast
 
 fn test_parse_empty_token() {
-	program := create_parser('// comment')!
+	parser := create_parser('// comment')!
 
-	assert program == ast.Program{
+	assert parser.ast == ast.Program{
 		statements: []
 	}
 }

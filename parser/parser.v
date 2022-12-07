@@ -1,8 +1,9 @@
 module parser
 
+import os
 import lexer
 import token { Kind }
-import ast { Expression, Program, Statement }
+import ast { Expression, File, Program, Statement }
 import ast.statements { ExpressionStatement }
 
 const statement_parsers = {
@@ -26,22 +27,28 @@ pub struct Parser {
 mut:
 	current_token token.Token
 	tokens        []token.Token
-	includes      []string
+	includes      []Expression
 }
 
 pub fn new_parser(mut lexer lexer.Lexer) &Parser {
 	return &Parser{
 		lexer: lexer
 		tokens: lexer.lex()
-		includes: []string{}
+		includes: []Expression{}
 	}
 }
 
-pub fn (mut p Parser) parse() !Program {
+pub fn (mut p Parser) parse() !File {
 	mut program := Program{}
 
 	if p.tokens.len == 0 {
-		return program
+		return File{
+			name: os.base(p.lexer.file_path)
+			root: os.real_path(os.dir(p.lexer.file_path))
+			path: p.lexer.file_path
+			ast: program
+			includes: p.includes
+		}
 	}
 
 	p.read_token()
@@ -54,7 +61,13 @@ pub fn (mut p Parser) parse() !Program {
 		p.read_token() // skip end of statement like `]`, `string`
 	}
 
-	return program
+	return File{
+		name: os.base(p.lexer.file_path)
+		root: os.real_path(os.dir(p.lexer.file_path))
+		path: p.lexer.file_path
+		ast: program
+		includes: p.includes
+	}
 }
 
 pub fn (mut p Parser) parse_statement() !Statement {
@@ -139,7 +152,7 @@ pub fn (mut p Parser) end_of_line_token() token.Token {
 }
 
 // test helper
-pub fn create_parser(content string) !Program {
+pub fn create_parser(content string) !File {
 	mut lexer := lexer.new_lexer_content(content) or { panic(err) }
 	mut parser := new_parser(mut lexer)
 

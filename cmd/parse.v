@@ -33,13 +33,10 @@ fn parse_action(cmd cli.Command) ? {
 
 	mut lexer := new_lexer(file) or { panic(err) }
 	mut parser := new_parser(mut lexer)
-
-	// mut ast := parser.parse() or {
-	// 	eprintln(err)
-	// 	return
-	// }
-
 	mut generator := new_generator(mut parser)
 
-	generator.generate()
+	generator.generate() or {
+		eprintln(err)
+		return
+	}
 }

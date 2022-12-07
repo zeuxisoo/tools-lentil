@@ -8,6 +8,7 @@ const (
 )
 
 pub struct Lexer {
+pub:
 	file_path string
 mut:
 	content          string
