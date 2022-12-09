@@ -91,7 +91,7 @@ pub fn (mut p Parser) parse_expression_statement() !ExpressionStatement {
 		}
 	}
 
-	return error('parser: unkown expression statement in token `$p.current_token.value` type $p.current_token.kind')
+	return error('parser: unkown expression statement in token `${p.current_token.value}` type ${p.current_token.kind}')
 }
 
 pub fn (mut p Parser) parse_expression() !Expression {
@@ -102,7 +102,7 @@ pub fn (mut p Parser) parse_expression() !Expression {
 		return expression
 	}
 
-	return error('parser: unknown expression in token `$p.current_token.value` type `$p.current_token.kind`')
+	return error('parser: unknown expression in token `${p.current_token.value}` type `${p.current_token.kind}`')
 }
 
 pub fn (mut p Parser) parse_expression_list() ![]Expression {
@@ -123,7 +123,7 @@ pub fn (mut p Parser) parse_expression_list() ![]Expression {
 	}
 
 	if p.current_token.kind != .right_bracket {
-		return error('parser: expected current token to be right bracket but got $p.current_token.kind')
+		return error('parser: expected current token to be right bracket but got ${p.current_token.kind}')
 	}
 
 	return expressions

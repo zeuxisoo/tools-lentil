@@ -1,6 +1,6 @@
 module generator
 
-import ast { Node, Statement }
+import ast { Node }
 import parser
 import utils { Environment }
 
@@ -37,7 +37,7 @@ fn (mut g Generator) produce(node Node, environment Environment) []string {
 		}
 		// TODO: implement other nodes
 		else {
-			panic('Unknown node: $node')
+			panic('Unknown node: ${node}')
 		}
 	}
 }

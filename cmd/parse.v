@@ -27,7 +27,7 @@ fn parse_action(cmd cli.Command) ! {
 	file := cmd.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {
-		eprintln('file not exists: $file')
+		eprintln('file not exists: ${file}')
 		return
 	}
 

@@ -21,11 +21,11 @@ mut:
 
 pub fn new_lexer(file_path string) ?&Lexer {
 	if !os.is_file(file_path) {
-		return error('lexer: file path is not file, got $file_path')
+		return error('lexer: file path is not file, got ${file_path}')
 	}
 
 	content := os.read_file(file_path) or {
-		return error('lexer: failed to open file, got $file_path')
+		return error('lexer: failed to open file, got ${file_path}')
 	}
 
 	return &Lexer{
@@ -147,7 +147,7 @@ fn (mut l Lexer) lex_text(look_char u8) ?token.Token {
 			} else {
 				unknown_char := unsafe { look_char.vstring() }
 
-				error('lexer: unknown char `$unknown_char` in (line: $l.current_line, column: $l.current_column)')
+				error('lexer: unknown char `${unknown_char}` in (line: ${l.current_line}, column: ${l.current_column})')
 			}
 		}
 	}
@@ -320,7 +320,7 @@ fn (l Lexer) new_token(kind token.Kind, value token.TokenValue) token.Token {
 
 fn (mut l Lexer) check_end_of_file(method_name string) {
 	if l.current_position >= l.content_length {
-		panic('lexer: cannot read next char, got end of file in `$method_name` method')
+		panic('lexer: cannot read next char, got end of file in `${method_name}` method')
 	}
 }
 

@@ -6,5 +6,5 @@ mut:
 }
 
 pub fn (mut e Environment) add_program(name string, value string) {
-	e.program[name] =value
+	e.program[name] = value
 }
