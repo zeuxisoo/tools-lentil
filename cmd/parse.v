@@ -23,7 +23,7 @@ pub fn parse() cli.Command {
 	}
 }
 
-fn parse_action(cmd cli.Command) ? {
+fn parse_action(cmd cli.Command) ! {
 	file := cmd.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {
