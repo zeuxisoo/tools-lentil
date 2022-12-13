@@ -1,7 +1,7 @@
 module utils
 
 pub struct Environment {
-mut:
+pub mut:
 	program map[string]string
 }
 

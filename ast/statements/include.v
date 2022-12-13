@@ -3,7 +3,7 @@ module statements
 import ast { Expression }
 
 pub struct IncludeStatement {
-mut:
+pub mut:
 	path Expression
 }
 

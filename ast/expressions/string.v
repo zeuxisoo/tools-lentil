@@ -1,7 +1,7 @@
 module expressions
 
 pub struct StringExpression {
-mut:
+pub mut:
 	value string
 }
 
