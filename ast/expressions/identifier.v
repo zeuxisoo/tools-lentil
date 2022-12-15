@@ -1,6 +1,7 @@
 module expressions
 
 pub struct IdentifierExpression {
+pub:
 	value string
 }
 

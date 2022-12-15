@@ -3,6 +3,7 @@ module statements
 import ast { Expression }
 
 pub struct ExpressionStatement {
+pub:
 	expression Expression
 }
 
