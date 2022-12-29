@@ -3,7 +3,7 @@ module generator
 import os
 import ast { Node, Program }
 import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement, ExpressionStatement }
-import ast.expressions { StringExpression, IdentifierExpression, ArrayExpression, AssignExpression }
+import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, ArrayExpression, AssignExpression }
 import lexer
 import parser
 import utils { Environment, EnvironmentVariableType }
@@ -77,6 +77,9 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			node.value
 		}
 		IdentifierExpression {
+			node.value
+		}
+		AccountExpression {
 			node.value
 		}
 		ArrayExpression {

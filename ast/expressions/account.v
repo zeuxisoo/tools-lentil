@@ -1,8 +1,9 @@
 module expressions
 
 pub struct AccountExpression {
-mut:
+pub mut:
 	value string
+mut:
 	kind  string
 }
 
