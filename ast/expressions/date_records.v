@@ -3,6 +3,7 @@ module expressions
 import ast { Expression }
 
 pub struct DateRecordsExpression {
+pub:
 	values []Expression
 }
 

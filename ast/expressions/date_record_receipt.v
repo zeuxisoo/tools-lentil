@@ -3,8 +3,9 @@ module expressions
 import ast { Expression }
 
 pub struct DateRecordReceiptExpression {
-	account Expression
 	amounts Expression
+pub:
+	account Expression
 pub mut:
 	is_last bool
 }

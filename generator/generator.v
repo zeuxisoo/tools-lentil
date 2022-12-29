@@ -2,13 +2,13 @@ module generator
 
 import os
 import ast { Node, Program }
-import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement, ExpressionStatement }
-import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, ArrayExpression, AssignExpression }
+import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement, DateStatement, DateBlockStatement, ExpressionStatement }
+import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, ArrayExpression, AssignExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
 import lexer
 import parser
 import utils { Environment, EnvironmentVariableType }
 
-pub type ProduceType = []string | string
+type ProduceType = []string | string
 
 struct Generator {
 mut:
@@ -69,6 +69,49 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			}
 
 			""
+		}
+		DateStatement {
+			date := node.value
+			rows := g.produce(node.block as Node, mut environment)
+
+			// TODO: generate each row
+			dump(date)
+			dump(rows)
+		}
+		DateBlockStatement {
+			g.produce(node.value as Node, mut environment)
+		}
+		DateRecordsExpression {
+			mut records := []string{}
+
+			for value in node.values {
+				record := g.produce(value as Node, mut environment)
+
+				records << record as string
+			}
+
+			records
+		}
+		DateRecordExpression {
+			mut receipts := []string{}
+
+			for value in node.values {
+				receipt := g.produce(value as Node, mut environment)
+
+				receipts << receipt as string
+			}
+
+			title := g.produce(node.title as Node, mut environment)
+			description := g.produce(node.description as Node, mut environment)
+
+			// TODO: return receipts, title and description
+			dump(title)
+			dump(description)
+		}
+		DateRecordReceiptExpression {
+			account := g.produce(node.account as Node, mut environment)
+
+			dump(account)
 		}
 		ExpressionStatement {
 			g.produce(node.expression as Node, mut environment)

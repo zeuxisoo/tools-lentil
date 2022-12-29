@@ -3,6 +3,7 @@ module statements
 import ast { Expression }
 
 pub struct DateBlockStatement {
+pub:
 	value Expression
 }
 
