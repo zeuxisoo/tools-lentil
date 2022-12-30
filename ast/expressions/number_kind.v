@@ -1,6 +1,7 @@
 module expressions
 
 pub struct NumberKindExpression {
+pub:
 	value string
 }
 

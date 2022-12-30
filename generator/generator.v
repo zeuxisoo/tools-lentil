@@ -1,14 +1,16 @@
 module generator
 
 import os
+import arrays
 import ast { Node, Program }
 import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement, DateStatement, DateBlockStatement, ExpressionStatement }
-import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, AtomExpression, ArrayExpression, AssignExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
+import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, AtomExpression, ArrayExpression, AssignExpression, AmountsExpression, AmountExpression, NumberExpression, NumberKindExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
 import lexer
 import parser
 import utils { Environment, EnvironmentConfigType, EnvironmentVariableType }
 
-type ProduceType = []string | string
+type ProduceMapValue = string | bool | int | []map[string]ProduceMapValue
+type ProduceType = []string | string | map[string]ProduceMapValue | []map[string]ProduceMapValue
 
 struct Generator {
 mut:
@@ -27,9 +29,9 @@ pub fn (mut g Generator) generate() ! {
 	mut environment := Environment{}
 	environment.add_program('root', ast_file.root)
 
-	result := g.produce(ast_file.ast, mut environment)
+	result := g.produce(ast_file.ast, mut environment) as []string
 
-	dump(result)
+	println(result.join('\n'))
 }
 
 fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType {
@@ -79,45 +81,61 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 				}
 			}
 
-			""
+			''
 		}
 		DateStatement {
 			date := node.value
-			rows := g.produce(node.block as Node, mut environment)
+			rows := g.produce(node.block as Node, mut environment) as []map[string]ProduceMapValue
 
-			// TODO: generate each row
-			dump(date)
-			dump(rows)
+			escape_quote := fn(value string) string {
+				return value.replace('"', '\"')
+			}
+
+			mut contents := []string{}
+
+			for row in rows {
+				title := escape_quote(row['title'] or { "" } as string)
+				description := escape_quote(row['description'] or { "" } as string)
+
+				contents << '${date} * "${title}" "${description}"'
+
+				contents << g.generate_date(row)
+			}
+
+			contents.join('\n')
 		}
 		DateBlockStatement {
 			g.produce(node.value as Node, mut environment)
 		}
 		DateRecordsExpression {
-			mut records := []string{}
+			mut records := []map[string]ProduceMapValue{}
 
 			for value in node.values {
 				record := g.produce(value as Node, mut environment)
 
-				records << record as string
+				records << record as map[string]ProduceMapValue
 			}
 
 			records
 		}
 		DateRecordExpression {
-			mut receipts := []string{}
+			mut receipts := []map[string]ProduceMapValue{}
 
 			for value in node.values {
 				receipt := g.produce(value as Node, mut environment)
 
-				receipts << receipt as string
+				receipts << receipt as map[string]ProduceMapValue
 			}
 
-			title := g.produce(node.title as Node, mut environment)
-			description := g.produce(node.description as Node, mut environment)
+			title := g.produce(node.title as Node, mut environment) as string
+			description := g.produce(node.description as Node, mut environment) as string
 
-			// TODO: return receipts, title and description
-			dump(title)
-			dump(description)
+			mut records := map[string]ProduceMapValue{}
+			records['title']       = title
+			records['description'] = description
+			records['receipts']    = receipts
+
+			records
 		}
 		DateRecordReceiptExpression {
 			account_name := g.produce(node.account as Node, mut environment) as string
@@ -125,9 +143,46 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 				panic('generator: account name not found, got `$account_name`')
 			} as string
 
-			// TODO: return account, amount, is_last and whitespace
-			dump(account_name)
-			dump(account_value)
+			// find longest account to calculate whitespace between account and currency
+			longest_account := arrays.reduce(environment.variables.values(), fn(a EnvironmentVariableType, b EnvironmentVariableType) EnvironmentVariableType {
+				a_value := a as string
+				b_value := b as string
+
+				return if a_value.len > b_value.len { a }else{ b }
+			}) or {
+				panic('generator: cannot found max length account in environment variable table')
+			}
+
+			whitespace_length := (longest_account as string).len - account_value.len + 4
+
+			// find manually input amount
+			amounts := node.amounts
+
+			amount := if amounts is AmountsExpression {
+				if amounts.values.len > 0 {
+					g.produce(amounts, mut environment)
+				}else{
+					[]map[string]ProduceMapValue{}
+				}
+			}else{
+				panic('generator: expected amount expression, but got `$amounts`')
+			} as []map[string]ProduceMapValue
+
+			// return ProduceType
+			mut receipts := map[string]ProduceMapValue{}
+			receipts['account']    = account_value
+			receipts['amount']     = amount
+			receipts['is_last']    = node.is_last
+			receipts['whitespace'] = whitespace_length
+
+			receipts
+
+			// return {
+			// 	"account"   : account_value
+			// "amount"    : amount
+			// 	"is_last"   : node.is_last
+			// 	"whitespace": whitespace_length
+			// }
 		}
 		ExpressionStatement {
 			g.produce(node.expression as Node, mut environment)
@@ -161,11 +216,48 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 				environment.add_variable(name, EnvironmentVariableType(data))
 			}
 
-			""
+			''
 		}
-		// TODO: implement other nodes
+		AmountsExpression {
+			mut amounts := []map[string]ProduceMapValue{}
+
+			for amount in node.values {
+				amounts << g.produce(amount as Node, mut environment) as map[string]ProduceMapValue
+			}
+
+			amounts
+		}
+		AmountExpression {
+			price := g.produce(node.value as Node, mut environment) as string
+			currency := g.produce(node.value as Node, mut environment) as string
+
+			mut amount := map[string]ProduceMapValue{}
+			amount['price'] = price
+			amount['currency'] = currency
+
+			amount
+
+			// return {
+			// 	"price"   : price,
+			// 	"currency": currency
+			// }
+		}
+		NumberExpression {
+			kind := g.produce(node.kind as Node, mut environment) as string
+			value := node.value
+
+			'${kind}${value}'
+		}
+		NumberKindExpression {
+			node.value
+		}
 		else {
 			panic('generator: unknown node: ${node}')
 		}
 	}
+}
+
+fn (mut g Generator) generate_date(record_row map[string]ProduceMapValue) string {
+	// TODO: generate each date record
+	return ""
 }

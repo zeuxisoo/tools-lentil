@@ -3,6 +3,7 @@ module expressions
 import ast { Expression }
 
 pub struct NumberExpression {
+pub:
 	kind  Expression
 	value string
 }
