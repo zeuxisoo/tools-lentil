@@ -2,6 +2,7 @@ module generator
 
 import os
 import arrays
+import regex
 import ast { Node, Program }
 import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement, DateStatement, DateBlockStatement, ExpressionStatement }
 import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, AtomExpression, ArrayExpression, AssignExpression, AmountsExpression, AmountExpression, NumberExpression, NumberKindExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
@@ -176,13 +177,6 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			receipts['whitespace'] = whitespace_length
 
 			receipts
-
-			// return {
-			// 	"account"   : account_value
-			// "amount"    : amount
-			// 	"is_last"   : node.is_last
-			// 	"whitespace": whitespace_length
-			// }
 		}
 		ExpressionStatement {
 			g.produce(node.expression as Node, mut environment)
@@ -236,11 +230,6 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			amount['currency'] = currency
 
 			amount
-
-			// return {
-			// 	"price"   : price,
-			// 	"currency": currency
-			// }
 		}
 		NumberExpression {
 			kind := g.produce(node.kind as Node, mut environment) as string
@@ -266,43 +255,72 @@ fn (mut g Generator) generate_date(record_row map[string]ProduceMapValue) string
 		[]map[string]ProduceMapValue{}
 	} as []map[string]ProduceMapValue
 
-	// render structure
-	mut records := []string{}
+	// create structure
+	mut records := []map[string]ProduceMapValue{}
 
-	for record in receipts {
-		record_is_last := record['is_last'] or {
-			false
-		} as bool
+	for receipt in receipts {
+		receipt_is_last := receipt['is_last'] or { false } as bool
 
-		mut record_amount := record['amount'] or {
+		mut receipt_amount := receipt['amount'] or {
 			[]map[string]ProduceMapValue{}
 		} as []map[string]ProduceMapValue
 
-		amount := if record_is_last {
-			g.generate_remain_amount(mut record_amount, mut remain_amount)
+		amount := if receipt_is_last {
+			g.generate_remain_amount(mut receipt_amount, mut remain_amount)
 		}else{
-			g.generate_amount(mut record_amount, mut remain_amount)
+			g.generate_amount(mut receipt_amount, mut remain_amount)
 		}
 
-		dump(amount)
+		mut record := map[string]ProduceMapValue{}
+		record['prefix']         = ' '.repeat(4)
+		record['account']        = receipt['account'] or { '' } as string
+		record['account_suffix'] = ' '.repeat(receipt['whitespace'] or { 0 } as int)
+		record['amount']         = amount
+		record['is_last']        = receipt_is_last
+
+		records << record
 	}
 
-	dump(records)
+	// render structure
+	last_amount_length := (records.last()['amount'] or { '' } as string).len
 
-	return ""
+	mut output := []string{}
+	mut pattern := regex.regex_opt(r'^[+|\-][0-9]+\.[0-9]{2}\s[a-z]{3}') or { panic(err) }
+
+	for record in records {
+		output << record['prefix'] or { '' } as string
+		output << record['account'] or { '' } as string
+		output << record['account_suffix'] or { '' } as string
+
+		// find first amount length `+10.00 usd @@ +7.80 xyz` -> `+10.00 usd`.length
+		amount := (record['amount'] or { '' } as string)
+		amount_start, amount_end := pattern.match_string(amount)
+
+		is_last := record['is_last'] or { false } as bool
+
+		amount_length := amount[amount_start..amount_end].len
+		amount_prefix := if is_last { 0 } else { last_amount_length - amount_length }
+
+		output << ' '.repeat(amount_prefix)
+		output << record['amount'] or { '' } as string
+		output << '\n'
+	}
+
+	return output.join('')
 }
 
 fn (mut g Generator) generate_remain_amount(mut amount []map[string]ProduceMapValue, mut remain_amount map[string]ProduceMapValue) string {
+	// in the last record and amount is empty will auto calculated remain amount
 	if amount.len <= 0 {
 		remain_amount_price := (remain_amount['price'] or { '0.00' } as string).f32()
 
+		// when remain amount is positive, it should be add `-` prefix
 		if remain_amount_price > 0 {
-			remain_amount['price'] = '-${remain_amount_price}'
+			remain_amount['price'] = '-${remain_amount_price:0.2f}'
 		}
 
 		return g.concat_amount(mut remain_amount)
 	}else{
-
 		return g.concat_amount(mut amount[0])
 	}
 }
@@ -330,13 +348,15 @@ fn (mut g Generator) concat_amount(mut amount map[string]ProduceMapValue) string
 	amount_price := (amount['price'] or { '0.00' } as string).f32()
 	amount_currency := amount['currency'] or { '' } as string
 
-	if amount_price > 0 {
+	if amount_price >= 0 {
 		amount['price'] = '+${amount_price:0.2f}'
+	}else{
+		amount['price'] = '${amount_price:0.2f}'
 	}
 
-	amount_price_string := amount['price'] or { '' } as string
+	final_amount_price := amount['price'] or { '0.00' } as string
 
-	return '$amount_price_string $amount_currency'
+	return '$final_amount_price $amount_currency'
 }
 
 fn (mut g Generator) update_remain_amount(mut remain_amount map[string]ProduceMapValue, amount map[string]ProduceMapValue) map[string]ProduceMapValue {
