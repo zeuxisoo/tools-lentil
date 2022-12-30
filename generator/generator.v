@@ -146,6 +146,10 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 				environment.add_variable(name, EnvironmentVariableType(data))
 			}
 
+			if data is string {
+				environment.add_variable(name, EnvironmentVariableType(data))
+			}
+
 			""
 		}
 		// TODO: implement other nodes
