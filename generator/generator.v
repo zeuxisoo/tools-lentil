@@ -6,7 +6,7 @@ import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement,
 import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, AtomExpression, ArrayExpression, AssignExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
 import lexer
 import parser
-import utils { Environment, EnvironmentVariableType }
+import utils { Environment, EnvironmentConfigType, EnvironmentVariableType }
 
 type ProduceType = []string | string
 
@@ -65,7 +65,18 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 		}
 		ConfigBlockStatement {
 			for value in node.values {
-				g.produce(value as Node, mut environment)
+				if value is ExpressionStatement {
+					expression := value.expression
+
+					if expression is AssignExpression {
+						name := g.produce(expression.left as Node, mut environment) as string
+						data := g.produce(expression.right as Node, mut environment)
+
+						if data is []string {
+							environment.add_config(name, EnvironmentConfigType(data))
+						}
+					}
+				}
 			}
 
 			""
@@ -109,10 +120,14 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			dump(description)
 		}
 		DateRecordReceiptExpression {
-			account := g.produce(node.account as Node, mut environment)
+			account_name := g.produce(node.account as Node, mut environment) as string
+			account_value := environment.variables[account_name] or {
+				panic('generator: account name not found, got `$account_name`')
+			} as string
 
 			// TODO: return account, amount, is_last and whitespace
-			dump(account)
+			dump(account_name)
+			dump(account_value)
 		}
 		ExpressionStatement {
 			g.produce(node.expression as Node, mut environment)
@@ -141,10 +156,6 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 		AssignExpression {
 			name := g.produce(node.left as Node, mut environment) as string
 			data := g.produce(node.right as Node, mut environment)
-
-			if data is []string {
-				environment.add_variable(name, EnvironmentVariableType(data))
-			}
 
 			if data is string {
 				environment.add_variable(name, EnvironmentVariableType(data))
