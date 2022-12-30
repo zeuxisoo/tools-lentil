@@ -1,6 +1,7 @@
 module expressions
 
 pub struct AtomExpression {
+pub:
 	value string
 }
 

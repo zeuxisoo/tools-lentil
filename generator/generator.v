@@ -3,7 +3,7 @@ module generator
 import os
 import ast { Node, Program }
 import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement, DateStatement, DateBlockStatement, ExpressionStatement }
-import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, ArrayExpression, AssignExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
+import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, AtomExpression, ArrayExpression, AssignExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
 import lexer
 import parser
 import utils { Environment, EnvironmentVariableType }
@@ -111,6 +111,7 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 		DateRecordReceiptExpression {
 			account := g.produce(node.account as Node, mut environment)
 
+			// TODO: return account, amount, is_last and whitespace
 			dump(account)
 		}
 		ExpressionStatement {
@@ -123,6 +124,9 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			node.value
 		}
 		AccountExpression {
+			node.value
+		}
+		AtomExpression {
 			node.value
 		}
 		ArrayExpression {
