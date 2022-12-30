@@ -229,7 +229,7 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 		}
 		AmountExpression {
 			price := g.produce(node.value as Node, mut environment) as string
-			currency := g.produce(node.value as Node, mut environment) as string
+			currency := g.produce(node.currency as Node, mut environment) as string
 
 			mut amount := map[string]ProduceMapValue{}
 			amount['price'] = price
@@ -258,6 +258,93 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 }
 
 fn (mut g Generator) generate_date(record_row map[string]ProduceMapValue) string {
-	// TODO: generate each date record
+	mut remain_amount := map[string]ProduceMapValue{}
+	remain_amount['price']    = '0.00'
+	remain_amount['currency'] = ''
+
+	receipts := record_row['receipts'] or {
+		[]map[string]ProduceMapValue{}
+	} as []map[string]ProduceMapValue
+
+	// render structure
+	mut records := []string{}
+
+	for record in receipts {
+		record_is_last := record['is_last'] or {
+			false
+		} as bool
+
+		mut record_amount := record['amount'] or {
+			[]map[string]ProduceMapValue{}
+		} as []map[string]ProduceMapValue
+
+		amount := if record_is_last {
+			g.generate_remain_amount(mut record_amount, mut remain_amount)
+		}else{
+			g.generate_amount(mut record_amount, mut remain_amount)
+		}
+
+		dump(amount)
+	}
+
+	dump(records)
+
 	return ""
+}
+
+fn (mut g Generator) generate_remain_amount(mut amount []map[string]ProduceMapValue, mut remain_amount map[string]ProduceMapValue) string {
+	if amount.len <= 0 {
+		remain_amount_price := (remain_amount['price'] or { '0.00' } as string).f32()
+
+		if remain_amount_price > 0 {
+			remain_amount['price'] = '-${remain_amount_price}'
+		}
+
+		return g.concat_amount(mut remain_amount)
+	}else{
+
+		return g.concat_amount(mut amount[0])
+	}
+}
+
+fn (mut g Generator) generate_amount(mut amount []map[string]ProduceMapValue, mut remain_amount map[string]ProduceMapValue) string {
+	if amount.len == 1 {
+		remain_amount = g.update_remain_amount(mut remain_amount, amount[0])
+
+		return g.concat_amount(mut amount[0])
+	}
+
+	if amount.len == 2 {
+		remain_amount = g.update_remain_amount(mut remain_amount, amount[1])
+
+		first := g.concat_amount(mut amount[0])
+		second := g.concat_amount(mut amount[1])
+
+		return '$first @@ $second'
+	}
+
+	return ''
+}
+
+fn (mut g Generator) concat_amount(mut amount map[string]ProduceMapValue) string {
+	amount_price := (amount['price'] or { '0.00' } as string).f32()
+	amount_currency := amount['currency'] or { '' } as string
+
+	if amount_price > 0 {
+		amount['price'] = '+${amount_price:0.2f}'
+	}
+
+	amount_price_string := amount['price'] or { '' } as string
+
+	return '$amount_price_string $amount_currency'
+}
+
+fn (mut g Generator) update_remain_amount(mut remain_amount map[string]ProduceMapValue, amount map[string]ProduceMapValue) map[string]ProduceMapValue {
+	amount_price := (amount['price'] or { '0.00' } as string).f32()
+	remain_amount_price := (remain_amount['price'] or { '0.00' } as string).f32()
+
+	remain_amount['price'] = (remain_amount_price + amount_price).str()
+	remain_amount['currency'] = amount['currency'] or { 'unknown' }
+
+	return remain_amount
 }
