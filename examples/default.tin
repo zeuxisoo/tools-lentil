@@ -1,12 +1,6 @@
 // Include
 
-include "dummy.tin"
-
-// Config
-
-config {
-    currency = ["hkd", "usd"]
-}
+include "config.tin"
 
 // Assets
 
@@ -21,7 +15,7 @@ hosting     = Expenses:Server:Vps
 
 // Records
 
-2022-10-23 {
+2022-11-17 {
     supermarket+25hkd & tbank
     supermarket+25usd & tbank+25usd
     supermarket+25eur & marksix+20eur & tbank-45eur
@@ -33,5 +27,5 @@ hosting     = Expenses:Server:Vps
     supermarket+25jpy & marksix+20jpy & ocard-45jpy :title :description
     supermarket+30.29jpy & marksix+20.21jpy & ocard-50.50jpy :title2 :description2
 
-    supermarket+25inr,+25hkd & hosting+10inr & tbank-35hkd
+    supermarket+25inr,+25hkd & hosting+10hkd & tbank-35hkd
 }
