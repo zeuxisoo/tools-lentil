@@ -4,7 +4,7 @@ pub struct AccountExpression {
 pub mut:
 	value string
 mut:
-	kind  string
+	kind string
 }
 
 pub fn (a AccountExpression) display() {

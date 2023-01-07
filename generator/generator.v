@@ -4,14 +4,14 @@ import os
 import arrays
 import regex
 import ast { Node, Program }
-import ast.statements { IncludeStatement, ConfigStatement, ConfigBlockStatement, DateStatement, DateBlockStatement, ExpressionStatement }
-import ast.expressions { StringExpression, IdentifierExpression, AccountExpression, AtomExpression, ArrayExpression, AssignExpression, AmountsExpression, AmountExpression, NumberExpression, NumberKindExpression, DateRecordsExpression, DateRecordExpression, DateRecordReceiptExpression }
+import ast.statements { ConfigBlockStatement, ConfigStatement, DateBlockStatement, DateStatement, ExpressionStatement, IncludeStatement }
+import ast.expressions { AccountExpression, AmountExpression, AmountsExpression, ArrayExpression, AssignExpression, AtomExpression, DateRecordExpression, DateRecordReceiptExpression, DateRecordsExpression, IdentifierExpression, NumberExpression, NumberKindExpression, StringExpression }
 import lexer
 import parser
 import utils { Environment, EnvironmentConfigType, EnvironmentVariableType }
 
-type ProduceMapValue = string | bool | int | []map[string]ProduceMapValue
-type ProduceType = []string | string | map[string]ProduceMapValue | []map[string]ProduceMapValue
+type ProduceMapValue = []map[string]ProduceMapValue | bool | int | string
+type ProduceType = []map[string]ProduceMapValue | []string | map[string]ProduceMapValue | string
 
 struct Generator {
 mut:
@@ -88,15 +88,15 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			date := node.value
 			rows := g.produce(node.block as Node, mut environment) as []map[string]ProduceMapValue
 
-			escape_quote := fn(value string) string {
-				return value.replace('"', '\"')
+			escape_quote := fn (value string) string {
+				return value.replace('"', '\\"')
 			}
 
 			mut contents := []string{}
 
 			for row in rows {
-				title := escape_quote(row['title'] or { "" } as string)
-				description := escape_quote(row['description'] or { "" } as string)
+				title := escape_quote(row['title'] or { '' } as string)
+				description := escape_quote(row['description'] or { '' } as string)
 
 				contents << '${date} * "${title}" "${description}"'
 
@@ -132,24 +132,24 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			description := g.produce(node.description as Node, mut environment) as string
 
 			mut records := map[string]ProduceMapValue{}
-			records['title']       = title
+			records['title'] = title
 			records['description'] = description
-			records['receipts']    = receipts
+			records['receipts'] = receipts
 
 			records
 		}
 		DateRecordReceiptExpression {
 			account_name := g.produce(node.account as Node, mut environment) as string
 			account_value := environment.variables[account_name] or {
-				panic('generator: account name not found, got `$account_name`')
+				panic('generator: account name not found, got `${account_name}`')
 			} as string
 
 			// find longest account to calculate whitespace between account and currency
-			longest_account := arrays.reduce(environment.variables.values(), fn(a EnvironmentVariableType, b EnvironmentVariableType) EnvironmentVariableType {
+			longest_account := arrays.reduce(environment.variables.values(), fn (a EnvironmentVariableType, b EnvironmentVariableType) EnvironmentVariableType {
 				a_value := a as string
 				b_value := b as string
 
-				return if a_value.len > b_value.len { a }else{ b }
+				return if a_value.len > b_value.len { a } else { b }
 			}) or {
 				panic('generator: cannot found max length account in environment variable table')
 			}
@@ -162,18 +162,18 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			amount := if amounts is AmountsExpression {
 				if amounts.values.len > 0 {
 					g.produce(amounts, mut environment)
-				}else{
+				} else {
 					[]map[string]ProduceMapValue{}
 				}
-			}else{
-				panic('generator: expected amount expression, but got `$amounts`')
+			} else {
+				panic('generator: expected amount expression, but got `${amounts}`')
 			} as []map[string]ProduceMapValue
 
 			// return ProduceType
 			mut receipts := map[string]ProduceMapValue{}
-			receipts['account']    = account_value
-			receipts['amount']     = amount
-			receipts['is_last']    = node.is_last
+			receipts['account'] = account_value
+			receipts['amount'] = amount
+			receipts['is_last'] = node.is_last
 			receipts['whitespace'] = whitespace_length
 
 			receipts
@@ -248,12 +248,10 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 
 fn (mut g Generator) generate_date(record_row map[string]ProduceMapValue) string {
 	mut remain_amount := map[string]ProduceMapValue{}
-	remain_amount['price']    = '0.00'
+	remain_amount['price'] = '0.00'
 	remain_amount['currency'] = ''
 
-	receipts := record_row['receipts'] or {
-		[]map[string]ProduceMapValue{}
-	} as []map[string]ProduceMapValue
+	receipts := record_row['receipts'] or { []map[string]ProduceMapValue{} } as []map[string]ProduceMapValue
 
 	// create structure
 	mut records := []map[string]ProduceMapValue{}
@@ -261,22 +259,20 @@ fn (mut g Generator) generate_date(record_row map[string]ProduceMapValue) string
 	for receipt in receipts {
 		receipt_is_last := receipt['is_last'] or { false } as bool
 
-		mut receipt_amount := receipt['amount'] or {
-			[]map[string]ProduceMapValue{}
-		} as []map[string]ProduceMapValue
+		mut receipt_amount := receipt['amount'] or { []map[string]ProduceMapValue{} } as []map[string]ProduceMapValue
 
 		amount := if receipt_is_last {
 			g.generate_remain_amount(mut receipt_amount, mut remain_amount)
-		}else{
+		} else {
 			g.generate_amount(mut receipt_amount, mut remain_amount)
 		}
 
 		mut record := map[string]ProduceMapValue{}
-		record['prefix']         = ' '.repeat(4)
-		record['account']        = receipt['account'] or { '' } as string
+		record['prefix'] = ' '.repeat(4)
+		record['account'] = receipt['account'] or { '' } as string
 		record['account_suffix'] = ' '.repeat(receipt['whitespace'] or { 0 } as int)
-		record['amount']         = amount
-		record['is_last']        = receipt_is_last
+		record['amount'] = amount
+		record['is_last'] = receipt_is_last
 
 		records << record
 	}
@@ -320,7 +316,7 @@ fn (mut g Generator) generate_remain_amount(mut amount []map[string]ProduceMapVa
 		}
 
 		return g.concat_amount(mut remain_amount)
-	}else{
+	} else {
 		return g.concat_amount(mut amount[0])
 	}
 }
@@ -338,7 +334,7 @@ fn (mut g Generator) generate_amount(mut amount []map[string]ProduceMapValue, mu
 		first := g.concat_amount(mut amount[0])
 		second := g.concat_amount(mut amount[1])
 
-		return '$first @@ $second'
+		return '${first} @@ ${second}'
 	}
 
 	return ''
@@ -350,13 +346,13 @@ fn (mut g Generator) concat_amount(mut amount map[string]ProduceMapValue) string
 
 	if amount_price >= 0 {
 		amount['price'] = '+${amount_price:0.2f}'
-	}else{
+	} else {
 		amount['price'] = '${amount_price:0.2f}'
 	}
 
 	final_amount_price := amount['price'] or { '0.00' } as string
 
-	return '$final_amount_price $amount_currency'
+	return '${final_amount_price} ${amount_currency}'
 }
 
 fn (mut g Generator) update_remain_amount(mut remain_amount map[string]ProduceMapValue, amount map[string]ProduceMapValue) map[string]ProduceMapValue {
