@@ -13,6 +13,7 @@ fn main() {
 		version: version
 		commands: [
 			cmd.parse(),
+			cmd.expose(),
 		]
 	}
 
