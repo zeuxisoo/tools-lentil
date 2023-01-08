@@ -6,5 +6,7 @@ pub mut:
 }
 
 fn (p Program) display() {
-	println('TODO: Program')
+	for statement in p.statements {
+		statement.display()
+	}
 }

@@ -6,5 +6,5 @@ pub mut:
 }
 
 pub fn (s StringExpression) display() {
-	println('TODO: string')
+	println(s.value)
 }

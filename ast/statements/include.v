@@ -8,5 +8,5 @@ pub mut:
 }
 
 pub fn (i IncludeStatement) display() {
-	println('TODO: include')
+	i.path.display()
 }
