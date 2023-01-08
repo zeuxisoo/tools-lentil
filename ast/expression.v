@@ -1,5 +1,5 @@
 module ast
 
 pub interface Expression {
-	display()
+	str() string
 }

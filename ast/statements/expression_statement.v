@@ -7,6 +7,6 @@ pub:
 	expression Expression
 }
 
-pub fn (es ExpressionStatement) display() {
-	println('TODO: expression statement')
+pub fn (es ExpressionStatement) str() string {
+	return 'TODO: expression statement'
 }

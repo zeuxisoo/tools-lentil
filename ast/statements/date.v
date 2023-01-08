@@ -8,6 +8,6 @@ pub:
 	block Statement
 }
 
-pub fn (ds DateStatement) display() {
-	println('TODO: date statement')
+pub fn (ds DateStatement) str() string {
+	return 'TODO: date statement'
 }

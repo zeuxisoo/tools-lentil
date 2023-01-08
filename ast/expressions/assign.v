@@ -8,6 +8,6 @@ pub:
 	right Expression
 }
 
-pub fn (s AssignExpression) display() {
-	println('TODO: assign')
+pub fn (s AssignExpression) str() string {
+	return 'TODO: assign'
 }

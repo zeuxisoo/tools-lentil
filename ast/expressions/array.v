@@ -7,6 +7,6 @@ pub:
 	values []Expression
 }
 
-pub fn (a ArrayExpression) display() {
-	println('TODO: array')
+pub fn (a ArrayExpression) str() string {
+	return 'TODO: array'
 }

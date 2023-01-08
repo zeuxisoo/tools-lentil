@@ -7,6 +7,6 @@ mut:
 	kind string
 }
 
-pub fn (a AccountExpression) display() {
-	println('TODO: account')
+pub fn (a AccountExpression) str() string {
+	return 'TODO: account'
 }

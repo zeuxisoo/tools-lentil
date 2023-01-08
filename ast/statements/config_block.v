@@ -7,6 +7,6 @@ pub:
 	values []Statement
 }
 
-pub fn (cb ConfigBlockStatement) display() {
-	println('TODO: config block')
+pub fn (cb ConfigBlockStatement) str() string {
+	return 'TODO: config block'
 }

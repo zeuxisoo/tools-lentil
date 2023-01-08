@@ -10,6 +10,6 @@ pub mut:
 	is_last bool
 }
 
-pub fn (dr DateRecordReceiptExpression) display() {
-	println('TODO: date record receipt')
+pub fn (dr DateRecordReceiptExpression) str() string {
+	return 'TODO: date record receipt'
 }

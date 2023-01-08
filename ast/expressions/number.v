@@ -8,6 +8,6 @@ pub:
 	value string
 }
 
-pub fn (n NumberExpression) display() {
-	println('TODO: number')
+pub fn (n NumberExpression) str() string {
+	return 'TODO: number'
 }

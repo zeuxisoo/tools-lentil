@@ -7,6 +7,6 @@ pub:
 	values []Expression
 }
 
-pub fn (dr DateRecordsExpression) display() {
-	println('TODO: date records')
+pub fn (dr DateRecordsExpression) str() string {
+	return 'TODO: date records'
 }

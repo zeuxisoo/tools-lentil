@@ -8,6 +8,6 @@ pub:
 	currency Expression
 }
 
-pub fn (a AmountExpression) display() {
-	println('TODO: amount')
+pub fn (a AmountExpression) str() string {
+	return 'TODO: amount'
 }

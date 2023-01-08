@@ -7,6 +7,6 @@ pub:
 	values []Expression
 }
 
-pub fn (a AmountsExpression) display() {
-	println('TODO: amounts')
+pub fn (a AmountsExpression) str() string {
+	return 'TODO: amounts'
 }

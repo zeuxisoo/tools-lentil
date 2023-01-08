@@ -7,6 +7,6 @@ pub:
 	block Statement
 }
 
-pub fn (c ConfigStatement) display() {
-	println('TODO: config')
+pub fn (c ConfigStatement) str() string {
+	return 'TODO: config'
 }

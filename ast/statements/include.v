@@ -7,6 +7,6 @@ pub mut:
 	path Expression
 }
 
-pub fn (i IncludeStatement) display() {
-	i.path.display()
+pub fn (i IncludeStatement) str() string {
+	return 'include "${i.path.str()}"'
 }

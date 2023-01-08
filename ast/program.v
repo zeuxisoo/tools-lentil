@@ -5,8 +5,12 @@ pub mut:
 	statements []Statement
 }
 
-fn (p Program) display() {
+fn (p Program) str() string {
+	mut output := []string{}
+
 	for statement in p.statements {
-		statement.display()
+		output << statement.str()
 	}
+
+	return output.join('\n')
 }

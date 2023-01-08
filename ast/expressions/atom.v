@@ -5,6 +5,6 @@ pub:
 	value string
 }
 
-pub fn (t AtomExpression) display() {
-	println('TODO: atom')
+pub fn (t AtomExpression) str() string {
+	return 'TODO: atom'
 }

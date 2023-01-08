@@ -5,6 +5,6 @@ pub mut:
 	value string
 }
 
-pub fn (s StringExpression) display() {
-	println(s.value)
+pub fn (s StringExpression) str() string {
+	return s.value
 }

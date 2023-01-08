@@ -5,6 +5,6 @@ pub:
 	value string
 }
 
-pub fn (n NumberKindExpression) display() {
-	println('TODO: number kind')
+pub fn (n NumberKindExpression) str() string {
+	return 'TODO: number kind'
 }

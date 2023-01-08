@@ -34,6 +34,5 @@ fn expose_action(cmd cli.Command) ! {
 	mut parser := new_parser(mut lexer)
 	mut ast_file := parser.parse() or { panic(err) }
 
-	// TODO: print the ast string
-	ast_file.ast.display()
+	println(ast_file.ast.str())
 }

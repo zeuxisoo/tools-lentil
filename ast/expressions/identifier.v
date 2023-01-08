@@ -5,6 +5,6 @@ pub:
 	value string
 }
 
-pub fn (s IdentifierExpression) display() {
-	println('TODO: identifier')
+pub fn (s IdentifierExpression) str() string {
+	return 'TODO: identifier'
 }

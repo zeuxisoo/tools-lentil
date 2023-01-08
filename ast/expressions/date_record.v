@@ -9,6 +9,6 @@ pub:
 	description Expression
 }
 
-pub fn (dr DateRecordExpression) display() {
-	println('TODO: date record')
+pub fn (dr DateRecordExpression) str() string {
+	return 'TODO: date record'
 }
