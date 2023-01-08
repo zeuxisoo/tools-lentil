@@ -9,5 +9,5 @@ pub:
 }
 
 pub fn (s AssignExpression) str() string {
-	return 'TODO: assign'
+	return '${s.left.str()} = ${s.right.str()}'
 }

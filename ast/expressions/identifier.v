@@ -6,5 +6,5 @@ pub:
 }
 
 pub fn (s IdentifierExpression) str() string {
-	return 'TODO: identifier'
+	return s.value
 }

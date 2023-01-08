@@ -8,5 +8,5 @@ pub:
 }
 
 pub fn (es ExpressionStatement) str() string {
-	return 'TODO: expression statement'
+	return es.expression.str()
 }

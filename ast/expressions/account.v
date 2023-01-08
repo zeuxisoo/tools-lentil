@@ -8,5 +8,5 @@ mut:
 }
 
 pub fn (a AccountExpression) str() string {
-	return 'TODO: account'
+	return '${a.value} (${a.kind})'
 }
