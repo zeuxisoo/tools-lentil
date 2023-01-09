@@ -7,6 +7,6 @@ pub:
 	value Expression
 }
 
-pub fn (db DateBlockStatement) str() string {
-	return 'TODO: date block'
+pub fn (dbs DateBlockStatement) str() string {
+	return dbs.value.str()
 }

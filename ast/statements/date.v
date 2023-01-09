@@ -9,5 +9,11 @@ pub:
 }
 
 pub fn (ds DateStatement) str() string {
-	return 'TODO: date statement'
+	mut output := [
+		'${ds.value} {',
+		ds.block.str(),
+		'}',
+	]
+
+	return output.join('\n')
 }
