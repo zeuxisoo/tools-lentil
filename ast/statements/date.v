@@ -8,10 +8,10 @@ pub:
 	block Statement
 }
 
-pub fn (ds DateStatement) str() string {
+pub fn (d DateStatement) str() string {
 	mut output := [
-		'${ds.value} {',
-		ds.block.str(),
+		'${d.value} {',
+		d.block.str(),
 		'}',
 	]
 

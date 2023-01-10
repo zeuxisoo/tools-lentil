@@ -7,6 +7,6 @@ pub:
 	expression Expression
 }
 
-pub fn (es ExpressionStatement) str() string {
-	return es.expression.str()
+pub fn (e ExpressionStatement) str() string {
+	return e.expression.str()
 }
