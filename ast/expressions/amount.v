@@ -9,5 +9,8 @@ pub:
 }
 
 pub fn (a AmountExpression) str() string {
-	return 'TODO: amount'
+	return [
+		a.value.str(),
+		a.currency.str(),
+	].join('')
 }

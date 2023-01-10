@@ -8,5 +8,11 @@ pub:
 }
 
 pub fn (a AmountsExpression) str() string {
-	return 'TODO: amounts'
+	mut output := []string{}
+
+	for value in a.values {
+		output << value.str()
+	}
+
+	return output.join(',')
 }
