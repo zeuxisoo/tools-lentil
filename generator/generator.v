@@ -10,8 +10,15 @@ import lexer
 import parser
 import utils { Environment, EnvironmentConfigType, EnvironmentVariableType }
 
-type ProduceMapValue = []map[string]ProduceMapValue | bool | int | string
-type ProduceType = []map[string]ProduceMapValue | []string | map[string]ProduceMapValue | string
+type ProduceMapValue = []map[string]ProduceMapValue
+	| bool
+	| int
+	| string
+
+type ProduceType = []map[string]ProduceMapValue
+	| map[string]ProduceMapValue
+	| []string
+	| string
 
 struct Generator {
 mut:
