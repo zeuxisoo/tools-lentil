@@ -6,5 +6,5 @@ pub:
 }
 
 pub fn (t AtomExpression) str() string {
-	return 'TODO: atom'
+	return t.value
 }

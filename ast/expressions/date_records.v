@@ -8,5 +8,11 @@ pub:
 }
 
 pub fn (dr DateRecordsExpression) str() string {
-	return 'TODO: date records'
+	mut output := []string{}
+
+	for value in dr.values {
+		output << value.str()
+	}
+
+	return output.join('\n')
 }
