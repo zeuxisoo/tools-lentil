@@ -11,5 +11,8 @@ pub mut:
 }
 
 pub fn (dr DateRecordReceiptExpression) str() string {
-	return 'TODO: date record receipt'
+	return [
+		dr.account.str(),
+		dr.amounts.str(),
+	].join('')
 }
