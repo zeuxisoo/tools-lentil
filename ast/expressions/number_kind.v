@@ -6,5 +6,5 @@ pub:
 }
 
 pub fn (n NumberKindExpression) str() string {
-	return 'TODO: number kind'
+	return n.value
 }

@@ -9,5 +9,8 @@ pub:
 }
 
 pub fn (n NumberExpression) str() string {
-	return 'TODO: number'
+	return [
+		n.kind.str(),
+		n.value,
+	].join('')
 }
