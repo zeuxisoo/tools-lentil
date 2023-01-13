@@ -59,6 +59,9 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 
 			codes
 		}
+		StringExpression, IdentifierExpression, AccountExpression, AtomExpression, NumberKindExpression {
+			node.value
+		}
 		IncludeStatement {
 			file_path := g.produce(node.path as Node, mut environment)
 			full_path := os.join_path_single(environment.programs['root'], file_path as string)
@@ -188,18 +191,6 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 		ExpressionStatement {
 			g.produce(node.expression as Node, mut environment)
 		}
-		StringExpression {
-			node.value
-		}
-		IdentifierExpression {
-			node.value
-		}
-		AccountExpression {
-			node.value
-		}
-		AtomExpression {
-			node.value
-		}
 		ArrayExpression {
 			mut items := []string{}
 
@@ -243,9 +234,6 @@ fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType
 			value := node.value
 
 			'${kind}${value}'
-		}
-		NumberKindExpression {
-			node.value
 		}
 		else {
 			panic('generator: unknown node: ${node}')
