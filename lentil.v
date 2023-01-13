@@ -13,7 +13,7 @@ fn main() {
 		version: version
 		commands: [
 			cmd.generate(),
-			cmd.expose(),
+			cmd.tree(),
 		]
 	}
 

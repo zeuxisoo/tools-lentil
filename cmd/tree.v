@@ -5,24 +5,24 @@ import os
 import lexer { new_lexer }
 import parser { new_parser }
 
-pub fn expose() cli.Command {
+pub fn tree() cli.Command {
 	return cli.Command{
-		name: 'expose'
-		description: 'Expose the abstract syntax tree string'
-		execute: expose_action
+		name: 'tree'
+		description: 'Display the string of abstract syntax tree'
+		execute: tree_action
 		flags: [
 			cli.Flag{
 				flag: .string
 				name: 'file'
 				abbrev: 'f'
-				description: 'which file should be expose'
+				description: 'which file should be show in the tree'
 				required: true
 			},
 		]
 	}
 }
 
-fn expose_action(cmd cli.Command) ! {
+fn tree_action(cmd cli.Command) ! {
 	file := cmd.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {
