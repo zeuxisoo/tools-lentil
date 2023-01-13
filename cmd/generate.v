@@ -6,24 +6,24 @@ import lexer { new_lexer }
 import parser { new_parser }
 import generator { new_generator }
 
-pub fn parse() cli.Command {
+pub fn generate() cli.Command {
 	return cli.Command{
-		name: 'parse'
-		description: 'Parse the syntax'
-		execute: parse_action
+		name: 'generate'
+		description: 'Generate bean file from the lentil file'
+		execute: generate_action
 		flags: [
 			cli.Flag{
 				flag: .string
 				name: 'file'
 				abbrev: 'f'
-				description: 'which file should be parse'
+				description: 'which file should be generate'
 				required: true
 			},
 		]
 	}
 }
 
-fn parse_action(cmd cli.Command) ! {
+fn generate_action(cmd cli.Command) ! {
 	file := cmd.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {

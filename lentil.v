@@ -12,7 +12,7 @@ fn main() {
 		description: 'tools for convert custom syntax to specified syntax'
 		version: version
 		commands: [
-			cmd.parse(),
+			cmd.generate(),
 			cmd.expose(),
 		]
 	}
