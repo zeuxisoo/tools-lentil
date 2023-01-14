@@ -35,8 +35,10 @@ fn generate_action(cmd cli.Command) ! {
 	mut parser := new_parser(mut lexer)
 	mut generator := new_generator(mut parser)
 
-	generator.generate() or {
+	result := generator.generate() or {
 		eprintln(err)
 		return
 	}
+
+	println(result)
 }

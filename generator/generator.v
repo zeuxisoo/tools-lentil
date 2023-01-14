@@ -31,7 +31,7 @@ pub fn new_generator(mut parser parser.Parser) &Generator {
 	}
 }
 
-pub fn (mut g Generator) generate() ! {
+pub fn (mut g Generator) generate() !string {
 	ast_file := g.parser.parse()!
 
 	mut environment := Environment{}
@@ -39,7 +39,7 @@ pub fn (mut g Generator) generate() ! {
 
 	result := g.produce(ast_file.ast, mut environment) as []string
 
-	println(result.join('\n'))
+	return result.join('\n')
 }
 
 fn (mut g Generator) produce(node Node, mut environment Environment) ProduceType {
