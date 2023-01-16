@@ -19,12 +19,20 @@ pub fn generate() cli.Command {
 				description: 'which file should be generate'
 				required: true
 			},
+			cli.Flag{
+				flag: .string
+				name: 'output'
+				abbrev: 'o'
+				description: 'which file is used to store'
+				required: false
+			}
 		]
 	}
 }
 
 fn generate_action(cmd cli.Command) ! {
 	file := cmd.flags.get_string('file') or { panic(err) }
+	output := cmd.flags.get_string('output') or { panic(err) }
 
 	if !os.exists(file) {
 		eprintln('file not exists: ${file}')
@@ -38,6 +46,20 @@ fn generate_action(cmd cli.Command) ! {
 	result := generator.generate() or {
 		eprintln(err)
 		return
+	}
+
+	if output.len > 0 {
+		folder_path := os.abs_path(os.dir(output))
+
+		if !os.exists(folder_path) {
+			eprintln('folder path is not exists: ${folder_path}')
+			return
+		}
+
+		os.write_file(output, result) or {
+			eprintln(err)
+			return
+		}
 	}
 
 	println(result)
