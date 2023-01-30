@@ -1,0 +1,25 @@
+{
+  "name": "tin",
+  "displayName": "Tin",
+  "description": "Tin template language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "tin",
+      "aliases": ["Tin template language", "tin"],
+      "extensions": [".tin"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "tin",
+      "scopeName": "source.tin",
+      "path": "./syntaxes/tin.tmLanguage.json"
+    }]
+  }
+}
