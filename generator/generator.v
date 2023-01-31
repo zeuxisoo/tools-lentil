@@ -1,11 +1,21 @@
 module generator
 
+// vfmt off
 import os
 import arrays
 import regex
 import ast { Node, Program }
-import ast.statements { ConfigBlockStatement, ConfigStatement, DateBlockStatement, DateStatement, ExpressionStatement, IncludeStatement }
-import ast.expressions { AccountExpression, AmountExpression, AmountsExpression, ArrayExpression, AssignExpression, AtomExpression, DateRecordExpression, DateRecordReceiptExpression, DateRecordsExpression, IdentifierExpression, NumberExpression, NumberKindExpression, StringExpression }
+import ast.statements {
+	ConfigBlockStatement, ConfigStatement,
+	DateBlockStatement, DateStatement,
+	ExpressionStatement, IncludeStatement
+}
+import ast.expressions {
+	AccountExpression, AtomExpression, AmountExpression, AmountsExpression,
+	DateRecordExpression, DateRecordReceiptExpression, DateRecordsExpression,
+	IdentifierExpression, StringExpression, ArrayExpression, AssignExpression,
+	NumberExpression, NumberKindExpression
+}
 import lexer
 import parser
 import utils { Environment, EnvironmentConfigType, EnvironmentVariableType }
@@ -19,6 +29,7 @@ type ProduceType = []map[string]ProduceMapValue
 	| map[string]ProduceMapValue
 	| []string
 	| string
+// vfmt on
 
 struct Generator {
 mut:
