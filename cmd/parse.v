@@ -5,24 +5,24 @@ import os
 import lexer { new_lexer }
 import parser { new_parser }
 
-pub fn tree() cli.Command {
+pub fn parse() cli.Command {
 	return cli.Command{
-		name: 'tree'
-		description: 'Display the string of abstract syntax tree'
-		execute: tree_action
+		name: 'parse'
+		description: 'Display the string of parsed content'
+		execute: parse_action
 		flags: [
 			cli.Flag{
 				flag: .string
 				name: 'file'
 				abbrev: 'f'
-				description: 'which file should be show in the tree'
+				description: 'which file should be parse'
 				required: true
 			},
 		]
 	}
 }
 
-fn tree_action(cmd cli.Command) ! {
+fn parse_action(cmd cli.Command) ! {
 	file := cmd.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {

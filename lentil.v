@@ -12,9 +12,9 @@ fn main() {
 		description: 'tools for convert custom syntax to specified syntax'
 		version: version
 		commands: [
-			cmd.generate(),
-			cmd.tree(),
 			cmd.token(),
+			cmd.parse(),
+			cmd.generate(),
 		]
 	}
 
