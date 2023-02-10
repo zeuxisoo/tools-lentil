@@ -1,7 +1,5 @@
 module statements
 
-import ast { Statement }
-
 pub struct ConfigBlockStatement {
 pub:
 	values []Statement

@@ -29,9 +29,9 @@ fn token_action(cmd cli.Command) ! {
 		return
 	}
 
-	mut lexer := new_lexer(file) or { panic(err) }
+	mut scanner := new_lexer(file) or { panic(err) }
 
-	for token in lexer.lex() {
+	for token in scanner.lex() {
 		kind := token.kind
 		value := token.value
 

@@ -1,7 +1,6 @@
 module parser
 
-import ast { Statement }
-import ast.statements { DateStatement }
+import ast.statements { Statement, DateStatement }
 
 fn parse_date_statement(mut parser Parser) !Statement {
 	current_token_value := parser.current_token.value

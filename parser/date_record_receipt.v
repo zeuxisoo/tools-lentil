@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { DateRecordReceiptExpression }
+import ast.expressions { Expression, DateRecordReceiptExpression }
 
 fn parse_date_record_receipt_expression(mut parser Parser) !Expression {
 	account := parse_identifier_expression(mut parser)!

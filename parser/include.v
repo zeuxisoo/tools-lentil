@@ -1,7 +1,6 @@
 module parser
 
-import ast { Statement }
-import ast.statements { IncludeStatement }
+import ast.statements { Statement, IncludeStatement }
 
 fn parse_include_statement(mut parser Parser) !Statement {
 	next_token_kind := parser.look_next_token().kind

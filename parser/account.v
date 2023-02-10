@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { AccountExpression }
+import ast.expressions { Expression, AccountExpression }
 import token { find_account_kind }
 
 pub fn parse_account_expression(mut parser Parser) !Expression {

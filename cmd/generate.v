@@ -39,11 +39,11 @@ fn generate_action(cmd cli.Command) ! {
 		return
 	}
 
-	mut lexer := new_lexer(file) or { panic(err) }
-	mut parser := new_parser(mut lexer)
-	mut generator := new_generator(mut parser)
+	mut scanner := new_lexer(file) or { panic(err) }
+	mut analyser := new_parser(mut scanner)
+	mut producer := new_generator(mut analyser)
 
-	result := generator.generate() or {
+	result := producer.generate() or {
 		eprintln(err)
 		return
 	}

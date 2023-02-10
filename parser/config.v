@@ -1,7 +1,6 @@
 module parser
 
-import ast { Statement }
-import ast.statements { ConfigStatement }
+import ast.statements { Statement, ConfigStatement }
 
 pub fn parse_config_statement(mut parser Parser) !Statement {
 	next_token_kind := parser.look_next_token().kind

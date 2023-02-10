@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { AssignExpression, IdentifierExpression }
+import ast.expressions { Expression, AssignExpression, IdentifierExpression }
 
 pub fn parse_assign_expression(mut parser Parser) !Expression {
 	identifier := IdentifierExpression{

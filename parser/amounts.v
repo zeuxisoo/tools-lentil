@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { AmountsExpression }
+import ast.expressions { Expression, AmountsExpression }
 
 fn parse_amounts_expression(mut parser Parser) !Expression {
 	if parser.current_token.kind !in [.plus, .minus] {

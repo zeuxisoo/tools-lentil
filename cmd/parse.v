@@ -30,9 +30,9 @@ fn parse_action(cmd cli.Command) ! {
 		return
 	}
 
-	mut lexer := new_lexer(file) or { panic(err) }
-	mut parser := new_parser(mut lexer)
-	mut ast_file := parser.parse() or { panic(err) }
+	mut scanner := new_lexer(file) or { panic(err) }
+	mut analyser := new_parser(mut scanner)
+	mut ast_file := analyser.parse() or { panic(err) }
 
 	println(ast_file.ast.str())
 }

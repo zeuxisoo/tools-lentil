@@ -1,7 +1,5 @@
 module expressions
 
-import ast { Expression }
-
 pub struct ArrayExpression {
 pub:
 	values []Expression

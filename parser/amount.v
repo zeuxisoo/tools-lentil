@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { AmountExpression }
+import ast.expressions { Expression, AmountExpression }
 
 fn parse_amount_expression(mut parser Parser) !Expression {
 	expression := AmountExpression{

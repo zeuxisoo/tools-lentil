@@ -1,10 +1,9 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { DateRecordExpression, DateRecordReceiptExpression }
+import ast.expressions { Expression, DateRecordExpression, DateRecordReceiptExpression }
 
 fn parse_date_record_expression(mut parser Parser) !Expression {
-	mut expressions := [
+	mut expression_list := [
 		parse_date_record_receipt_expression(mut parser)!,
 	]
 
@@ -13,11 +12,11 @@ fn parse_date_record_expression(mut parser Parser) !Expression {
 			parser.read_token()
 		}
 
-		expressions << parse_date_record_receipt_expression(mut parser)!
+		expression_list << parse_date_record_receipt_expression(mut parser)!
 	}
 
 	// set `is_last` field to true when expression is last element
-	mut last_receipt := expressions.last()
+	mut last_receipt := expression_list.last()
 
 	if mut last_receipt is DateRecordReceiptExpression {
 		last_receipt.is_last = true
@@ -25,7 +24,7 @@ fn parse_date_record_expression(mut parser Parser) !Expression {
 
 	// create the date record expression
 	expression := DateRecordExpression{
-		values: expressions
+		values: expression_list
 		title: parse_atom_expression(mut parser)!
 		description: parse_atom_expression(mut parser)!
 	}

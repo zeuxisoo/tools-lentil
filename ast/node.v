@@ -1,5 +1,6 @@
 module ast
 
-pub interface Node {
-	str() string
-}
+import ast.expressions { Expression }
+import ast.statements { Statement }
+
+pub type Node = Statement | Expression

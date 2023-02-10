@@ -1,4 +1,4 @@
-module ast
+module statements
 
 pub struct Program {
 pub mut:

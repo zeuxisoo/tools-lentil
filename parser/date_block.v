@@ -1,7 +1,6 @@
 module parser
 
-import ast { Statement }
-import ast.statements { DateBlockStatement }
+import ast.statements { Statement, DateBlockStatement }
 
 fn parse_date_block_statement(mut parser Parser) !Statement {
 	parser.read_token() // skip `{`

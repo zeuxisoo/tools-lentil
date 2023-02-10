@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { ArrayExpression }
+import ast.expressions { Expression, ArrayExpression }
 
 pub fn parse_array_expression(mut parser Parser) !Expression {
 	return ArrayExpression{

@@ -1,6 +1,6 @@
 module statements
 
-import ast { Expression }
+import ast.expressions { Expression }
 
 pub struct DateBlockStatement {
 pub:

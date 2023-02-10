@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { StringExpression }
+import ast.expressions { Expression, StringExpression }
 
 pub fn parse_string_expression(mut parser Parser) !Expression {
 	expression := StringExpression{

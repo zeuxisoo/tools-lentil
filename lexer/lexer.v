@@ -64,12 +64,12 @@ pub fn (mut l Lexer) lex() []token.Token {
 		}
 
 		// tokens
-		token := l.lex_text(look_char) or {
+		indicate := l.lex_text(look_char) or {
 			eprintln(err)
 			exit(1)
 		}
 
-		l.tokens << token
+		l.tokens << indicate
 	}
 
 	return l.tokens

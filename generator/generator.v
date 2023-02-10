@@ -4,13 +4,15 @@ module generator
 import os
 import arrays
 import regex
-import ast { Node, Program }
+import ast { Node }
 import ast.statements {
+	Statement, Program,
 	ConfigBlockStatement, ConfigStatement,
 	DateBlockStatement, DateStatement,
 	ExpressionStatement, IncludeStatement
 }
 import ast.expressions {
+	Expression,
 	AccountExpression, AtomExpression, AmountExpression, AmountsExpression,
 	DateRecordExpression, DateRecordReceiptExpression, DateRecordsExpression,
 	IdentifierExpression, StringExpression, ArrayExpression, AssignExpression,
@@ -36,9 +38,9 @@ mut:
 	parser parser.Parser
 }
 
-pub fn new_generator(mut parser parser.Parser) &Generator {
+pub fn new_generator(mut analyser parser.Parser) &Generator {
 	return &Generator{
-		parser: parser
+		parser: analyser
 	}
 }
 
@@ -50,20 +52,33 @@ pub fn (mut g Generator) generate() !string {
 	mut environment := Environment{}
 	environment.add_program('root', ast_file.root)
 
-	result := g.produce(ast_file.ast, mut environment) or {
-		return err
-	} as []string
+	result := g.produce(ast_file.ast, mut environment)! as []string
+
+	// result := g.produce(ast_file.ast, mut environment) or {
+	// 	return err
+	// } as []string
 
 	return result.join('\n')
 }
 
 fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceType {
 	return match node {
+		Statement {
+			g.produce_statement(node, mut environment)!
+		}
+		Expression {
+			g.produce_expression(node, mut environment)!
+		}
+	}
+}
+
+fn (mut g Generator) produce_statement(node Statement, mut environment Environment) !ProduceType {
+	return match node {
 		Program {
 			mut codes := []string{}
 
 			for statement in node.statements {
-				code := g.produce(statement as Node, mut environment)!
+				code := g.produce_statement(statement, mut environment)!
 
 				if code is string {
 					if code.len > 0 {
@@ -74,22 +89,22 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 
 			codes
 		}
-		StringExpression, IdentifierExpression, AccountExpression, AtomExpression, NumberKindExpression {
-			node.value
+		ExpressionStatement {
+			g.produce_expression(node.expression, mut environment)!
 		}
 		IncludeStatement {
-			file_path := g.produce(node.path as Node, mut environment)!
+			file_path := g.produce_expression(node.path, mut environment)!
 			full_path := os.join_path_single(environment.programs['root'], file_path as string)
 
-			mut lexer := lexer.new_lexer(full_path) or { panic(err) }
-			mut parser := parser.new_parser(mut lexer)
+			mut scanner := lexer.new_lexer(full_path) or { panic(err) }
+			mut analyser := parser.new_parser(mut scanner)
 
-			ast_file := parser.parse() or { panic(err) }
+			ast_file := analyser.parse() or { panic(err) }
 
 			g.produce(ast_file.ast, mut environment)!
 		}
 		ConfigStatement {
-			g.produce(node.block as Node, mut environment)!
+			g.produce_statement(node.block, mut environment)!
 		}
 		ConfigBlockStatement {
 			for value in node.values {
@@ -97,8 +112,8 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 					expression := value.expression
 
 					if expression is AssignExpression {
-						name := g.produce(expression.left as Node, mut environment)! as string
-						data := g.produce(expression.right as Node, mut environment)!
+						name := g.produce_expression(expression.left, mut environment)! as string
+						data := g.produce_expression(expression.right, mut environment)!
 
 						if data is []string {
 							environment.add_config(name, EnvironmentConfigType(data))
@@ -111,7 +126,7 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 		}
 		DateStatement {
 			date := node.value
-			rows := g.produce(node.block as Node, mut environment)! as []map[string]ProduceMapValue
+			rows := g.produce_statement(node.block, mut environment)! as []map[string]ProduceMapValue
 
 			escape_quote := fn (value string) string {
 				return value.replace('"', '\\"')
@@ -131,13 +146,21 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 			contents.join('\n')
 		}
 		DateBlockStatement {
-			g.produce(node.value as Node, mut environment)!
+			g.produce_expression(node.value, mut environment)!
+		}
+	}
+}
+
+fn (mut g Generator) produce_expression(node Expression, mut environment Environment) !ProduceType {
+	return match node {
+		StringExpression, IdentifierExpression, AccountExpression, AtomExpression, NumberKindExpression {
+			node.value
 		}
 		DateRecordsExpression {
 			mut records := []map[string]ProduceMapValue{}
 
 			for value in node.values {
-				record := g.produce(value as Node, mut environment)!
+				record := g.produce_expression(value, mut environment)!
 
 				records << record as map[string]ProduceMapValue
 			}
@@ -148,13 +171,13 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 			mut receipts := []map[string]ProduceMapValue{}
 
 			for value in node.values {
-				receipt := g.produce(value as Node, mut environment)!
+				receipt := g.produce_expression(value, mut environment)!
 
 				receipts << receipt as map[string]ProduceMapValue
 			}
 
-			title := g.produce(node.title as Node, mut environment)! as string
-			description := g.produce(node.description as Node, mut environment)! as string
+			title := g.produce_expression(node.title, mut environment)! as string
+			description := g.produce_expression(node.description, mut environment)! as string
 
 			mut records := map[string]ProduceMapValue{}
 			records['title'] = title
@@ -164,7 +187,7 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 			records
 		}
 		DateRecordReceiptExpression {
-			account_name := g.produce(node.account as Node, mut environment)! as string
+			account_name := g.produce_expression(node.account, mut environment)! as string
 			account_value := environment.variables[account_name] or {
 				return error('generator: account name not found, got `${account_name}`')
 			} as string
@@ -195,7 +218,7 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 
 			if amounts is AmountsExpression {
 				if amounts.values.len > 0 {
-					amount = g.produce(amounts, mut environment)! as []map[string]ProduceMapValue
+					amount = g.produce_expression(amounts, mut environment)! as []map[string]ProduceMapValue
 				}
 			}else{
 				return error('generator: expected amount expression, but got `${amounts}`')
@@ -210,21 +233,18 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 
 			receipts
 		}
-		ExpressionStatement {
-			g.produce(node.expression as Node, mut environment)!
-		}
 		ArrayExpression {
 			mut items := []string{}
 
 			for value in node.values {
-				items << g.produce(value as Node, mut environment)! as string
+				items << g.produce_expression(value, mut environment)! as string
 			}
 
 			items
 		}
 		AssignExpression {
-			name := g.produce(node.left as Node, mut environment)! as string
-			data := g.produce(node.right as Node, mut environment)!
+			name := g.produce_expression(node.left, mut environment)! as string
+			data := g.produce_expression(node.right, mut environment)!
 
 			if data is string {
 				environment.add_variable(name, EnvironmentVariableType(data))
@@ -236,14 +256,14 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 			mut amounts := []map[string]ProduceMapValue{}
 
 			for amount in node.values {
-				amounts << g.produce(amount as Node, mut environment)! as map[string]ProduceMapValue
+				amounts << g.produce_expression(amount, mut environment)! as map[string]ProduceMapValue
 			}
 
 			amounts
 		}
 		AmountExpression {
-			price := g.produce(node.value as Node, mut environment)! as string
-			currency := g.produce(node.currency as Node, mut environment)! as string
+			price := g.produce_expression(node.value, mut environment)! as string
+			currency := g.produce_expression(node.currency, mut environment)! as string
 
 			mut amount := map[string]ProduceMapValue{}
 			amount['price'] = price
@@ -252,13 +272,10 @@ fn (mut g Generator) produce(node Node, mut environment Environment) !ProduceTyp
 			amount
 		}
 		NumberExpression {
-			kind := g.produce(node.kind as Node, mut environment)! as string
+			kind := g.produce_expression(node.kind, mut environment)! as string
 			value := node.value
 
 			'${kind}${value}'
-		}
-		else {
-			return error('generator: unknown node: ${node}')
 		}
 	}
 }

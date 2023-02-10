@@ -3,8 +3,9 @@ module parser
 import os
 import lexer
 import token { Kind }
-import ast { Expression, File, Program, Statement }
-import ast.statements { ExpressionStatement }
+import ast { File }
+import ast.expressions { Expression }
+import ast.statements { Statement, Program, ExpressionStatement }
 
 const statement_parsers = {
 	Kind.include: parse_include_statement
@@ -30,10 +31,10 @@ mut:
 	includes      []Expression
 }
 
-pub fn new_parser(mut lexer lexer.Lexer) &Parser {
+pub fn new_parser(mut scanner lexer.Lexer) &Parser {
 	return &Parser{
-		lexer: lexer
-		tokens: lexer.lex()
+		lexer: scanner
+		tokens: scanner.lex()
 		includes: []Expression{}
 	}
 }
@@ -46,7 +47,7 @@ pub fn (mut p Parser) parse() !File {
 			name: os.base(p.lexer.file_path)
 			root: os.real_path(os.dir(p.lexer.file_path))
 			path: p.lexer.file_path
-			ast: program
+			ast: Statement(program)
 			includes: p.includes
 		}
 	}
@@ -65,15 +66,15 @@ pub fn (mut p Parser) parse() !File {
 		name: os.base(p.lexer.file_path)
 		root: os.real_path(os.dir(p.lexer.file_path))
 		path: p.lexer.file_path
-		ast: program
+		ast: Statement(program)
 		includes: p.includes
 	}
 }
 
 pub fn (mut p Parser) parse_statement() !Statement {
 	if p.current_token.kind in parser.statement_parsers {
-		parser := parser.statement_parsers[p.current_token.kind]
-		statement := parser(mut p)!
+		analyser := parser.statement_parsers[p.current_token.kind]
+		statement := analyser(mut p)!
 
 		return statement
 	}
@@ -83,8 +84,8 @@ pub fn (mut p Parser) parse_statement() !Statement {
 
 pub fn (mut p Parser) parse_expression_statement() !ExpressionStatement {
 	if p.current_token.kind in parser.expression_statement_parsers {
-		parser := parser.expression_statement_parsers[p.current_token.kind]
-		expression := parser(mut p)!
+		analyser := parser.expression_statement_parsers[p.current_token.kind]
+		expression := analyser(mut p)!
 
 		return ExpressionStatement{
 			expression: expression
@@ -96,8 +97,8 @@ pub fn (mut p Parser) parse_expression_statement() !ExpressionStatement {
 
 pub fn (mut p Parser) parse_expression() !Expression {
 	if p.current_token.kind in parser.expression_parsers {
-		parser := parser.expression_parsers[p.current_token.kind]
-		expression := parser(mut p)!
+		analyser := parser.expression_parsers[p.current_token.kind]
+		expression := analyser(mut p)!
 
 		return expression
 	}
@@ -108,12 +109,12 @@ pub fn (mut p Parser) parse_expression() !Expression {
 pub fn (mut p Parser) parse_expression_list() ![]Expression {
 	p.read_token() // skip `[`
 
-	mut expressions := []Expression{}
+	mut expression_list := []Expression{}
 
 	for p.current_token.kind !in [.right_bracket, .end_of_line] {
 		expression := p.parse_expression()!
 
-		expressions << expression
+		expression_list << expression
 
 		p.read_token()
 
@@ -126,7 +127,7 @@ pub fn (mut p Parser) parse_expression_list() ![]Expression {
 		return error('parser: expected current token to be right bracket but got ${p.current_token.kind}')
 	}
 
-	return expressions
+	return expression_list
 }
 
 pub fn (mut p Parser) read_token() token.Token {
@@ -142,9 +143,9 @@ pub fn (mut p Parser) read_token() token.Token {
 }
 
 pub fn (mut p Parser) look_next_token() token.Token {
-	token := p.tokens.first()
+	next_token := p.tokens.first()
 
-	return token
+	return next_token
 }
 
 pub fn (mut p Parser) end_of_line_token() token.Token {
@@ -153,8 +154,8 @@ pub fn (mut p Parser) end_of_line_token() token.Token {
 
 // test helper
 pub fn create_parser(content string) !File {
-	mut lexer := lexer.new_lexer_content(content) or { panic(err) }
-	mut parser := new_parser(mut lexer)
+	mut scanner := lexer.new_lexer_content(content) or { panic(err) }
+	mut analyser := new_parser(mut scanner)
 
-	return parser.parse()
+	return analyser.parse()
 }

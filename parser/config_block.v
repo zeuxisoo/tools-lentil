@@ -1,7 +1,6 @@
 module parser
 
-import ast { Statement }
-import ast.statements { ConfigBlockStatement }
+import ast.statements { Statement, ConfigBlockStatement }
 
 pub fn parse_config_block_statement(mut parser Parser) !Statement {
 	parser.read_token() // skip `{`

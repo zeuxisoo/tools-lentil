@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { AtomExpression }
+import ast.expressions { Expression, AtomExpression }
 
 fn parse_atom_expression(mut parser Parser) !Expression {
 	current_token := parser.current_token

@@ -5,13 +5,13 @@ import ast.statements
 import ast.expressions
 
 fn test_config_statement() {
-	parser := create_parser('
+	analyser := create_parser('
 		config {
 			currency = ["hkd", "usd", "jpy"]
 		}
 	')!
 
-	assert parser.ast == ast.Program{
+	assert analyser.ast == ast.Program{
 		statements: [
 			statements.ConfigStatement{
 				block: statements.ConfigBlockStatement{

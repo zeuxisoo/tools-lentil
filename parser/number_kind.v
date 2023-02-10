@@ -1,7 +1,6 @@
 module parser
 
-import ast { Expression }
-import ast.expressions { NumberKindExpression }
+import ast.expressions { Expression, NumberKindExpression }
 
 fn parse_number_kind_expression(mut parser Parser) !Expression {
 	expression := NumberKindExpression{
