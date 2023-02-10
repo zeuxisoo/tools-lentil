@@ -6,10 +6,10 @@ pub:
 	block Statement
 }
 
-pub fn (d DateStatement) str() string {
+pub fn (d DateStatement) ast() string {
 	mut output := [
 		'${d.value} {',
-		d.block.str(),
+		(d.block as DateBlockStatement).ast(),
 		'}',
 	]
 

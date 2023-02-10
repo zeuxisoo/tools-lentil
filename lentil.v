@@ -13,7 +13,7 @@ fn main() {
 		version: version
 		commands: [
 			cmd.token(),
-			cmd.parse(),
+			cmd.ast(),
 			cmd.generate(),
 		]
 	}

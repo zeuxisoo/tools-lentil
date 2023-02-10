@@ -5,6 +5,6 @@ pub:
 	value string
 }
 
-pub fn (t AtomExpression) str() string {
+pub fn (t AtomExpression) ast() string {
 	return t.value
 }

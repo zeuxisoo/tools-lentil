@@ -7,16 +7,16 @@ pub:
 	description Expression
 }
 
-pub fn (dr DateRecordExpression) str() string {
+pub fn (dr DateRecordExpression) ast() string {
 	mut output_table := []string{}
 	mut output_row := []string{}
 
 	for value in dr.values {
-		output_row << value.str()
+		output_row << (value as DateRecordReceiptExpression).ast()
 	}
 
-	title := dr.title.str()
-	description := dr.description.str()
+	title := (dr.title as AtomExpression).ast()
+	description := (dr.description as AtomExpression).ast()
 
 	if title.len > 0 {
 		output_row << ':${title}'

@@ -7,6 +7,6 @@ mut:
 	kind string
 }
 
-pub fn (a AccountExpression) str() string {
+pub fn (a AccountExpression) ast() string {
 	return '${a.value} (${a.kind})'
 }

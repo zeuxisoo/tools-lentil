@@ -8,9 +8,9 @@ pub mut:
 	is_last bool
 }
 
-pub fn (dr DateRecordReceiptExpression) str() string {
+pub fn (dr DateRecordReceiptExpression) ast() string {
 	return [
-		dr.account.str(),
-		dr.amounts.str(),
+		(dr.account as IdentifierExpression).ast(),
+		(dr.amounts as AmountsExpression).ast(),
 	].join('')
 }

@@ -6,9 +6,9 @@ pub:
 	value string
 }
 
-pub fn (n NumberExpression) str() string {
+pub fn (n NumberExpression) ast() string {
 	return [
-		n.kind.str(),
+		(n.kind as NumberKindExpression).ast(),
 		n.value,
 	].join('')
 }
