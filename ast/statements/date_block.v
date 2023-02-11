@@ -7,6 +7,6 @@ pub:
 	value Expression
 }
 
-pub fn (db DateBlockStatement) ast() string {
-	return (db.value as DateRecordsExpression).ast()
+pub fn (db DateBlockStatement) ast_str() string {
+	return (db.value as DateRecordsExpression).ast_str()
 }

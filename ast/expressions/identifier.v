@@ -5,6 +5,6 @@ pub:
 	value string
 }
 
-pub fn (s IdentifierExpression) ast() string {
+pub fn (s IdentifierExpression) ast_str() string {
 	return s.value
 }

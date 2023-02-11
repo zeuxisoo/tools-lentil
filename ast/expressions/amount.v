@@ -6,9 +6,9 @@ pub:
 	currency Expression
 }
 
-pub fn (a AmountExpression) ast() string {
+pub fn (a AmountExpression) ast_str() string {
 	return [
-		(a.value as NumberExpression).ast(),
-		(a.currency as IdentifierExpression).ast(),
+		(a.value as NumberExpression).ast_str(),
+		(a.currency as IdentifierExpression).ast_str(),
 	].join('')
 }

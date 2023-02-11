@@ -7,10 +7,10 @@ pub:
 	expression Expression
 }
 
-pub fn (e ExpressionStatement) ast() string {
+pub fn (e ExpressionStatement) ast_str() string {
 	return match e.expression {
 		AssignExpression {
-			e.expression.ast()
+			e.expression.ast_str()
 		}
 		else {
 			// skip other expression

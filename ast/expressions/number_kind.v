@@ -5,6 +5,6 @@ pub:
 	value string
 }
 
-pub fn (n NumberKindExpression) ast() string {
+pub fn (n NumberKindExpression) ast_str() string {
 	return n.value
 }

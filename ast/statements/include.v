@@ -7,8 +7,8 @@ pub mut:
 	path Expression
 }
 
-pub fn (i IncludeStatement) ast() string {
-	path := (i.path as StringExpression).ast()
+pub fn (i IncludeStatement) ast_str() string {
+	path := (i.path as StringExpression).ast_str()
 
 	return 'include "${path}"'
 }

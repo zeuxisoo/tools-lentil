@@ -14,6 +14,7 @@ fn main() {
 		commands: [
 			cmd.token(),
 			cmd.ast(),
+			cmd.parse(),
 			cmd.generate(),
 		]
 	}

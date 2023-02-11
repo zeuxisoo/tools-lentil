@@ -5,10 +5,10 @@ pub:
 	block Statement
 }
 
-pub fn (c ConfigStatement) ast() string {
+pub fn (c ConfigStatement) ast_str() string {
 	mut output := [
 		'config {',
-		(c.block as ConfigBlockStatement).ast()
+		(c.block as ConfigBlockStatement).ast_str()
 		'}'
 	]
 
