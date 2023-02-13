@@ -1,7 +1,7 @@
 module parser
 
-import ast
-import ast.statements
+import ast { Node }
+import ast.statements { Statement }
 import ast.expressions
 
 fn test_config_statement() {
@@ -11,7 +11,7 @@ fn test_config_statement() {
 		}
 	')!
 
-	assert analyser.ast == ast.Program{
+	assert analyser.ast == Node(Statement(statements.Program{
 		statements: [
 			statements.ConfigStatement{
 				block: statements.ConfigBlockStatement{
@@ -40,5 +40,5 @@ fn test_config_statement() {
 				}
 			},
 		]
-	}
+	}))
 }
