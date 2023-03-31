@@ -19,7 +19,7 @@ mut:
 	tokens           []token.Token
 }
 
-pub fn new_lexer(file_path string) ?&Lexer {
+pub fn new_lexer(file_path string) !&Lexer {
 	if !os.is_file(file_path) {
 		return error('lexer: file path is not file, got ${file_path}')
 	}
