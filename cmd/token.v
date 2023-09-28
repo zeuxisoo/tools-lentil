@@ -21,8 +21,8 @@ pub fn token() cli.Command {
 	}
 }
 
-fn token_action(cmd cli.Command) ! {
-	file := cmd.flags.get_string('file') or { panic(err) }
+fn token_action(c cli.Command) ! {
+	file := c.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {
 		eprintln('file not exists: ${file}')

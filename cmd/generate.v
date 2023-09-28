@@ -30,9 +30,9 @@ pub fn generate() cli.Command {
 	}
 }
 
-fn generate_action(cmd cli.Command) ! {
-	file := cmd.flags.get_string('file') or { panic(err) }
-	output := cmd.flags.get_string('output') or { panic(err) }
+fn generate_action(c cli.Command) ! {
+	file := c.flags.get_string('file') or { panic(err) }
+	output := c.flags.get_string('output') or { panic(err) }
 
 	if !os.exists(file) {
 		eprintln('file not exists: ${file}')

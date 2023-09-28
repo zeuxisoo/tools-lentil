@@ -23,8 +23,8 @@ pub fn parse() cli.Command {
 	}
 }
 
-fn parse_action(cmd cli.Command) ! {
-	file := cmd.flags.get_string('file') or { panic(err) }
+fn parse_action(c cli.Command) ! {
+	file := c.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {
 		eprintln('file not exists: ${file}')

@@ -23,8 +23,8 @@ pub fn ast() cli.Command {
 	}
 }
 
-fn ast_action(cmd cli.Command) ! {
-	file := cmd.flags.get_string('file') or { panic(err) }
+fn ast_action(c cli.Command) ! {
+	file := c.flags.get_string('file') or { panic(err) }
 
 	if !os.exists(file) {
 		eprintln('file not exists: ${file}')
