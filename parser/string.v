@@ -2,9 +2,9 @@ module parser
 
 import ast.expressions { Expression, StringExpression }
 
-pub fn parse_string_expression(mut parser Parser) !Expression {
+pub fn parse_string_expression(mut p Parser) !Expression {
 	expression := StringExpression{
-		value: parser.current_token.value
+		value: p.current_token.value
 	}
 
 	return expression

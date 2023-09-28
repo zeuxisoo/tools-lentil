@@ -2,8 +2,8 @@ module parser
 
 import ast.expressions { Expression, ArrayExpression }
 
-pub fn parse_array_expression(mut parser Parser) !Expression {
+pub fn parse_array_expression(mut p Parser) !Expression {
 	return ArrayExpression{
-		values: parser.parse_expression_list()!
+		values: p.parse_expression_list()!
 	}
 }

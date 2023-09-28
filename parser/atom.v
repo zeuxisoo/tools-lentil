@@ -2,8 +2,8 @@ module parser
 
 import ast.expressions { Expression, AtomExpression }
 
-fn parse_atom_expression(mut parser Parser) !Expression {
-	current_token := parser.current_token
+fn parse_atom_expression(mut p Parser) !Expression {
+	current_token := p.current_token
 
 	value := if current_token.kind == .atom {
 		current_token.value
@@ -12,7 +12,7 @@ fn parse_atom_expression(mut parser Parser) !Expression {
 	}
 
 	if value != '' {
-		parser.read_token()
+		p.read_token()
 	}
 
 	expression := AtomExpression{

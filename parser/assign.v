@@ -2,16 +2,16 @@ module parser
 
 import ast.expressions { Expression, AssignExpression, IdentifierExpression }
 
-pub fn parse_assign_expression(mut parser Parser) !Expression {
+pub fn parse_assign_expression(mut p Parser) !Expression {
 	identifier := IdentifierExpression{
-		value: parser.current_token.value
+		value: p.current_token.value
 	}
 
-	parser.read_token() // skip identifier
-	parser.read_token() // skip `=`
+	p.read_token() // skip identifier
+	p.read_token() // skip `=`
 
 	return AssignExpression{
 		left: identifier
-		right: parser.parse_expression()!
+		right: p.parse_expression()!
 	}
 }

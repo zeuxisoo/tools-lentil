@@ -2,24 +2,24 @@ module parser
 
 import ast.expressions { Expression, AmountsExpression }
 
-fn parse_amounts_expression(mut parser Parser) !Expression {
-	if parser.current_token.kind !in [.plus, .minus] {
+fn parse_amounts_expression(mut p Parser) !Expression {
+	if p.current_token.kind !in [.plus, .minus] {
 		return AmountsExpression{
 			values: []
 		}
 	}
 
 	mut amounts := [
-		parse_amount_expression(mut parser)!,
+		parse_amount_expression(mut p)!,
 	]
 
-	for parser.look_next_token().kind == .comma {
-		parser.read_token() // sip `,`
+	for p.look_next_token().kind == .comma {
+		p.read_token() // sip `,`
 
-		if parser.look_next_token().kind in [.plus, .minus] {
-			parser.read_token() // sip `+` or `-`
+		if p.look_next_token().kind in [.plus, .minus] {
+			p.read_token() // sip `+` or `-`
 
-			amounts << parse_amount_expression(mut parser)!
+			amounts << parse_amount_expression(mut p)!
 		}
 	}
 
