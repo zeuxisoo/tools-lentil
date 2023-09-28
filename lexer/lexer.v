@@ -326,7 +326,7 @@ fn (mut l Lexer) check_end_of_file(method_name string) {
 
 // test helper
 fn create_tokens(content string) ![]token.Token {
-	mut lexer := new_lexer_content(content) or { panic(err) }
+	mut l := new_lexer_content(content) or { panic(err) }
 
-	return lexer.lex()
+	return l.lex()
 }
