@@ -294,7 +294,7 @@ fn (mut l Lexer) read_atom() string {
 	return value.bytestr()
 }
 
-[inline]
+@[inline]
 fn (mut l Lexer) skip_single_line_comment() {
 	// skip the double slash
 	l.read_char()
